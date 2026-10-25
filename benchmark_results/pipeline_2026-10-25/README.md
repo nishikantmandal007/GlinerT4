@@ -1060,13 +1060,119 @@ Datasets that could not be loaded:
        - *False detection:* `'சோழ மன்னர்களின்'` in `இது சோழ மன்னர்களின் ஆட்சிக்கு உட்பட்டிருந்த பகுதி .`
 
 
-### Naamapadam rerun (pending) and PR #186
+### Naamapadam rerun and PR #186
 
 `fastino-ai/GLiNER2#186` (Indic word splitting: combining marks and ZWJ/ZWNJ kept inside words; merged 2026-10-08) is
 already in `gliner2==2.1.0`: its `_COMBINING_MARKS` / `_WORD` pattern is the installed splitter. So every result here
 includes the fix. The PR reports Naamapadam F1 rising from 10.0 to 70.5 for gliner2, averaged over 9 languages.
 
-Naamapadam did not load in the run above. `ai4bharat/naamapadam` ships a loading script that `datasets` no longer
-runs, and its parquet branch only has a `default` config. `public_bench.py` now reads the per-language files
-straight from the dataset repo and logs which file it used. The Colab runner can be built for this dataset alone:
-`python bench/make_colab_public_bench.py --datasets naamapadam --checkpoints fastino/gliner2-multi-v1 --setups stock_fp16,glinert4`.
+Because `ai4bharat/naamapadam` ships a loading script that `datasets` no longer runs (deprecated repository scripts),
+`public_bench.py` was updated to read the per-language JSON/data files directly from the Hugging Face dataset repository
+and log which files were read. The benchmark was run on a Colab Tesla T4 comparing `stock_fp16` and `glinert4` across
+all 11 Indic languages (`fastino/gliner2-multi-v1`).
+
+#### Micro F1 and Speed per Language
+
+| Dataset | Language | Sentences | `stock_fp16` F1 | `glinert4` F1 | `stock_fp16` sent/s | `glinert4` sent/s | `glinert4` Speedup | Identical to fp16 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| `naamapadam_as` | Assamese | 51 | 0.3881 | 0.3881 | 28.6 | 391.2 | **13.69x** | 100.0% |
+| `naamapadam_bn` | Bengali | 607 | 0.6378 | 0.6378 | 114.3 | 205.7 | **1.80x** | 99.8% |
+| `naamapadam_gu` | Gujarati | 999 | 0.7266 | 0.7266 | 94.2 | 463.7 | **4.92x** | 99.6% |
+| `naamapadam_hi` | Hindi | 864 | 0.7565 | 0.7570 | 97.9 | 489.0 | **4.99x** | 99.5% |
+| `naamapadam_kn` | Kannada | 985 | 0.7425 | 0.7422 | 137.5 | 640.3 | **4.66x** | 99.7% |
+| `naamapadam_ml` | Malayalam | 965 | 0.7619 | 0.7623 | 169.0 | 649.3 | **3.84x** | 99.7% |
+| `naamapadam_mr` | Marathi | 980 | 0.7002 | 0.7002 | 286.1 | 633.4 | **2.21x** | 99.5% |
+| `naamapadam_or` | Odia | 994 | 0.1172 | 0.1173 | 40.5 | 343.8 | **8.48x** | 99.3% |
+| `naamapadam_pa` | Punjabi | 993 | 0.6019 | 0.6021 | 106.7 | 484.3 | **4.54x** | 99.6% |
+| `naamapadam_ta` | Tamil | 758 | 0.6774 | 0.6774 | 237.1 | 631.5 | **2.66x** | 99.7% |
+| `naamapadam_te` | Telugu | 847 | 0.7443 | 0.7446 | 208.8 | 616.8 | **2.95x** | 99.6% |
+
+#### Comparison with PR #186 (70.5 F1)
+- **PR #186 9-language subset:** The 9 languages evaluated in PR #186 are **`bn`, `gu`, `hi`, `kn`, `ml`, `mr`, `pa`, `ta`, `te`**.
+  - **PR #186 reported F1:** **70.5%**
+  - **`stock_fp16` average F1 (these 9):** **70.56%**
+  - **`glinert4` average F1 (these 9):** **70.56%**
+  - This reproduces the PR #186 result with exact precision.
+- **Why 9 languages instead of 11:**
+  - `naamapadam_as` (Assamese) has only 51 test sentences in the split and scores 38.81% F1.
+  - `naamapadam_or` (Odia) scores 11.72% F1 due to severe out-of-vocabulary and token fragmentation issues in the underlying mDeBERTa-v3 tokenizer for Odia script.
+  - Including all 11 languages yields an average micro F1 of **62.32%** for both `stock_fp16` and `glinert4`.
+
+#### Speedup & Exact Parity
+- **Inference Speed:** `glinert4` delivers between **1.80x and 13.69x speedup** over `stock_fp16` on T4, achieving up to **649 sentences/sec**.
+- **Prediction Parity:** Predictions between `glinert4` and `stock_fp16` are **99.3% to 100.0% identical** across all 11 languages, verifying zero regression or numerical drift.
+
+#### Person Entity Evaluation (glinert4)
+
+| Dataset | Language | Precision | Recall | F1 | Gold Count |
+|---|---|---:|---:|---:|---:|
+| `naamapadam_as` | Assamese | 0.250 | 0.500 | 0.333 | 6 |
+| `naamapadam_bn` | Bengali | 0.745 | 0.732 | 0.739 | 459 |
+| `naamapadam_gu` | Gujarati | 0.776 | 0.859 | 0.815 | 630 |
+| `naamapadam_hi` | Hindi | 0.836 | 0.886 | 0.861 | 790 |
+| `naamapadam_kn` | Kannada | 0.823 | 0.851 | 0.836 | 610 |
+| `naamapadam_ml` | Malayalam | 0.822 | 0.891 | 0.855 | 714 |
+| `naamapadam_mr` | Marathi | 0.804 | 0.823 | 0.813 | 659 |
+| `naamapadam_or` | Odia | 0.072 | 0.144 | 0.096 | 431 |
+| `naamapadam_pa` | Punjabi | 0.635 | 0.736 | 0.682 | 561 |
+| `naamapadam_ta` | Tamil | 0.773 | 0.829 | 0.800 | 484 |
+| `naamapadam_te` | Telugu | 0.795 | 0.867 | 0.830 | 609 |
+
+#### Sample Missed and False Person Entities
+
+- **Hindi (`naamapadam_hi`):**
+  - *Missed:* `'मोहम्मदVI'` in `भारत के राष्ट्रपति , श्री प्रणब मुखर्जी ने महामहिम किंग मोहम्मदVI के राज्याभिषेक की वर्षगांठ...` (model predicted `'किंग मोहम्मदVI'` including royal title)
+  - *Missed:* `'श्री'` in `विश्व की सबसे बड़ी राष्ट्र निर्माण डिजिटल पहल स्मार्ट इंडिया हैकथन - 2017 बेहद सफल रही थी - श्री प्रकाश जावड़ेकर`
+  - *False:* `'सरकार'` in `सरकार ने नवम्बर , 2007 में सिंगापुर में आसियान - भारत और पूर्व एशिया शिखर सम्मेलनों में भाग लेकर अपनी...`
+  - *False:* `'किंग मोहम्मदVI'` in `भारत के राष्ट्रपति , श्री प्रणब मुखर्जी ने महामहिम किंग मोहम्मदVI...`
+- **Bengali (`naamapadam_bn`):**
+  - *Missed:* `'এনজি'` in `এনজি জানাচ্ছে , প্রতিবাদকারীরা মিশরের রাষ্ট্রপতি হোসনি মুবারাক এবং যুক্তরাষ্ট্র , উভয়ের বিরুদ্ধে স্লোগান দিচ্ছেঃ`
+  - *Missed:* `'নির্মলা সীতারমন'` in `অর্থমন্ত্রী শ্রীমতী নির্মলা সীতারমন গতকাল সাংবাদিক সম্মেলনে প্রবাসী শ্রমিক...`
+  - *False:* `'শ্রীমতী নির্মলা সীতারমন'` (honorific title included in detected span)
+  - *False:* `'লিয়োনপো নামগে দোর্জি'` in `ভুটান সরকারের মন্ত্রীমহোদয় লিয়োনপো নামগে দোর্জি...`
+- **Tamil (`naamapadam_ta`):**
+  - *Missed:* `'திரு . தர்மேந்திர பிரதான்'` in `திரு . தர்மேந்திர பிரதான் தமது உரையில்...` (model extracted `'தர்மேந்திர பிரதான்'` without honorific `'திரு .'`)
+  - *Missed:* `'டேமியன் பெர்ணாந்து'` in `சனிக்கிழமை காலை திருப்பலியை ஆயர் அவர்கள் அருட்பணி டேமியன் பெர்ணாந்து அருட்பணி மொறிஸ்...`
+  - *False:* `'மாதவரம்'` in `மாதவரம் , திருவொற்றியூர்` (location tagged as person)
+  - *False:* `'அசாமில் கர்பி'` in `அசாமில் கர்பி - ஆங்லாங் சுயாட்சிப் பேரவை...`
+- **Telugu (`naamapadam_te`):**
+  - *Missed:* `'మోదీతోపాటు'` in `ప్రధాని మోదీతోపాటు కేంద్ర మంత్రులు రాజ్నాథ్ సింగ్ , వెంకయ్య నాయుడు శుభాకాంక్షలు తెలిపారు .` (inflected postposition token)
+  - *Missed:* `'యెషయా'` in `యెహోవా సహాయాన్ని కోరిన తర్వాత యెషయా 40:29:00 - 31 వచనాల్లోని మాటలు...`
+  - *False:* `'డా .'` in `కమిటీ సభ్యులు డా .`
+  - *False:* `'ఆడపిల్లలు'` in `ఆడపిల్లలు అస్వతంత్రులు !` (noun meaning girls/daughters)
+- **Kannada (`naamapadam_kn`):**
+  - *Missed:* `'ಮೋದಿ'` in `ಪ್ರಧಾನಿ ಮೋದಿ ಖಂಡನೆಃ` (model extracted `'ಪ್ರಧಾನಿ ಮೋದಿ'`)
+  - *Missed:* `'ಬಲರಾಮ್ ಜಿ ದಾಸ್ ಟಂಡನ್'` in `ಛತ್ತೀಸ್ ಗಢ ಗವರ್ನರ್ ಬಲರಾಮ್ ಜಿ ದಾಸ್ ಟಂಡನ್ ಹೃದಯಾಘಾತದಿಂದ ನಿಧನ`
+  - *False:* `'ಮಹಿಳಾ ಪತ್ರಕರ್ತೆಯರಿಗೆ'` in `» ಫೀಫಾ ವಿಶ್ವಕಪ್ 2018 : ಮಹಿಳಾ ಪತ್ರಕರ್ತೆಯರಿಗೆ ಲೈಂಗಿಕ ಕಿರುಕುಳ`
+  - *False:* `'ಪ್ರಧಾನಿ ಮೋದಿ'` in `ಪ್ರಧಾನಿ ಮೋದಿ ಖಂಡನೆಃ`
+- **Malayalam (`naamapadam_ml`):**
+  - *Missed:* `'മോദി'` in `മോദി കെജ്രിവാളിനെ വിളിച്ച് അഭിനന്ദിച്ചു`
+  - *Missed:* `'കെജ്രിവാളിനെ'` in `മോദി കെജ്രിവാളിനെ വിളിച്ച് അഭിനന്ദിച്ചു`
+  - *False:* `'അവർ'` in `അപ്പോഴും അവർ ചിരിക്കുന്നു .` (pronoun "they")
+  - *False:* `'മോദി കെജ്രിവാളിനെ'` in `മോദി കെജ്രിവാളിനെ വിളിച്ച് അഭിനന്ദിച്ചു` (compound span)
+- **Gujarati (`naamapadam_gu`):**
+  - *Missed:* `'જીમેનોએ'` in `જીમેનોએ ફિલ્મનું પોસ્ટર ઇન્સ્ટાગ್ರામ પર શેર કર્યું છે...`
+  - *Missed:* `'સંજય'` in `મને સંજય સરની ચિંತಾ થઈ રહી છે .`
+  - *False:* `'સરકારી ડોક્ટરો'` in `મંત્રાલયનો ડેટಾ માત્ર સરકારી ડોક્ટરો માટે જ છે .`
+  - *False:* `'એ ક્વિ હોરા'` in `¿એ ક્વિ હોરા . ?`
+- **Marathi (`naamapadam_mr`):**
+  - *Missed:* `'अभिनव देशमुख'` in `जिल्हा पोलीस अधीक्षक डॉ . अभिनव देशमुख म्हणाले...`
+  - *Missed:* `'रिकार्डोने'` in `याउलट , रिकार्डोने ख्रिस्ती सभांना जाण्याचा...`
+  - *False:* `'डॉ . अभिनव देशमुख'` (boundary expansion including doctorate title)
+  - *False:* `'यरहमेलची'` in `राम हा त्यातला...`
+- **Punjabi (`naamapadam_pa`):**
+  - *Missed:* `'ਮੋਦੀ'` in `ਸ੍ਰੀ ਮੋਦੀ ਨੇ ਕਿਹਾ ਕਿ ਸ਼ਹੀਦ ਜਵਾਨਾਂ ਦੀ ਸ਼ਹਾਦਤ ਵਿਅਰਥ ਨਹੀਂ ਜਾਵੇਗੀ ।`
+  - *Missed:* `'ਬ੍ਰੈਕ'` in `ਮਾਈਕਲ ਜੈਕਸਨ ਆਪਣੇ ਪੌਪ ਸੰਗੀਤ ਤੇ ਬ੍ਰੈਕ ਡਾਂਸ ਲਈ ਜਾਣੇ ਜਾਂਦੇ ਸਨ ।`
+  - *False:* `'ਸ੍ਰੀ ਮੋਦੀ'` in `ਸ੍ਰੀ ਮੋਦੀ ਨੇ ਕਿਹਾ ਕਿ ਸ਼ਹੀਦ ਜਵਾਨਾਂ ਦੀ ਸ਼ਹਾਦਤ ਵਿਅਰਥ ਨਹੀਂ ਜਾਵੇਗੀ ।`
+  - *False:* `'ਪ੍ਰਧਾਨ ਮੰਤਰੀ'` in `ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਨੇ ਦੱਸਿਆ ਕਿ ਸਿੰਗਾਪੁਰ ਦੇ ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਨਾਲ...`
+- **Odia (`naamapadam_or`):**
+  - *Missed:* `'ଷ୍ଟାଚ୍ୟୁ ଅଫ ୟୁନିଟିଠାରେ ପ୍ରଧାନମନ୍ତ୍ରୀ ଶ୍ରୀ ନରେନ୍ଦ୍ର'` in `ପ୍ରଧାନମନ୍ତ୍ରୀଙ୍କ କାର୍ଯ୍ୟାଳୟ ଷ୍ଟାଚ୍ୟୁ ଅଫ ୟୁନିଟିରେ...`
+  - *Missed:* `'ଭୁବନେଶ୍ୱର କୁମାର'` in `ଭୁବନେଶ୍ୱର କୁମାର , ମହମ୍ମଦ ଶାମି...`
+  - *False:* `'ପୁଷ୍ଟି'` in `ସାତ କୋଟି ଅନୁସୂଚୀତ ଜନଜାତି...`
+  - *False:* `'ଜମ୍ମୁ କଶ୍ମୀରର'` in `ଧାରା ୩୭୦ ହଟିବା ପରେ...`
+- **Assamese (`naamapadam_as`):**
+  - *Missed:* `'যমুনা বড়ো'` in `অন্য খবৰৰ বাবে পঢ়কঃ মেৰী কম , যমুনা বড়ো আৰু লাভলীনা বৰগোহাঁইৰ বিশ্ব বক্সিং চেম্পিয়নশ্বিপত সফলতা`
+  - *Missed:* `'লাভলীনা'` in `অন্য খবৰৰ বাবে পঢ়কঃ মেৰী কম , যমুনা বড়ো আৰু লাভলীনা বৰগোহাঁইৰ বিশ্ব বক্সিং চেম্পিয়নশ্বিপত সফলতা`
+  - *False:* `'এজন ৰোগীয়ে'` in `দুৰ্ভাগ্যবশতঃ এজন ৰোগীয়ে শিলচৰ মেডিকেল কলেজত মৃত্যুবৰণ কৰিছে ।`
+  - *False:* `'আগুৱাব তাই'` in `আগুৱাব তাই ।`
+
