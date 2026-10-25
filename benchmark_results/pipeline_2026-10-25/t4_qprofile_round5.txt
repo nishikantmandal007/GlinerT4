@@ -1,0 +1,107 @@
+         2204856 function calls (2144330 primitive calls) in 5.049 seconds
+
+   Ordered by: internal time
+   List reduced from 359 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     2400    2.538    0.001    2.538    0.001 {method 'tolist' of 'torch._C.TensorBase' objects}
+       39    0.379    0.010    0.379    0.010 {method 'cpu' of 'torch._C.TensorBase' objects}
+      582    0.185    0.000    0.533    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1542(_format_input_with_mapping)
+     4604    0.182    0.000    0.182    0.000 {built-in method torch._C._nn.linear}
+   211710    0.089    0.000    0.089    0.000 {method 'token_to_id' of 'tokenizers.Tokenizer' objects}
+   445246    0.085    0.000    0.085    0.000 {method 'append' of 'list' objects}
+   211710    0.080    0.000    0.168    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_tokenizers.py:821(_convert_token_to_id_with_added_voc)
+      582    0.078    0.000    0.767    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:672(_transform_record)
+      582    0.077    0.000    0.246    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_base.py:1465(convert_tokens_to_ids)
+      580    0.069    0.000    0.315    0.001 /content/gliner-detect/serving/gliner2_exact.py:36(count_instance0)
+26788/1164    0.055    0.000    0.146    0.000 /usr/lib/python3.13/copy.py:119(deepcopy)
+   212994    0.052    0.000    0.054    0.000 {method 'extend' of 'list' objects}
+     1162    0.039    0.000    0.057    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1513(_find_spans)
+     2367    0.038    0.000    0.038    0.000 {built-in method torch.tensor}
+230032/229915    0.038    0.000    0.041    0.000 {built-in method builtins.len}
+     1700    0.037    0.000    0.128    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:56(resolve_overlaps)
+     1927    0.030    0.000    0.030    0.000 {method 'to' of 'torch._C.TensorBase' objects}
+     1150    0.026    0.000    0.026    0.000 {built-in method torch.arange}
+    46822    0.024    0.000    0.024    0.000 {built-in method builtins.id}
+       41    0.024    0.001    2.972    0.072 /content/gliner-detect/serving/gliner2_exact.py:67(_compute_direct_span_logits_batched)
+    97315    0.022    0.000    0.022    0.000 {method 'get' of 'dict' objects}
+     1199    0.022    0.000    0.022    0.000 {built-in method torch.cat}
+7195/1353    0.020    0.000    0.414    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1783(_call_impl)
+14896/580    0.020    0.000    0.029    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:92(remap_result_spans)
+      984    0.019    0.000    0.019    0.000 {built-in method torch._ops.gliner_t4.add_layernorm}
+    25129    0.018    0.000    0.023    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:135(<genexpr>)
+      580    0.018    0.000    0.037    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:43(split_text_into_chunks)
+     1740    0.018    0.000    0.018    0.000 {built-in method torch.sigmoid}
+       41    0.018    0.000    0.069    0.002 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:756(_pad_batch)
+       41    0.018    0.000    0.018    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1671(_extract_embeddings_fast)
+       39    0.018    0.000    0.065    0.002 /usr/local/lib/python3.13/dist-packages/gliner2/models/span/model.py:572(compute_span_scores_batched)
+     1211    0.017    0.000    0.017    0.000 {built-in method torch.stack}
+    22426    0.017    0.000    0.017    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1955(__getattr__)
+    12573    0.017    0.000    0.026    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:83(rank_key)
+101695/99117    0.017    0.000    0.022    0.000 {built-in method builtins.isinstance}
+      492    0.015    0.000    0.015    0.000 {built-in method torch._ops.gliner_t4.disentangled_attention}
+     5033    0.015    0.000    0.025    0.000 /content/gliner-detect/artifacts/colab_pipeline/gliner2_ner.py:441(cell_pieces)
+    95326    0.015    0.000    0.017    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:29(iter_word_offsets)
+      621    0.014    0.000    0.014    0.000 {built-in method torch.embedding}
+     3567    0.014    0.000    0.014    0.000 {method 'contiguous' of 'torch._C.TensorBase' objects}
+      580    0.013    0.000    0.087    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1086(_extract_entities)
+7195/1353    0.013    0.000    0.417    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1775(_wrapped_call_impl)
+      699    0.013    0.000    0.013    0.000 {built-in method torch.relu}
+      492    0.012    0.000    0.042    0.000 /content/gliner-detect/torch-ext/gliner_t4/__init__.py:31(real_lengths)
+ 4832/580    0.012    0.000    0.020    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:315(_strip_span_metadata)
+
+
+         2204856 function calls (2144330 primitive calls) in 5.049 seconds
+
+   Ordered by: cumulative time
+   List reduced from 359 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       41    0.010    0.000    4.805    0.117 /usr/local/lib/python3.13/dist-packages/torch/autograd/grad_mode.py:293(__exit__)
+       41    0.004    0.000    4.756    0.116 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:252(batch_extract)
+       41    0.003    0.000    3.794    0.093 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:446(_extract_from_batch)
+       41    0.024    0.001    2.972    0.072 /content/gliner-detect/serving/gliner2_exact.py:67(_compute_direct_span_logits_batched)
+     2400    2.538    0.001    2.538    0.001 {method 'tolist' of 'torch._C.TensorBase' objects}
+       41    0.000    0.000    0.927    0.023 /usr/local/lib/python3.13/dist-packages/gliner2/training/trainer.py:539(__call__)
+       41    0.004    0.000    0.927    0.023 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:462(collate_fn_inference)
+       41    0.005    0.000    0.922    0.022 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:621(_collate_batch)
+      582    0.078    0.000    0.767    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:672(_transform_record)
+     40/6    0.000    0.000    0.635    0.106 /usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py:120(decorate_context)
+      582    0.185    0.000    0.533    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1542(_format_input_with_mapping)
+       41    0.010    0.000    0.506    0.012 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:514(_extract_from_batch_sync_collapsed)
+7195/1353    0.013    0.000    0.417    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1775(_wrapped_call_impl)
+7195/1353    0.020    0.000    0.414    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1783(_call_impl)
+       39    0.379    0.010    0.379    0.010 {method 'cpu' of 'torch._C.TensorBase' objects}
+      580    0.069    0.000    0.315    0.001 /content/gliner-detect/serving/gliner2_exact.py:36(count_instance0)
+       41    0.000    0.000    0.294    0.007 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:657(encode_tokens)
+       41    0.001    0.000    0.293    0.007 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1795(inner)
+       41    0.001    0.000    0.277    0.007 /usr/local/lib/python3.13/dist-packages/transformers/models/deberta_v2/modeling_deberta_v2.py:719(forward)
+       41    0.000    0.000    0.258    0.006 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:441(forward)
+       41    0.000    0.000    0.258    0.006 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:596(forward)
+       41    0.010    0.000    0.257    0.006 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:335(forward_prepared)
+      582    0.077    0.000    0.246    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_base.py:1465(convert_tokens_to_ids)
+     4604    0.182    0.000    0.182    0.000 {built-in method torch._C._nn.linear}
+   211710    0.080    0.000    0.168    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_tokenizers.py:821(_convert_token_to_id_with_added_voc)
+        1    0.000    0.000    0.168    0.168 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1833(batch_extract_entities_long)
+     20/1    0.001    0.000    0.168    0.168 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1663(batch_extract_long)
+26788/1164    0.055    0.000    0.146    0.000 /usr/lib/python3.13/copy.py:119(deepcopy)
+2328/1164    0.011    0.000    0.140    0.000 /usr/lib/python3.13/copy.py:218(_deepcopy_dict)
+     1700    0.037    0.000    0.128    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:56(resolve_overlaps)
+      580    0.002    0.000    0.127    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:111(merge_chunk_results)
+      492    0.008    0.000    0.122    0.000 /content/gliner-detect/torch-ext/gliner_t4/__init__.py:70(forward_prepared)
+     2874    0.005    0.000    0.119    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/linear.py:130(forward)
+      290    0.005    0.000    0.098    0.000 /content/gliner-detect/artifacts/colab_pipeline/gliner2_ner.py:456(resolve_spans)
+      699    0.006    0.000    0.095    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/container.py:248(forward)
+   211710    0.089    0.000    0.089    0.000 {method 'token_to_id' of 'tokenizers.Tokenizer' objects}
+      580    0.001    0.000    0.088    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1002(_decode_span_probabilities)
+      580    0.013    0.000    0.087    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1086(_extract_entities)
+   445246    0.085    0.000    0.085    0.000 {method 'append' of 'list' objects}
+      984    0.009    0.000    0.077    0.000 /content/gliner-detect/torch-ext/gliner_t4/__init__.py:122(forward)
+      580    0.002    0.000    0.075    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:139(_merge_result_dicts)
+      580    0.004    0.000    0.072    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:167(_merge_entity_maps)
+       41    0.018    0.000    0.069    0.002 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:756(_pad_batch)
+     1156    0.006    0.000    0.067    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:266(_dedupe_items)
+       39    0.018    0.000    0.065    0.002 /usr/local/lib/python3.13/dist-packages/gliner2/models/span/model.py:572(compute_span_scores_batched)
+
+
+

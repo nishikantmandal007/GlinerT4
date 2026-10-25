@@ -3,14 +3,16 @@
 This round applies the **no-semantic-change, Phase 1** items of
 `GLiNER_Multilingual_v2_1_T4_Optimization_Plan.docx` to the GLiNER2 path (`fastino/gliner2-multi-v1`, `gliner2==2.1.0`).
 That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4):**
-- Zero-loss pipeline work (rounds 1-3) reached 1.14x in the encoder-plus-head benchmark (`count0_streams2_ln`, 58.05 vs 50.91).
-- **End to end through the production queue (round 4), no config reaches 100 chunks/s.** The best, `exact_2pass`
-  (drop the City-alone pass, exact count head, fused add+LayerNorm, 2 streams), ran at **66.3 chunks/s** versus 48.6 for today's
-  serving settings (`prod_3pass`), 1.36x, and 33.7 chunks/s short of 100. It meets or beats the 3-pass reference on every
-  label (City precision .930 to .947, the rest equal) but is not zero-loss: 1144 of 1160 chunks match the reference.
-  The 2-pass layout was checked on only 10 documents and needs held-out confirmation.
-- The zero-loss 3-pass config with the same kernels (`exact_3pass`, 45.7 chunks/s) was not faster than today's settings.
-  Almost all of the end-to-end gain comes from dropping a label pass.
+- Zero-loss pipeline work (rounds 1-3) reached 1.14x in the encoder-plus-head benchmark (`count0_streams2_ln`, 58.05 vs 50.91 chunks/s).
+- End to end through the production queue (rounds 4-5), **no config reaches 100 chunks/s**. The best shipping candidate,
+  `exact_2pass_1stream` (drop City-alone pass, exact count head, fused add+LayerNorm, single stream), ran at **65.7 chunks/s**
+  versus 46.4 chunks/s for today's serving settings (`prod_3pass`), a **1.416x** speedup, and **34.3 chunks/s short of 100**
+  (needs another 1.52x). It meets or beats the 3-pass reference on every label (City precision .930 to .947, others equal) with
+  1144/1160 identical chunks vs ref, and cuts GPU memory from 3.1 GB to 1.8 GB.
+- Round 5 isolates the bottleneck: queue run size (`queue_runs` 69.5 vs `whole_corpus` 69.0 chunks/s) and sampler overhead
+  (within noise) do not limit throughput. Instead, cProfile reveals that **host-side device-to-host synchronization**
+  (`tensor.tolist()` taking 2.54 s and `tensor.cpu()` taking 0.38 s out of 5.05 s total) inside the span head and decoding
+  dominates wall time on Colab's single physical core.
 
 ## What the existing T4 profile actually says
 
@@ -367,7 +369,7 @@ between the 3-pass configs are within noise.
 - **Ship status:** `exact_2pass` is the shipping candidate, but only after held-out confirmation of the 2-pass layout
   (10-document corpus) and acceptance of the 16 changed chunks.
 
-## Round 5: what limits the shipping path (code done, T4 run pending)
+## Round 5: what limits the shipping path
 
 Round 4's `exact_2pass` reached 66.3 chunks/s through the queue, with the GPU 75-78% busy, so the host side limits it.
 The pass benchmark ran the same 2-pass layout at 77.7 chunks/s with one stream. Two suspects:
@@ -390,3 +392,101 @@ Round-5 runner configs (`python bench/make_colab_detection_bench.py`, 3 runs eac
 | exact_2pass | sampler off: the artifact |
 | exact_2pass_1stream | whether 2 streams help on one core in the queue path |
 | exact_2pass_run32 / run64 | larger queue runs (`DETECTION_RUN_SIZE`); not byte-exact, accuracy gate applies; longer wait for urgent requests |
+
+### T4 results (round 5)
+
+Run: `colab run --gpu T4`, `bench_detection.py` in queue mode, 4 repeats of the corpus (1160 chunks), 3 runs per config,
+followed by `bench/queue_profile.py`. Raw files: `t4_run_round5.log`, `t4_detect_round5.json`, `t4_detect_round5.md`,
+`t4_qprofile_round5.json`, `t4_qprofile_round5.txt`.
+
+- **Environment & GPU confirmation:** The raw `nvidia-smi` text banner did not reach the log (same behavior as round 4
+  under Colab), but the device is confirmed as a **Tesla T4** by `torch.cuda.get_device_name()` (recorded as `"device": "Tesla T4"`
+  in `t4_qprofile_round5.json`).
+- **No failures:** No `CONFIG_FAILED` occurred; all 7 configs completed 3 full runs.
+
+| config | chunks/s | vs prod_3pass | Person R/P | Organization R/P | Street R/P | City R/P | identical vs ref | GPU util % | serving MB |
+|---|---|---|---|---|---|---|---|---|---|
+| ref_3pass | 43.7 | 0.942x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[80], [86], [80]] | [1943] |
+| prod_3pass | 46.4 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[100], [94], [100]] | [3063] |
+| exact_2pass_sampled | 65.5 | 1.412x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[83], [82], [80]] | [3021] |
+| exact_2pass | 65.0 | 1.401x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[89], [97], [82]] | [3007] |
+| exact_2pass_1stream | 65.7 | 1.416x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[82], [88], [86]] | [1829] |
+| exact_2pass_run32 | 65.3 | 1.407x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[85], [83], [73]] | [3019] |
+| exact_2pass_run64 | 65.3 | 1.407x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[74], [90], [72]] | [3369] |
+
+#### Per-run breakdown & analysis
+
+Per-run chunks/s:
+- `ref_3pass`: [48.2, 43.5, 43.7] (median 43.7)
+- `prod_3pass`: [49.6, 46.4, 46.2] (median 46.4)
+- `exact_2pass_sampled`: [65.5, 64.8, 66.2] (median 65.5)
+- `exact_2pass`: [65.7, 64.3, 65.0] (median 65.0)
+- `exact_2pass_1stream`: [65.5, 65.7, 65.9] (median 65.7)
+- `exact_2pass_run32`: [65.3, 65.8, 65.3] (median 65.3)
+- `exact_2pass_run64`: [65.0, 66.1, 65.3] (median 65.3)
+
+1. **Sampler effect (`exact_2pass` vs `exact_2pass_sampled`):**
+   `exact_2pass` (sampler off) ran at 65.0 chunks/s vs 65.5 chunks/s for `exact_2pass_sampled` (sampler on every 0.5 s).
+   The difference is under 1% and within run-to-run noise (runs overlap between 64.3 and 66.2 chunks/s). Background
+   `nvidia-smi` polling is not a bottleneck.
+
+2. **1 vs 2 streams (`exact_2pass_1stream` vs `exact_2pass`):**
+   `exact_2pass_1stream` reached **65.7 chunks/s** (runs: 65.5, 65.7, 65.9) with **1829 MB** serving memory.
+   `exact_2pass` (2 streams) reached **65.0 chunks/s** (runs: 65.7, 64.3, 65.0) with **3007 MB** serving memory.
+   On Colab's single physical core (2 vCPUs sharing 1 core), 2 CUDA streams provide **zero throughput gain** because the host
+   Python thread is saturated, but costs an extra **1.18 GB of GPU memory (+64%)**. Single stream is strictly superior here.
+
+3. **Queue run size (`run32` and `run64`):**
+   `exact_2pass_run32` and `exact_2pass_run64` both measured **65.3 chunks/s**, virtually identical to run16 (65.0 - 65.7).
+   Both achieve identical accuracy: Person 0.994/0.961, Organization 0.977/0.846, Street 0.861/1.000, City 1.000/0.947,
+   matching or exceeding `ref_3pass` across all labels (City precision .947 vs .930).
+   Both produce 1144/1160 identical chunks vs `ref_3pass` (same 16 differences as `exact_2pass` due to dropping the City pass).
+   Larger batch queue runs do not increase throughput on this host.
+
+4. **Queue chunking overhead (`queue_profile.py`):**
+   - `queue_runs` (run size 16): **69.54 chunks/s** (seconds: [4.170, 4.293])
+   - `whole_corpus` (single batch of 290 chunks): **69.02 chunks/s** (seconds: [4.202, 4.290])
+   Overhead from repeatedly setting up queue runs (batch collation, window splits, merging results) is negligible (<0.8%).
+
+5. **Profile breakdown (top 15 functions outside the encoder):**
+   cProfile of `detect_batch` queue runs (5.049 s total profile time) reveals where non-encoder time goes:
+
+   **Top 15 by `tottime` (self-time):**
+   1. `{method 'tolist' of 'torch._C.TensorBase' objects}`: **2.538 s** (50.3% of total time! Forces host-GPU sync to extract Python lists)
+   2. `{method 'cpu' of 'torch._C.TensorBase' objects}`: **0.379 s** (7.5% - Device-to-Host transfer)
+   3. `gliner2/processor.py:_format_input_with_mapping`: 0.185 s (cum 0.533 s)
+   4. `{built-in method torch._C._nn.linear}`: 0.182 s
+   5. `{method 'token_to_id' of 'tokenizers.Tokenizer' objects}`: 0.089 s
+   6. `{method 'append' of 'list' objects}`: 0.085 s
+   7. `transformers/tokenization_utils_tokenizers.py:_convert_token_to_id_with_added_voc`: 0.080 s
+   8. `gliner2/processor.py:_transform_record`: 0.078 s (cum 0.767 s)
+   9. `transformers/tokenization_utils_base.py:convert_tokens_to_ids`: 0.077 s
+   10. `serving/gliner2_exact.py:count_instance0`: 0.069 s (cum 0.315 s)
+   11. `copy.py:deepcopy`: 0.055 s
+   12. `{method 'extend' of 'list' objects}`: 0.052 s
+   13. `gliner2/inference/runtime.py:_find_spans`: 0.039 s
+   14. `{built-in method torch.tensor}`: 0.038 s
+   15. `{built-in method builtins.len}`: 0.038 s
+
+   **Top 15 by `cumtime` (cumulative time):**
+   1. `torch/autograd/grad_mode.py:__exit__`: 4.805 s
+   2. `gliner2/inference/runtime.py:batch_extract`: 4.756 s
+   3. `gliner2/inference/runtime.py:_extract_from_batch`: 3.794 s
+   4. `serving/gliner2_exact.py:_compute_direct_span_logits_batched`: 2.972 s
+   5. `{method 'tolist' of 'torch._C.TensorBase' objects}`: 2.538 s
+   6. `gliner2/training/trainer.py:__call__`: 0.927 s
+   7. `gliner2/processor.py:collate_fn_inference`: 0.927 s
+   8. `gliner2/processor.py:_collate_batch`: 0.922 s
+   9. `gliner2/processor.py:_transform_record`: 0.767 s
+   10. `torch/utils/_contextlib.py:decorate_context`: 0.635 s
+   11. `gliner2/processor.py:_format_input_with_mapping`: 0.533 s
+   12. `gliner2/inference/runtime.py:_extract_from_batch_sync_collapsed`: 0.506 s
+   13. `torch/nn/modules/module.py:_wrapped_call_impl`: 0.417 s
+   14. `torch/nn/modules/module.py:_call_impl`: 0.414 s
+   15. `{method 'cpu' of 'torch._C.TensorBase' objects}`: 0.379 s
+
+6. **Best config and distance to 100 chunks/s:**
+   The best configuration meeting the accuracy gate is **`exact_2pass_1stream`** at **65.7 chunks/s** (1.416x speedup over `prod_3pass` at 46.4 chunks/s).
+   It is **34.3 chunks/s short of 100 chunks/s** (needs another 1.52x improvement).
+   cProfile makes the root cause unambiguous: host-bound synchronization (`tensor.tolist()` and `tensor.cpu()` blocking the CPU thread while GPU work completes) in gliner2's span head and decoding accounts for over 2.9 seconds of wall time. To approach 100 chunks/s on a single-core host, these synchronization points must be replaced with asynchronous, batched GPU kernel postprocessing.
+
