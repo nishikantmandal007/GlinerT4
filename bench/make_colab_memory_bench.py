@@ -1,7 +1,8 @@
 # Writes artifacts/colab_memory_bench.py: one file for `colab run` that unpacks production/ (glinert4 with the document
 # memory), bench/memory_bench.py with its scorers, the realistic corpus (040 and 020 sections with ground truth) and the
 # synthetic 100-page contract with its manifest, builds the ops for the T4, runs the production tests, then
-# bench/memory_bench.py, and prints its table and JSON between BEGIN_MEMORY / END_MEMORY.
+# bench/memory_bench.py (contract, realistic corpus, and the corpus joined into one ~76-page document at x1, x4 and x10),
+# and prints its table and JSON between BEGIN_MEMORY / END_MEMORY.
 #   python bench/make_colab_memory_bench.py [--floor 0.3]
 import argparse
 import base64

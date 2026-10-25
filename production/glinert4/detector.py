@@ -49,7 +49,7 @@ def cell_pieces(text, start, end):
 
 
 def resolve_spans(text, spans):
-    from gliner2.inference.overlap import resolve_overlaps
+    from .overlap import resolve_overlaps
 
     pieces = [(label, s, e, *rest) for label, start, end, *rest in spans for s, e in cell_pieces(text, start, end)]
     rank = {"score": lambda span: span[3], "start": lambda span: span[1], "end": lambda span: span[2]}
@@ -87,7 +87,8 @@ class Detector:
     def detect(self, texts: Sequence[str], labels: Optional[Sequence[str]] = None) -> List[dict]:
         labels = list(labels or self.config.labels)
         memory = self.config.memory
-        found = self.spans(texts, labels, memory.candidate_floor if memory else None)
+        floor = memory.candidate_floor if memory is not None and "pool" in memory.steps else None
+        found = self.spans(texts, labels, floor)
         return self.finish(texts, found, labels, memory)
 
     def spans(self, texts: Sequence[str], labels: Sequence[str], candidate_floor: Optional[float] = None):

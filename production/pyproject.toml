@@ -13,6 +13,7 @@ dependencies = [
     "gliner2[local]==2.1.0",
     "disentangled-flash==1.1.1",
     "ninja",
+    "pyahocorasick>=2.0",
 ]
 
 [project.optional-dependencies]

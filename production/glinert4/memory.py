@@ -1,9 +1,12 @@
+import functools
 import math
 import re
 import unicodedata
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Callable, Dict, FrozenSet, List, Sequence, Tuple
+
+import ahocorasick
 
 Span = Tuple[str, int, int, float, str]
 
@@ -26,7 +29,7 @@ STOPWORDS = frozenset(word.casefold() for word in (
 
 @dataclass(frozen=True)
 class MemoryConfig:
-    steps: Tuple[str, ...] = ("labels", "pool", "spread", "aliases")
+    steps: Tuple[str, ...] = ("labels", "spread", "aliases")
     candidate_floor: float = 0.3
     seed_confidence: float = 0.9
     label_margin: float = 2.0
@@ -52,6 +55,7 @@ def word_char(ch):
     return ch.isalnum() or ch == "_" or unicodedata.category(ch)[0] == "M"
 
 
+@functools.lru_cache(maxsize=65536)
 def name_like(form, label, stopwords=STOPWORDS):
     form = form.strip()
     words = form.split()
@@ -81,21 +85,21 @@ def occurrences(text, form):
     return found
 
 
-class Taken:
-    def __init__(self, spans=(), width=64):
-        self.width, self.cells = width, defaultdict(list)
+class Coverage:
+    def __init__(self, length, spans=()):
+        self.marks = bytearray(length)
         for start, end in spans:
             self.add(start, end)
 
-    def _cells(self, start, end):
-        return range(start // self.width, max(start, end - 1) // self.width + 1)
-
     def add(self, start, end):
-        for cell in self._cells(start, end):
-            self.cells[cell].append((start, end))
+        self.marks[start:end] = b"\x01" * (end - start)
 
     def hits(self, start, end):
-        return any(s < end and start < e for cell in self._cells(start, end) for s, e in self.cells.get(cell, ()))
+        return self.marks.find(1, start, end) != -1
+
+
+def bounded(text, start, end):
+    return not (start and word_char(text[start - 1])) and not (end < len(text) and word_char(text[end]))
 
 
 def vote_labels(text, spans, config):
@@ -117,7 +121,7 @@ def vote_labels(text, spans, config):
 
 
 def pool(text, spans, candidates, threshold, config):
-    taken = Taken((start, end) for _, start, end, _, _ in spans)
+    taken = Coverage(len(text), ((start, end) for _, start, end, _, _ in spans))
     groups: Dict[Tuple[str, str], List[Tuple[int, int, float]]] = defaultdict(list)
     for label, start, end, score in candidates:
         if score >= config.pool_min_score and not taken.hits(start, end):
@@ -147,18 +151,6 @@ def seeds(text, spans, labels, config):
     return {form: next(iter(by_label.items())) for form, by_label in found.items() if len(by_label) == 1}
 
 
-def spread(text, spans, config):
-    taken = Taken((start, end) for _, start, end, _, _ in spans)
-    added = []
-    for form, (label, score) in sorted(seeds(text, spans, config.spread_labels, config).items(),
-                                       key=lambda item: -len(item[0])):
-        for start, end in occurrences(text, form):
-            if not taken.hits(start, end):
-                added.append((label, start, end, score, "memory:spread"))
-                taken.add(start, end)
-    return added
-
-
 def strip_suffix(name):
     for suffix in sorted(LEGAL_SUFFIXES, key=len, reverse=True):
         if name.endswith(" " + suffix):
@@ -170,8 +162,15 @@ TITLE_BEFORE = re.compile(r"(?<!\w)(?:" + "|".join(re.escape(title) for title in
 INITIAL_BEFORE = re.compile(r"(?<!\w)(\w)\.\s?$")
 
 
-def aliases(text, spans, config):
-    known = seeds(text, spans, config.alias_labels, config)
+def scan(text, spans, config, spread_names, short_forms):
+    labels = set(config.spread_labels if spread_names else ()) | set(config.alias_labels if short_forms else ())
+    every = seeds(text, spans, labels, config)
+    patterns: Dict[str, list] = defaultdict(list)
+    if spread_names:
+        for form, (label, score) in every.items():
+            if label in config.spread_labels:
+                patterns[form].append(("spread", label, score, None))
+    known = {form: seed for form, seed in every.items() if short_forms and seed[0] in config.alias_labels}
     owners: Dict[Tuple[str, str], set] = defaultdict(set)
     initials: Dict[Tuple[str, str], set] = defaultdict(set)
     for form, (label, _) in known.items():
@@ -183,24 +182,42 @@ def aliases(text, spans, config):
             base = strip_suffix(form)
             if base != form and name_like(base, label, config.stopwords):
                 owners[label, base].add(form)
-    taken = Taken((start, end) for _, start, end, _, _ in spans)
+    for (label, core), names in owners.items():
+        if core not in known:
+            patterns[core].append(("alias", label, None, names))
+    if not patterns:
+        return []
+    automaton = ahocorasick.Automaton()
+    for pattern, entries in patterns.items():
+        automaton.add_word(pattern, (len(pattern), entries))
+    automaton.make_automaton()
+    matches = sorted(((last + 1 - length, last + 1, entries) for last, (length, entries) in automaton.iter(text)),
+                     key=lambda match: (match[0], match[0] - match[1]))
+    taken = Coverage(len(text), ((start, end) for _, start, end, _, _ in spans))
     added = []
-    for (label, core), names in sorted(owners.items(), key=lambda item: -len(item[0][1])):
-        if core in known:
+    for start, end, entries in matches:
+        if not bounded(text, start, end) or taken.hits(start, end):
             continue
-        for start, end in occurrences(text, core):
+        for kind, label, score, names in entries:
+            if kind == "spread":
+                added.append((label, start, end, score, "memory:spread"))
+                taken.add(start, end)
+                break
+            core = text[start:end]
             owner = next(iter(names)) if len(names) == 1 else None
+            begin = start
             if label == "Person":
                 before = text[max(0, start - 12):start]
                 initial = INITIAL_BEFORE.search(before)
                 if initial and len(initials.get((initial.group(1), core), ())) == 1:
                     owner = next(iter(initials[initial.group(1), core]))
-                    start -= len(initial.group(0))
+                    begin = start - len(initial.group(0))
                 elif not (TITLE_BEFORE.search(before) or config.bare_surnames):
                     owner = None
-            if owner is not None and not taken.hits(start, end):
-                added.append((label, start, end, known[owner][1], "memory:alias"))
-                taken.add(start, end)
+            if owner is not None and not taken.hits(begin, end):
+                added.append((label, begin, end, known[owner][1], "memory:alias"))
+                taken.add(begin, end)
+                break
     return added
 
 
@@ -213,8 +230,6 @@ def refine(text: str, accepted: Sequence[Tuple[str, int, int, float]],
         spans = vote_labels(text, spans, config)
     if "pool" in steps:
         spans += pool(text, spans, candidates, threshold, config)
-    if "spread" in steps:
-        spans += spread(text, spans, config)
-    if "aliases" in steps:
-        spans += aliases(text, spans, config)
+    if "spread" in steps or "aliases" in steps:
+        spans += scan(text, spans, config, "spread" in steps, "aliases" in steps)
     return spans

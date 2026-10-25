@@ -6,11 +6,12 @@ __all__ = ["Detector", "DetectorConfig", "MemoryConfig", "install", "uninstall",
 
 
 def install(kernels=True):
-    from . import count, runtime
+    from . import count, overlap, runtime
 
     runtime.check_gliner2()
     runtime.install_word_cache()
     count.install()
+    overlap.install()
     if kernels:
         from . import attention, layernorm
 
@@ -19,9 +20,10 @@ def install(kernels=True):
 
 
 def uninstall():
-    from . import attention, count, layernorm, runtime
+    from . import attention, count, layernorm, overlap, runtime
 
     attention.uninstall()
     layernorm.uninstall()
     count.uninstall()
+    overlap.uninstall()
     runtime.uninstall_word_cache()
