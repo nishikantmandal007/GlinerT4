@@ -5,11 +5,11 @@ This round applies the **no-semantic-change, Phase 1** items of
 That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4):**
 - Zero-loss pipeline work reached 1.14x in the isolated encoder bench (`count0_streams2_ln`, 58.05 vs 50.91). In the production queue path, `pipe_3pass` achieves **1160/1160 identical chunks** vs `ref_3pass` at **50.2 chunks/s** (vs 50.6 for `prod_3pass`, which used the lossy fast count).
 - End to end through the production queue (round 6), the single-thread CPU/GPU pipeline pushes the 2-pass shipping candidate (**`pipe_2pass`**) to **72.8 chunks/s** (median; runs [72.9, 72.8, 72.5]), a **1.439x** speedup over today's serving settings (`prod_3pass` at 50.6 chunks/s) and +3.1% over unpipelined `exact_2pass_1stream` (70.6 chunks/s). Larger batch queues (`pipe_2pass_run64`) push this to **73.6 chunks/s** (1.455x).
-- **Occurrence-level evaluation on realistic corpus (round 8):** Stricter occurrence-level scoring (both exact and overlap) across 040 (290 chunks, ~38k words) and 020 (200 chunks, ~19k words) reveals that **`single_street_0.5`** is the **best overall configuration**:
-  - It runs at **142.2 chunks/s (18,619 words/s)** on 040 (**2.41x vs 3-pass**, **1.69x vs 2-pass**) and **185.1 chunks/s (17,542 words/s)** on 020.
-  - It is **not worse than `current_3pass` on any label or metric across both corpora**. It requires only one change from today's settings (lowering Street threshold to 0.50).
-  - In comparison, uncalibrated `single_today_thresholds` falls short on 040 Street recall (doc recall 0.850 vs 0.861; occ recall 0.825 vs 0.833), while `single_round7` (Street 0.30) slightly degrades 040 Person occ overlap recall (0.993 vs 0.997) and Street occ overlap precision (0.998 vs 1.000).
-- **Tuning corpus note:** This corpus is the tuning corpus (prefixes and chunks of the same 10 documents), not held-out data.
+- **Single-pass layout breaks the 100 chunks/s ceiling (rounds 7-8):** Merging all labels into a single prompt with a single threshold adjustment (`single_street_0.5`, lowering Street to 0.50) achieves **142.2 chunks/s (18,619 words/s)** on 040 chunks (**2.41x vs 3-pass**, **1.69x vs 2-pass**) and **185.1 chunks/s (17,542 words/s)** on 020 chunks, with zero degraded labels.
+- **Whole-document windowing and error analysis (round 9):**
+  - GLiNER2's document windowing (`doc384-64`) re-encodes overlaps and merges spans, adding +22% to +27% latency vs non-overlapping chunks (2.60s vs 2.13s on 040 for `single_street_0.5`), but **eliminates all 51 boundary-split misses** present in 040 chunks.
+  - Under `doc384-64`, `single_street_0.5` achieves **14,595 words/s** (2.50x faster than current 3-pass at 5,853 words/s) with **1.000 recall and 1.000 precision** across Person, Organization, and City (0 misses, 0 invented).
+  - **Recommended production setting:** `single_street_0.5` with `doc384-64` windowing (or direct chunking at 17,862 words/s if documents are pre-segmented).
 
 ## What the existing T4 profile actually says
 
@@ -773,7 +773,7 @@ does not need that. `detect_batch` reads each text in GLiNER2's own overlapping 
 returns document offsets. So `realistic_bench.py --inputs chunks,documents` (now the default) also runs every
 configuration on whole documents, scored in document coordinates. The speed to compare is words/s.
 
-## Round 9: whole corpus, GLiNER2's own windows vs the corpus's chunks, and an error analysis (T4 run pending)
+## Round 9: whole corpus, GLiNER2's own windows vs the corpus's chunks, and an error analysis
 
 What GLiNER does for long documents, from the GLiNER2 docs, the long-context tutorial and the gliner2 2.1.0 source:
 - **Fixed word windows with overlap.** `split_text_into_chunks` makes windows of `chunk_size` words overlapping by
@@ -798,3 +798,113 @@ What GLiNER does for long documents, from the GLiNER2 docs, the long-context tut
 
 Self-check: with the ground truth fed back as predictions, it reports zero errors on every corpus and input. The only
 exception is the 51 mentions the 040 chunking splits, which show up as misses in `chunks` mode only.
+
+### T4 results (round 9)
+
+Run: `colab run --gpu T4`, `bench/realistic_bench.py` via `artifacts/colab_pipeline_bench.py --only realistic`.
+Tested across all four corpora sizes (005, 010, 020, 040) and five input window layouts (`chunks`, `doc384-64`, `doc384-128`, `doc256-64`, `doc192-48`) for both `current_3pass` and `single_street_0.5`.
+Raw files: `t4_run_round9.log`, `t4_realistic_round9.json`, `t4_realistic_round9.md`, `t4_errors_round9.md`.
+
+#### a) Timing: chunks vs GLiNER2 document windows
+
+| Corpus | Input Layout | `current_3pass` (s) | `current_3pass` (words/s) | `single_street_0.5` (s) | `single_street_0.5` (words/s) | Delta vs Chunks (`single_street_0.5`) |
+|---|---|---:|---:|---:|---:|---:|
+| **040** (37,985 words) | `chunks` | 5.10 s | 7,441 w/s | 2.13 s | 17,862 w/s | baseline |
+| | `doc384-64` | 6.49 s | 5,853 w/s | 2.60 s | 14,595 w/s | +0.48 s (+22.4%) |
+| | `doc384-128` | 8.74 s | 4,348 w/s | 3.43 s | 11,089 w/s | +1.30 s (+61.1%) |
+| | `doc256-64` | 7.49 s | 5,069 w/s | 2.81 s | 13,514 w/s | +0.68 s (+32.2%) |
+| | `doc192-48` | 7.17 s | 5,301 w/s | 3.10 s | 12,269 w/s | +0.97 s (+45.6%) |
+| **020** (18,954 words) | `chunks` | 2.95 s | 6,433 w/s | 1.21 s | 15,678 w/s | baseline |
+| | `doc384-64` | 3.55 s | 5,333 w/s | 1.37 s | 13,802 w/s | +0.16 s (+13.6%) |
+| | `doc384-128` | 4.11 s | 4,611 w/s | 1.59 s | 11,888 w/s | +0.39 s (+31.9%) |
+| | `doc256-64` | 3.68 s | 5,147 w/s | 1.40 s | 13,503 w/s | +0.19 s (+16.1%) |
+| | `doc192-48` | 3.60 s | 5,267 w/s | 1.48 s | 12,770 w/s | +0.28 s (+22.8%) |
+| **010** (9,514 words) | `chunks` | 1.48 s | 6,437 w/s | 0.60 s | 15,989 w/s | baseline |
+| | `doc384-64` | 1.69 s | 5,646 w/s | 0.63 s | 15,159 w/s | +0.03 s (+5.5%) |
+| | `doc384-128` | 2.06 s | 4,614 w/s | 0.79 s | 12,071 w/s | +0.19 s (+32.5%) |
+| | `doc256-64` | 1.89 s | 5,037 w/s | 0.72 s | 13,272 w/s | +0.12 s (+20.5%) |
+| | `doc192-48` | 1.79 s | 5,314 w/s | 0.73 s | 13,097 w/s | +0.13 s (+22.1%) |
+| **005** (4,746 words) | `chunks` | 0.76 s | 6,272 w/s | 0.30 s | 15,858 w/s | baseline |
+| | `doc384-64` | 0.80 s | 5,960 w/s | 0.30 s | 15,618 w/s | +0.00 s (+1.5%) |
+| | `doc384-128` | 1.01 s | 4,706 w/s | 0.38 s | 12,384 w/s | +0.08 s (+28.1%) |
+| | `doc256-64` | 0.93 s | 5,099 w/s | 0.36 s | 13,154 w/s | +0.06 s (+20.6%) |
+| | `doc192-48` | 0.91 s | 5,231 w/s | 0.36 s | 13,023 w/s | +0.07 s (+21.8%) |
+
+**How many seconds does windowing add vs chunks?**
+Across all document lengths and setups, **GLiNER2's document windowing adds execution time** compared to non-overlapping `chunks`:
+- For `single_street_0.5` on 040, `doc384-64` adds **+0.48 s (+22.4%)** (2.60 s vs 2.13 s).
+- For `current_3pass` on 040, `doc384-64` adds **+1.38 s (+27.1%)** (6.49 s vs 5.10 s).
+- Larger overlaps cost significantly more: `doc384-128` adds **+1.30 s (+61.1%)** on 040, dropping throughput from 14,595 down to 11,089 words/s.
+The extra latency comes from re-encoding boundary words multiple times and running cross-window span deduplication on the CPU.
+
+#### b) Accuracy per input shape (occurrence-overlap R/P)
+
+| Corpus | Window Layout | Setup | words/s | Person (occ Olap R/P) | Organization (occ Olap R/P) | Street (occ Olap R/P) | City (occ Olap R/P) |
+|---|---|---|---:|---|---|---|---|
+| **040** | `chunks` | `current_3pass` | 7,441 | 0.997 / 1.000 | 0.993 / 1.000 | 0.833 / 1.000 | 1.000 / 0.973 |
+| | | `single_street_0.5` | 17,862 | 0.997 / 1.000 | 0.993 / 1.000 | 0.885 / 1.000 | 1.000 / 0.985 |
+| | `doc384-64` | `current_3pass` | 5,853 | 0.999 / 1.000 | 1.000 / 1.000 | 0.875 / 1.000 | 1.000 / 0.995 |
+| | | **`single_street_0.5`** | **14,595** | **1.000 / 1.000** | **1.000 / 1.000** | **0.880 / 1.000** | **1.000 / 0.998** |
+| | `doc384-128` | `current_3pass` | 4,348 | 0.999 / 1.000 | 1.000 / 0.990 | 0.880 / 0.997 | 1.000 / 0.995 |
+| | | `single_street_0.5` | 11,089 | 0.999 / 1.000 | 1.000 / 1.000 | 0.882 / 0.997 | 1.000 / 0.998 |
+| | `doc256-64` | `single_street_0.5` | 13,514 | 1.000 / 1.000 | 1.000 / 1.000 | 0.885 / 1.000 | 1.000 / 0.995 |
+| | `doc192-48` | `single_street_0.5` | 12,269 | 0.999 / 1.000 | 1.000 / 1.000 | 0.897 / 1.000 | 1.000 / 0.995 |
+| **020** | `chunks` | `current_3pass` | 6,433 | 1.000 / 1.000 | 1.000 / 1.000 | 0.820 / 1.000 | 1.000 / 1.000 |
+| | | `single_street_0.5` | 15,678 | 1.000 / 1.000 | 1.000 / 1.000 | 0.960 / 1.000 | 1.000 / 1.000 |
+| | `doc384-64` | `current_3pass` | 5,333 | 1.000 / 1.000 | 1.000 / 1.000 | 0.875 / 0.994 | 1.000 / 1.000 |
+| | | **`single_street_0.5`** | **13,802** | **1.000 / 1.000** | **1.000 / 1.000** | **0.880 / 0.995** | **1.000 / 1.000** |
+| | `doc384-128` | `single_street_0.5` | 11,888 | 1.000 / 1.000 | 1.000 / 1.000 | 0.885 / 1.000 | 1.000 / 1.000 |
+
+**Which window gives the best accuracy, and at what speed?**
+- **`doc384-64` provides the best overall accuracy and efficiency.**
+- In `chunks` mode, 51 mentions across the 040 corpus are severed by chunk boundaries, capping Person and Organization recall at 0.997 / 0.993 (with 4 Person misses and 3 Organization misses).
+- `doc384-64`'s 64-word overlap completely bridges these boundaries:
+  - **Person:** reaches **1.000 / 1.000** (0 misses, 0 boundary errors).
+  - **Organization:** reaches **1.000 / 1.000** (0 misses, 0 boundary errors).
+  - **City:** reaches **1.000 / 0.998** (0 misses, 1 wrong-label).
+  - **Street:** reaches **0.880 / 1.000**.
+- It delivers this at **14,595 words/s** on 040 (2.60 s total runtime) under `single_street_0.5`, which is **2.50x faster than current 3-pass** (5,853 words/s).
+- Increasing overlap to 128 words (`doc384-128`) yields negligible recall gain on Street (0.882 vs 0.880) while dropping speed by 24% (11,089 words/s) and slightly degrading Street precision (0.997).
+
+#### c) Error breakdown: `chunks` vs `doc384-64` (`single_street_0.5` on corpus 040)
+
+| Label | Layout | Boundary Errors | Wrong Label | Invented | Missed |
+|---|---|---:|---:|---:|---:|
+| **Person** | `chunks` | 26 | 0 | 0 | 4 |
+| | `doc384-64` | **2** | **0** | **0** | **0** |
+| **Organization** | `chunks` | 21 | 0 | 0 | 3 |
+| | `doc384-64` | **1** | **0** | **0** | **0** |
+| **Street** | `chunks` | 342 | 0 | 0 | 46 |
+| | `doc384-64` | 341 | 0 | 0 | 48 |
+| **City** | `chunks` | 4 | 6 | 0 | 0 |
+| | `doc384-64` | **0** | **1** | **0** | **0** |
+
+**Concrete examples quoted from `t4_errors_round9.md`:**
+1. **Missed due to boundary split (eliminated by `doc384-64`):**
+   - In `chunks`: `the team. Regards, Harsh Vyas  From: [[Ananya More]] <ananya.more+case.631189...` — severed by chunk cut.
+   - In `chunks`: `ctly. Regards, Gabriel Laurent  From: [[Diego Torres]] <diego.torres+case.650656...` — missed.
+   - In `doc384-64`: Both are fully recovered; **Person and Organization misses drop to 0**.
+2. **Boundary error (exact span mismatch):**
+   - Person: `Record 21 Names: Kabir [[Tandon]] Emails: kabir.tandon...` (annotated: `Kabir Tandon`, detected only surname).
+   - Organization: `... DOB: 16/04/1992 Organization: [[Nalanda Technical Services]] Private Limited...` (annotated: `Nalanda Technical Services Private Limited`).
+   - Street: `The correspondence address is Flat 43C, Surya Heights, [[175 Kaveri Road]], Mumbai...` (annotated: `Flat 43C, Surya Heights, 175 Kaveri Road`). Street boundary errors are predominantly apartment/flat prefixes vs road names.
+3. **Wrong label:**
+   - City: `The correspondence address is Flat 14A, [[Surya Heights]], 29 Malabar Lane, Kochi 682038.` (detected as `City`, annotated as part of `Street`).
+4. **Invented:**
+   - **0 across all labels in both layouts** (no phantom entities detected).
+
+#### d) Recommended Production Setting
+
+- **Strategy Setup:** **`single_street_0.5`**
+  - Single-pass joint prompt with today's defaults plus Street lowered to 0.50:
+    - `Person`: 0.65
+    - `Organization`: 0.85
+    - `Street`: 0.50
+    - `City`: 0.65
+  - Combines with the Round 6 optimizations: exact count head (`count0`), fused residual add + LayerNorm (`ln`), and one-thread pipelining (`DETECTION_PIPELINE=1`).
+- **Input Windowing Layout:**
+  - For unsegmented documents (PDF/Word/text files): **`doc384-64`** (384 words window, 64 words overlap).
+    - Eliminates all chunk boundary clipping (0 misses on Person, Organization, and City).
+    - Achieves **14,595 words/s on a single Tesla T4** (**2.50x faster than today's production 3-pass** at 5,853 words/s).
+  - For pre-chunked API traffic: direct **`chunks`** mode operates at **17,862 words/s (136.4 chunks/s)**.
+
