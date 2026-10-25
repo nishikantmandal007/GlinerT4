@@ -1,0 +1,13 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-1263df'...
+[colab] Session READY (run-1263df). Executing artifacts/colab_production_check.py...
+BEGIN_PYTEST
+END_PYTEST rc=0
+CompletedProcess(args=['/usr/bin/python3', '/content/glinert4-check/check.py'], 
+returncode=0)
+[colab] Stopping session 'run-1263df'...
+[colab] Session terminated.
