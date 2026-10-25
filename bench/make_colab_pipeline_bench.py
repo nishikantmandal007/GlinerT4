@@ -33,7 +33,7 @@ if args.only == "realistic":
     spec = importlib.util.spec_from_file_location("realistic_bench", root / "bench/realistic_bench.py")
     realistic = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(realistic)
-    files["realistic.json"] = json.dumps({size: realistic.prepare(root / "test_corpus", size) for size in ("040", "020")},
+    files["realistic.json"] = json.dumps({size: realistic.prepare(root / "test_corpus", size) for size in ("040", "020", "010", "005")},
                                          ensure_ascii=False)
 blob = base64.b64encode(gzip.compress(json.dumps(files).encode())).decode()
 
@@ -60,6 +60,7 @@ if {args.only!r} == "realistic":
                     "--out", str(out)], check=True)
     print("BEGIN_REALISTIC_JSON"); print((out / "realistic_result.json").read_text()); print("END_REALISTIC_JSON")
     print("BEGIN_REALISTIC_MD"); print((out / "realistic_summary.md").read_text()); print("END_REALISTIC_MD", flush=True)
+    print("BEGIN_ERRORS_MD"); print((out / "realistic_errors.md").read_text()); print("END_ERRORS_MD", flush=True)
 if {args.only!r} == "single":
     subprocess.run([sys.executable, str(root / "bench/single_pass_bench.py"), "--corpus", str(root / "corpus.json"),
                     "--out", str(out)], check=True)

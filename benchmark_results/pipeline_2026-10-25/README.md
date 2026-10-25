@@ -772,3 +772,29 @@ Whole documents: the corpus files arrive pre-cut into ~131-word chunks, which ro
 does not need that. `detect_batch` reads each text in GLiNER2's own overlapping windows (384 words, 64 overlap) and
 returns document offsets. So `realistic_bench.py --inputs chunks,documents` (now the default) also runs every
 configuration on whole documents, scored in document coordinates. The speed to compare is words/s.
+
+## Round 9: whole corpus, GLiNER2's own windows vs the corpus's chunks, and an error analysis (T4 run pending)
+
+What GLiNER does for long documents, from the GLiNER2 docs, the long-context tutorial and the gliner2 2.1.0 source:
+- **Fixed word windows with overlap.** `split_text_into_chunks` makes windows of `chunk_size` words overlapping by
+  `chunk_overlap`. The tutorial's default is 384/64; it suggests 96-128 overlap when entities sit near window edges
+  and smaller windows for speed.
+- **Merging.** Chunk-local spans are mapped to document offsets, and duplicates from the overlap are merged by position.
+- **No joining across windows.** A mention split between two windows cannot be joined, so overlap is what protects it.
+- **Long-context models.**
+  - Fastino's long-context path is the GLiNER2.5 boundary checkpoint, `fastino/gliner2.5-multi-v1`.
+  - Knowledgator's ModernBERT GLiNER reads up to 8,192 tokens, but it is an English-only bi-encoder without label
+    interaction. That does not fit a 25-language need.
+
+`realistic_bench.py` now runs (`python bench/make_colab_pipeline_bench.py --only realistic`):
+- **Corpora:** all four sizes, 005 / 010 / 020 / 040.
+- **Inputs:** the corpus's chunks (`chunks`) and whole documents in GLiNER2's windows: `doc384-64` (default),
+  `doc384-128` (more overlap), `doc256-64` (faster) and `doc192-48` (about the corpus chunk size).
+- **Configs:** today's 3 passes and the single pass with Street 0.5.
+- **Scoring:** doc-set, occurrence-overlap and occurrence-exact, plus seconds per run and words/s.
+- **Error analysis against the ground truth:**
+  - every non-exact detection as a boundary error, a wrong label or invented;
+  - every miss, with 40 characters of context (`realistic_errors.md`, all items in `realistic_errors.json`).
+
+Self-check: with the ground truth fed back as predictions, it reports zero errors on every corpus and input. The only
+exception is the 51 mentions the 040 chunking splits, which show up as misses in `chunks` mode only.

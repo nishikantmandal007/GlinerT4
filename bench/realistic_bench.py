@@ -5,11 +5,15 @@
 #   occ-overlap:  every annotated occurrence (test_corpus/ground_truth char offsets): recalled if a detected span of the
 #                 same label overlaps it; a detected span is correct if it overlaps an annotated one of that label
 #   occ-exact:    the same with identical character spans
-# Two input shapes: the corpus's own pre-cut chunks (~131 words, as in rounds 1-7), and whole documents, which
-# detect_batch reads in GLiNER2's own overlapping windows (WINDOW_WORDS=384, WINDOW_OVERLAP_WORDS=64), as production does.
+# Input shapes: the corpus's own pre-cut chunks (~131 words, as in rounds 1-8), and whole documents, which detect_batch
+# reads in GLiNER2's own overlapping word windows (docW-O: W words per window, O words of overlap; production and the
+# GLiNER2 docs use 384-64, and suggest 96-128 overlap for entities near window edges and smaller windows for speed).
+# Every run also gets an error analysis against the ground truth: each detected span that is not an exact annotated
+# span is a boundary error (overlaps an annotated mention of its label), a wrong label (overlaps only other labels'
+# mentions) or invented (overlaps nothing); each annotated mention no detection of its label overlaps is a miss.
 # The 040-section corpus is the rounds 1-7 corpus (the round-7 thresholds were chosen on it); the 020-section corpus is
 # the same documents cut shorter and chunked at other boundaries. Neither is held-out data.
-#   python bench/realistic_bench.py --out results_dir [--sizes 040,020] [--inputs chunks,documents] [--prepared x.json]
+#   python bench/realistic_bench.py --out results_dir [--sizes ...] [--inputs chunks,doc384-64,...] [--configs ...]
 import argparse
 import codecs
 import json
@@ -69,9 +73,9 @@ def prepare(test_corpus, size):
     return docs
 
 
-def occurrence_scores(docs, found, labels):
-    totals = {label: {"gt": 0, "gt_hit": 0, "gt_exact": 0, "pred": 0, "pred_hit": 0, "pred_exact": 0} for label in labels}
-    index = 0
+def predictions(docs, found):
+    """Per document, the detected (label, start, end) spans in the ground truth's coordinates."""
+    per_doc, index = [], 0
     for doc in docs:
         predicted, mapped = [], doc.get("position_map") or None
         for offset in doc["chunk_offsets"]:
@@ -81,6 +85,44 @@ def occurrence_scores(docs, found, labels):
                     start, end = mapped[start], mapped[end - 1] + 1
                 predicted.append((o["label"], start, end))
             index += 1
+        per_doc.append(predicted)
+    return per_doc
+
+
+def error_analysis(docs, found, labels, context=40):
+    """Every non-exact detection by kind (boundary / wrong_label / invented) and every miss, with surrounding text."""
+    def snippet(text, start, end):
+        return (text[max(0, start - context):start] + "[[" + text[start:end] + "]]" + text[end:end + context]).replace(
+            "\r", "").replace("\n", " ")
+
+    def overlaps(a, b):
+        return a[1] < b[2] and b[1] < a[2]
+
+    errors = {label: {"boundary": [], "wrong_label": [], "invented": [], "missed": []} for label in labels}
+    for doc, predicted in zip(docs, predictions(docs, found)):
+        text, truth = doc["text"], [tuple(o) for o in doc["occurrences"]]
+        exact = set(truth)
+        for p in predicted:
+            if p in exact or p[0] not in errors:
+                continue
+            same = [t for t in truth if t[0] == p[0] and overlaps(p, t)]
+            other = [t for t in truth if t[0] != p[0] and overlaps(p, t)]
+            kind = "boundary" if same else "wrong_label" if other else "invented"
+            item = {"file": doc["file"], "detected": text[p[1]:p[2]], "context": snippet(text, p[1], p[2])}
+            if same or other:
+                item["annotated"] = [f"{t[0]}: {text[t[1]:t[2]]}" for t in (same or other)]
+            errors[p[0]][kind].append(item)
+        for t in truth:
+            if t[0] in errors and not any(p[0] == t[0] and overlaps(p, t) for p in predicted):
+                errors[t[0]]["missed"].append({
+                    "file": doc["file"], "annotated": text[t[1]:t[2]], "context": snippet(text, t[1], t[2]),
+                    "detected_as": sorted({p[0] for p in predicted if overlaps(p, t)})})
+    return errors
+
+
+def occurrence_scores(docs, found, labels):
+    totals = {label: {"gt": 0, "gt_hit": 0, "gt_exact": 0, "pred": 0, "pred_hit": 0, "pred_exact": 0} for label in labels}
+    for doc, predicted in zip(docs, predictions(docs, found)):
         truth = [tuple(o) for o in doc["occurrences"]]
         exact = set(truth) & set(predicted)
         for label in labels:
@@ -103,9 +145,11 @@ def occurrence_scores(docs, found, labels):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", required=True)
-    parser.add_argument("--sizes", default="040,020")
-    parser.add_argument("--inputs", default="chunks,documents",
-                        help="chunks: the corpus's pre-cut chunks; documents: whole documents, windowed by GLiNER2")
+    parser.add_argument("--sizes", default="040,020,010,005")
+    parser.add_argument("--inputs", default="chunks,doc384-64,doc384-128,doc256-64,doc192-48",
+                        help="chunks: the corpus's pre-cut chunks; docW-O: whole documents in GLiNER2's own windows of "
+                             "W words overlapping by O")
+    parser.add_argument("--configs", default="current_3pass,single_street_0.5", help="comma-separated, or 'all'")
     parser.add_argument("--test-corpus", default=str(ROOT / "test_corpus"))
     parser.add_argument("--prepared", help="JSON from --prepare-only (used on Colab instead of test_corpus/)")
     parser.add_argument("--prepare-only", help="write the prepared corpora to this path and exit")
@@ -160,6 +204,8 @@ def main():
         "single_street_0.5": (single, {"Organization": 0.85, "Street": 0.5}, 0.65),  # one change from today
         "single_round7": (single, {"Person": 0.85, "Organization": 0.80, "Street": 0.30, "City": 0.90}, 0.30),
     }
+    if args.configs != "all":
+        configs = {name: configs[name] for name in args.configs.split(",")}
     detector = ner.Gliner2NER()
 
     def detect(name, chunks):
@@ -175,11 +221,15 @@ def main():
         return time.perf_counter() - start, found
 
     report = {"device": torch.cuda.get_device_name() if device == "cuda" else "cpu (stand-in)", "corpora": {}}
-    lines = []
+    lines, error_lines, errors_all = [], [], {}
+    default_window = (ner.WINDOW_WORDS, ner.WINDOW_OVERLAP_WORDS)
     runs = [(size, shape) for size in corpora for shape in args.inputs.split(",")]
     for size, shape in runs:
         docs = corpora[size]
-        if shape == "documents":  # one text per document, at offset 0 of the ground truth's text
+        ner.WINDOW_WORDS, ner.WINDOW_OVERLAP_WORDS = default_window
+        if shape != "chunks":  # one text per document, at offset 0 of the ground truth's text, in GLiNER2's windows
+            window, overlap = (int(v) for v in shape[len("doc"):].split("-"))
+            ner.WINDOW_WORDS, ner.WINDOW_OVERLAP_WORDS = window, overlap
             docs = [{**doc, "chunks": [doc["text"]], "chunk_offsets": [0], "position_map": None} for doc in docs]
         chunks = [chunk for doc in docs for chunk in doc["chunks"]]
         words = sum(len(chunk.split()) for chunk in chunks)
@@ -191,9 +241,14 @@ def main():
                 elapsed, found = detect(name, chunks)
                 seconds.append(elapsed)
             median = statistics.median(seconds)
-            rows[name] = {"seconds": seconds, "texts_per_s": len(chunks) / median, "words_per_s": words / median,
+            errors = error_analysis(docs, found, labels)
+            errors_all[f"{size}|{shape}|{name}"] = errors
+            rows[name] = {"seconds": seconds, "median_seconds": median, "texts_per_s": len(chunks) / median,
+                          "words_per_s": words / median,
                           "doc_set": bench_detection.score(docs, [item["values"] for item in found]),
-                          "occurrence": occurrence_scores(docs, found, labels)}
+                          "occurrence": occurrence_scores(docs, found, labels),
+                          "errors": {label: {kind: len(items) for kind, items in kinds.items()}
+                                     for label, kinds in errors.items()}}
             print("RESULT " + json.dumps({"corpus": size, "inputs": shape, "config": name, **rows[name]}), flush=True)
         ref = rows["current_3pass"]
         for row in rows.values():
@@ -216,8 +271,32 @@ def main():
                 for l in labels)
             worse = ", ".join(row["worse_than_current"]) or ("reference" if name == "current_3pass" else "none")
             lines.append(f"| {name} | {row['texts_per_s']:.1f} | {row['words_per_s']:.0f} | {cells} | {worse} |")
+        lines += ["", "Errors per label (boundary / wrong label / invented / missed), median seconds per run:", "",
+                  "| config | seconds | " + " | ".join(labels) + " |", "|" + "---|" * (2 + len(labels))]
+        for name, row in rows.items():
+            lines.append(f"| {name} | {row['median_seconds']:.2f} | " + " | ".join(
+                "{boundary} / {wrong_label} / {invented} / {missed}".format(**row["errors"][l]) for l in labels) + " |")
         lines.append("")
     (out / "realistic_result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
+    (out / "realistic_errors.json").write_text(json.dumps(errors_all, indent=1, ensure_ascii=False))
+    # readable examples: the largest corpus, every input shape and config, up to 15 items per label and kind
+    largest = max(corpora, key=lambda size: sum(len(d["chunks"]) for d in corpora[size]))
+    for key, errors in errors_all.items():
+        size, shape, name = key.split("|")
+        if size != largest:
+            continue
+        error_lines += [f"## corpus_{size}sections, {shape}, {name}", ""]
+        for label, kinds in errors.items():
+            for kind, items in kinds.items():
+                if not items:
+                    continue
+                error_lines.append(f"**{label} {kind}: {len(items)}**")
+                for item in items[:15]:
+                    extra = f" (annotated: {'; '.join(item['annotated'])})" if item.get("annotated") and kind != "missed" \
+                        else f" (detected as: {', '.join(item['detected_as'])})" if item.get("detected_as") else ""
+                    error_lines.append(f"- `{item['context']}`{extra} — {item['file'].split('/')[-1]}")
+                error_lines.append("")
+    (out / "realistic_errors.md").write_text("\n".join(error_lines) + "\n")
     (out / "realistic_summary.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines), flush=True)
     print("REALISTIC_BENCH_DONE", flush=True)
