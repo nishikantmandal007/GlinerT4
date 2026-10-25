@@ -232,13 +232,14 @@ for kind in ("sentences", "documents"):
 code("""
 plt.rcParams.update({"font.size": 11, "axes.edgecolor": "#d5d4cf", "axes.labelcolor": "#52514e",
                      "xtick.color": "#52514e", "ytick.color": "#0b0b0b"})
-fig, axes = plt.subplots(1, 2, figsize=(12, 3.6), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(12, 3.6), sharex=True, sharey=True)
+top = max(runs["fp16"][kind]["seconds"] / run[kind]["seconds"] for run in runs.values() for kind in ("sentences", "documents"))
 for ax, kind in zip(axes, ("sentences", "documents")):
     speedup = [runs["fp16"][kind]["seconds"] / run[kind]["seconds"] for run in runs.values()]
     bars = ax.barh(list(runs), speedup, height=0.55, color="#2a78d6")
     ax.bar_label(bars, labels=[f"{s:.1f}×" for s in speedup], padding=5, color="#0b0b0b")
     ax.set_title(f"{kind.capitalize()}: times faster than GLiNER2 fp16", loc="left", color="#0b0b0b", pad=12)
-    ax.set_xlim(0, max(speedup) * 1.18)
+    ax.set_xlim(0, top * 1.15)
     ax.grid(axis="x", color="#ecebe7")
     ax.set_axisbelow(True)
     ax.spines[["top", "right"]].set_visible(False)
