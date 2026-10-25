@@ -80,3 +80,50 @@ class Clip(Scene):
 
     def pause(self, seconds=0.5):
         self.wait(seconds)
+
+
+def bracket(left, right, y, color=INK_DIM, tick=0.12, up=True, stroke=2.5):
+    sign = -1 if up else 1
+    left, right = np.array([left, y, 0]), np.array([right, y, 0])
+    return VGroup(Line(left, right), Line(left, left + sign * tick * UP), Line(right, right + sign * tick * UP)).set_stroke(
+        color, stroke)
+
+
+def hatch(rect, spacing=0.14, color=WASTE, stroke=1.6):
+    x0, x1 = rect.get_left()[0], rect.get_right()[0]
+    y0, y1 = rect.get_bottom()[1], rect.get_top()[1]
+    lines = VGroup()
+    offset = x0 - (y1 - y0)
+    while offset < x1:
+        start = np.array([offset, y0, 0])
+        end = start + (y1 - y0) * np.array([1, 1, 0])
+        if start[0] < x0:
+            start = start + (x0 - start[0]) * np.array([1, 1, 0])
+        if end[0] > x1:
+            end = end - (end[0] - x1) * np.array([1, 1, 0])
+        if end[0] > start[0]:
+            lines.add(Line(start, end))
+        offset += spacing
+    return lines.set_stroke(color, stroke)
+
+
+def counter(tracker, size=60, color=NUMBER, fmt="{:.0f}"):
+    paint = color if callable(color) else (lambda: color)
+    return always_redraw(lambda: words(fmt.format(tracker.get_value()), size=size, color=paint(), weight=BOLD,
+                                       font=MONO))
+
+
+TERM_C2C = "#5CD0B3"
+TERM_C2P = "#C792EA"
+TERM_P2C = "#FF8FB1"
+
+
+def heat_grid(values, color, cell=0.42, gap=0.04):
+    grid = VGroup()
+    rows, cols = len(values), len(values[0])
+    for i in range(rows):
+        for j in range(cols):
+            square = Square(cell).set_stroke(width=0).set_fill(color, 0.08 + 0.85 * values[i][j])
+            square.move_to([(j - (cols - 1) / 2) * (cell + gap), -(i - (rows - 1) / 2) * (cell + gap), 0])
+            grid.add(square)
+    return grid

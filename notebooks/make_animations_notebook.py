@@ -6,8 +6,16 @@ import json
 from pathlib import Path
 
 here = Path(__file__).parent / "animations"
-CLIPS = [("clip_a_read_once.py", "ReadOnce", "Read once, ask everything",
-          "Instead of reading the document three times, read it once and ask all the questions.")]
+CLIPS = [("clip_a_read_once.py", "ReadOnce", "A. Read once, ask everything",
+          "Instead of reading the document three times, read it once and ask all the questions."),
+         ("clip_b_waiting.py", "Waiting", "B. The CPU wasn't working, it was waiting",
+          "The slow line wasn't slow: it was where the CPU waited for the GPU."),
+         ("clip_c_overlap.py", "Overlap", "C. Overlap keeps entities whole",
+          "Overlap means no entity is ever only seen cut in half."),
+         ("clip_d_deberta.py", "ThreeAttentions", "D. DeBERTa's three attentions",
+          "DeBERTa looks at what words are and where they are, so it needs a special kernel."),
+         ("clip_e_tiles.py", "Tiles", "E. Feeding the tensor cores",
+          "The kernel re-packs the work into the exact shape the T4's fast units want.")]
 cells = []
 
 
