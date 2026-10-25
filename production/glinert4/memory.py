@@ -36,7 +36,7 @@ class MemoryConfig:
     context_chars: int = 30
     spread_labels: Tuple[str, ...] = ("Person", "Organization", "City", "Street")
     alias_labels: Tuple[str, ...] = ("Person", "Organization")
-    bare_surnames: bool = True
+    bare_surnames: bool = False
     stopwords: FrozenSet[str] = STOPWORDS
 
 
@@ -166,40 +166,40 @@ def strip_suffix(name):
     return name
 
 
-def alias_forms(form, label, config):
-    words = form.split()
-    if label == "Person" and len(words) >= 2 and cased(form):
-        surname, initial = words[-1], words[0][0]
-        forms = {f"{initial}. {surname}": f"{initial}. {surname}", f"{initial}.{surname}": f"{initial}.{surname}"}
-        forms.update({f"{title}{dot} {surname}": surname for title in TITLES for dot in (".", "")})
-        if config.bare_surnames:
-            forms[surname] = surname
-        return {alias: core for alias, core in forms.items() if name_like(surname, label, config.stopwords)}
-    if label == "Organization":
-        base = strip_suffix(form)
-        return {base: base} if base != form and name_like(base, label, config.stopwords) else {}
-    return {}
+TITLE_BEFORE = re.compile(r"(?<!\w)(?:" + "|".join(re.escape(title) for title in TITLES) + r")\.?\s+$")
+INITIAL_BEFORE = re.compile(r"(?<!\w)(\w)\.\s?$")
 
 
 def aliases(text, spans, config):
     known = seeds(text, spans, config.alias_labels, config)
-    owners: Dict[str, set] = defaultdict(set)
-    cores: Dict[str, str] = {}
+    owners: Dict[Tuple[str, str], set] = defaultdict(set)
+    initials: Dict[Tuple[str, str], set] = defaultdict(set)
     for form, (label, _) in known.items():
-        for alias, core in alias_forms(form, label, config).items():
-            if alias != form:
-                owners[alias].add(form)
-                cores[alias] = core
+        words = form.split()
+        if label == "Person" and len(words) >= 2 and cased(form) and name_like(words[-1], label, config.stopwords):
+            owners[label, words[-1]].add(form)
+            initials[words[0][0], words[-1]].add(form)
+        elif label == "Organization":
+            base = strip_suffix(form)
+            if base != form and name_like(base, label, config.stopwords):
+                owners[label, base].add(form)
     taken = Taken((start, end) for _, start, end, _, _ in spans)
     added = []
-    for alias in sorted(owners, key=len, reverse=True):
-        if len(owners[alias]) != 1 or alias in known:
+    for (label, core), names in sorted(owners.items(), key=lambda item: -len(item[0][1])):
+        if core in known:
             continue
-        label, score = known[next(iter(owners[alias]))]
-        for start, end in occurrences(text, alias):
-            start = end - len(cores[alias])
-            if not taken.hits(start, end):
-                added.append((label, start, end, score, "memory:alias"))
+        for start, end in occurrences(text, core):
+            owner = next(iter(names)) if len(names) == 1 else None
+            if label == "Person":
+                before = text[max(0, start - 12):start]
+                initial = INITIAL_BEFORE.search(before)
+                if initial and len(initials.get((initial.group(1), core), ())) == 1:
+                    owner = next(iter(initials[initial.group(1), core]))
+                    start -= len(initial.group(0))
+                elif not (TITLE_BEFORE.search(before) or config.bare_surnames):
+                    owner = None
+            if owner is not None and not taken.hits(start, end):
+                added.append((label, start, end, known[owner][1], "memory:alias"))
                 taken.add(start, end)
     return added
 

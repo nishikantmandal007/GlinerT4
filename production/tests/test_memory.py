@@ -53,9 +53,12 @@ def test_short_forms_mark_the_name_without_its_title():
     accepted = [span("Person", "Lakshmi Varma", 0.95), span("Organization", "Kaveri Analytics Private Limited", 0.97)]
     result = run(accepted, steps=("spread", "aliases"))
     assert added(result, "memory:alias") == [("Organization", "Kaveri Analytics"), ("Person", "L. Varma"),
-                                             ("Person", "Varma"), ("Person", "Varma")]
+                                             ("Person", "Varma")]
     titled = TEXT.index("Ms. Varma") + len("Ms. ")
     assert ("Person", "Varma", titled, "memory:alias") in result
+    with_bare = run(accepted, steps=("spread", "aliases"), bare_surnames=True)
+    assert added(with_bare, "memory:alias") == [("Organization", "Kaveri Analytics"), ("Person", "L. Varma"),
+                                                ("Person", "Varma"), ("Person", "Varma")]
 
 
 def test_short_forms_shared_by_two_people_are_left_alone():
@@ -63,7 +66,7 @@ def test_short_forms_shared_by_two_people_are_left_alone():
     text_with_two = TEXT + " Rahul Varma joined."
     second = text_with_two.index("Rahul Varma")
     found = refine(text_with_two, [accepted[0], ("Person", second, second + len("Rahul Varma"), 0.95)], [], threshold,
-                   MemoryConfig(steps=("aliases",)))
+                   MemoryConfig(steps=("aliases",), bare_surnames=True))
     forms = {text_with_two[start:end] for _, start, end, _, source in found if source == "memory:alias"}
     assert forms == {"L. Varma"}
 
