@@ -68,6 +68,10 @@ loaded_checkpoints = {}
 # a city scored alone is caught most often (0.96), but Street needs City beside it (0.95 vs 0.85), so City also gets
 # a pass of its own and the cities of both passes are kept: City 0.86 -> 0.97 with Street unchanged
 CITY_ALONE_DESCRIPTION = "Name of a city, town or village."
+# measured again on the detbench corpus with today's descriptions, thresholds and cell confirmation (GlinerT4
+# pass_bench, 2026-10-25): without the City-alone pass City is 1.000/.947 (with it 1.000/.930), every other label is
+# unchanged, and the run is 1.46x faster (two passes instead of three); off until a held-out corpus confirms it
+CITY_PASS = os.getenv("DETECTION_CITY_PASS", "1") == "1"
 
 
 # fp16 with DisentangledFlash on the GPU: DeBERTa's attention fused into one kernel, about 1.6-2x faster on a T4 with
@@ -84,7 +88,17 @@ if ATTENTION_KERNEL and FUSED_ATTENTION:
     sys.path.insert(0, os.path.join(ATTENTION_KERNEL, "torch-ext"))
     import gliner_t4
 
-    gliner_t4.install()
+    gliner_t4.install()  # GLINER_T4_FUSE_LAYERNORM=1 also fuses residual add + LayerNorm (bit-identical)
+
+# exact count head (serving/gliner2_exact.py of the same checkout): entity count queries run only the GRU step they
+# keep, with the stock kernel shapes, so results are bit-identical (unlike DETECTION_FAST_COUNT); opt-in
+if ATTENTION_KERNEL and os.getenv("DETECTION_EXACT_COUNT") == "1":
+    import sys
+
+    sys.path.insert(0, os.path.join(ATTENTION_KERNEL, "serving"))
+    import gliner2_exact
+
+    gliner2_exact.install(count_step0=True, format_cache=False)
 
 
 # with more than one run in flight per GPU every serving thread has its own copy: the fused encoder keeps per-call
@@ -254,7 +268,7 @@ def strategy_passes(labels):
         rest = [label for label in labels if label not in PII_LABELS]
         return [(key, group, {}) for key, group in (("pii", covered), ("legacy", rest)) if group]
     passes = [("legacy", group, {}) for group in label_passes(labels)]
-    if "City" in labels:
+    if "City" in labels and CITY_PASS:
         passes.append(("legacy", ["City"], {"City": CITY_ALONE_DESCRIPTION}))
     return passes
 

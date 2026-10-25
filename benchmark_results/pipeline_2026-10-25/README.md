@@ -297,3 +297,27 @@ accepted layouts). This is not zero-loss: it changes the computation, and 4 chun
 25-language corpus on the VM) before it ships. Per-label numbers are rounded to 3 decimals, and the speed is from 2 trials.
 Combining `drop_city_pass` with the zero-loss `count0_streams2_ln` path was not measured, and I'd expect the gains to
 partly overlap rather than multiply.
+
+## Round 4: shipping candidates end to end (code done, T4 run pending)
+
+Rounds 2 and 3 measured the pieces separately. Round 4 measures them together through the production serving path: the
+ai-utils detection queue, driven by `bench_detection.py` in queue mode, on one T4, with 4 repeats of the corpus (1160
+chunks, as the reference runs) and 2 runs per configuration (`bench/make_colab_detection_bench.py` builds
+`artifacts/colab_detection_bench.py`).
+
+New opt-in switches in `artifacts/colab_pipeline/gliner2_ner.py` (patch for ai-utils: `artifacts/ai_utils_gliner2_ner.patch`;
+defaults unchanged):
+- `DETECTION_CITY_PASS=0` drops the City-alone pass.
+- `DETECTION_EXACT_COUNT=1` installs the bit-identical count0 from the kernel checkout's `serving/`.
+- `GLINER_T4_FUSE_LAYERNORM=1` (existing) turns on the bit-identical fused add + LayerNorm.
+
+| config | streams | count head | fused add+LN | passes | role |
+|---|---:|---|---|---:|---|
+| ref_3pass | 1 | stock | no | 3 | accuracy reference |
+| prod_3pass | 2 | fast count (not exact) | no | 3 | today's serving settings |
+| exact_3pass | 2 | exact count0 | yes | 3 | zero-loss speed; must match ref_3pass on every chunk |
+| exact_2pass | 2 | exact count0 | yes | 2 | **shipping candidate** |
+| fast_2pass | 2 | fast count | yes | 2 | upper bound if fast count's accuracy is acceptable |
+
+Expected from rounds 2-3: with two passes, kernel time puts the one-T4 ceiling near 100 chunks/s. A realistic estimate
+on Colab's single physical core is 85-95.
