@@ -1,0 +1,317 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-beef1b'...
+[colab] Session READY (run-beef1b). Executing artifacts/colab_pipeline_bench.py...
+PACKAGES_READY
+BEGIN_RESULT_JSON
+{
+  "env": {
+    "gpu": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ],
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "triton": "3.6.0",
+      "gliner2": "2.1.0",
+      "disentangled-flash": "1.1.1",
+      "transformers": "5.20.2"
+    },
+    "cuda": "13.0",
+    "cpu_count": 2,
+    "torch_threads": 1,
+    "git_commit": null
+  },
+  "corpus": {
+    "chunks": 290,
+    "sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40"
+  },
+  "bulk_lookup_installed": true,
+  "configs": {
+    "baseline": {
+      "seconds": [
+        5.686490840000033,
+        5.755183613999861,
+        5.70667900400008
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "median_seconds": 5.70667900400008,
+      "chunks_per_s": 50.81764714586634,
+      "speedup_vs_baseline": 1.0,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "prefetch1": {
+      "seconds": [
+        5.80258310399995,
+        5.768713023999908,
+        5.7870979140000145
+      ],
+      "errors": [],
+      "prefetch_depth": 1,
+      "num_workers": 0,
+      "batch_size": 16,
+      "median_seconds": 5.7870979140000145,
+      "chunks_per_s": 50.11147285039686,
+      "speedup_vs_baseline": 0.9861037585340682,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "prefetch2": {
+      "seconds": [
+        5.8464304290000655,
+        5.796257847999868,
+        5.813461012000062
+      ],
+      "errors": [],
+      "prefetch_depth": 2,
+      "num_workers": 0,
+      "batch_size": 16,
+      "median_seconds": 5.813461012000062,
+      "chunks_per_s": 49.88422549001124,
+      "speedup_vs_baseline": 0.9816319387401817,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "workers1": {
+      "seconds": [
+        5.844473153000081,
+        5.768237016000057,
+        5.804065055999899
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 1,
+      "batch_size": 16,
+      "median_seconds": 5.804065055999899,
+      "chunks_per_s": 49.96498095765056,
+      "speedup_vs_baseline": 0.9832210612630629,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "workers2": {
+      "seconds": [
+        6.140362738000022,
+        6.390609754000025,
+        6.143776731000116
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 2,
+      "batch_size": 16,
+      "median_seconds": 6.143776731000116,
+      "chunks_per_s": 47.202236132170164,
+      "speedup_vs_baseline": 0.9288552064734807,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "batch8": {
+      "seconds": [
+        6.277061989999993,
+        6.165017028999955,
+        6.2024163730000055
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 8,
+      "median_seconds": 6.2024163730000055,
+      "chunks_per_s": 46.75597098937294,
+      "speedup_vs_baseline": 0.9200735101954876,
+      "identical_full_output": false,
+      "identical_kept_values_chunks": 288
+    },
+    "batch32": {
+      "seconds": [
+        6.054592283999909,
+        5.934386310000036,
+        5.989173092999863
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 32,
+      "median_seconds": 5.989173092999863,
+      "chunks_per_s": 48.42070774994825,
+      "speedup_vs_baseline": 0.9528325388808746,
+      "identical_full_output": false,
+      "identical_kept_values_chunks": 290
+    },
+    "batch32_prefetch2": {
+      "seconds": [
+        5.824198490000072,
+        5.889160026000127,
+        5.903989991999879
+      ],
+      "errors": [],
+      "prefetch_depth": 2,
+      "num_workers": 0,
+      "batch_size": 32,
+      "median_seconds": 5.889160026000127,
+      "chunks_per_s": 49.243015764502125,
+      "speedup_vs_baseline": 0.9690140832997559,
+      "identical_full_output": false,
+      "identical_kept_values_chunks": 290
+    }
+  },
+  "breakdown_baseline": {
+    "total_seconds": 6.021982671999922,
+    "stages_seconds": {
+      "collate": 1.0704807239999354,
+      "to_device": 0.012517479999587522,
+      "encoder": 3.306521347998796,
+      "embeddings": 0.032553195998843876,
+      "span_head": 1.4173823050002738,
+      "decode": 0.13758714500045244,
+      "format": 0.0051381749988195224,
+      "other": 0.03980229900321319
+    },
+    "stages_ms_per_chunk": {
+      "collate": 3.6913128413790877,
+      "to_device": 0.043163724136508694,
+      "encoder": 11.401797751719986,
+      "embeddings": 0.11225239999601336,
+      "span_head": 4.887525189656117,
+      "decode": 0.4744384310360429,
+      "format": 0.017717844823515596,
+      "other": 0.1372493069076317
+    }
+  },
+  "gpu_busy": {
+    "baseline": {
+      "wall_seconds": 6.086336394999989,
+      "kernel_seconds": 4.012687940000019,
+      "gpu_busy_fraction": 0.6592944720072486,
+      "top_kernels": [
+        [
+          "turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn",
+          1020.2653349999986
+        ],
+        [
+          "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, _",
+          1014.761256999994
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn",
+          541.2138100000016
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_stages_32x1_tn",
+          213.9437969999999
+        ],
+        [
+          "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<a",
+          198.35882099998466
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::GeluCUDAKernelImpl",
+          187.03881300000273
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c1",
+          158.62172500000273
+        ],
+        [
+          "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<c10::Half, ",
+          147.5649459999986
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_t",
+          99.15768699999278
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespa",
+          83.83151999999568
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn",
+          53.63882899999531
+        ],
+        [
+          "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, f",
+          46.18106799999185
+        ]
+      ]
+    },
+    "prefetch1": {
+      "wall_seconds": 6.223631931999989,
+      "kernel_seconds": 4.025115542000016,
+      "gpu_busy_fraction": 0.6467470419168135,
+      "top_kernels": [
+        [
+          "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, _",
+          1019.2272400000039
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn",
+          1018.503844999975
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn",
+          546.1835330000054
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_stages_32x1_tn",
+          214.24735899999578
+        ],
+        [
+          "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<a",
+          200.11973200000378
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::GeluCUDAKernelImpl",
+          187.11230200000566
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c1",
+          158.05804999999697
+        ],
+        [
+          "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<c10::Half, ",
+          148.08167799999947
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_t",
+          97.30778099999714
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespa",
+          83.773257999992
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn",
+          55.595041000000286
+        ],
+        [
+          "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, f",
+          45.07465100002478
+        ]
+      ]
+    }
+  },
+  "peak_allocated_mb": 2724.18212890625
+}
+END_RESULT_JSON
+BEGIN_SUMMARY_MD
+| config | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |
+|---|---:|---:|---:|---:|---:|---|---:|
+| baseline | 0 | 0 | 16 | 50.82 | 1.000x | True | 290/290 |
+| prefetch1 | 1 | 0 | 16 | 50.11 | 0.986x | True | 290/290 |
+| prefetch2 | 2 | 0 | 16 | 49.88 | 0.982x | True | 290/290 |
+| workers1 | 0 | 1 | 16 | 49.96 | 0.983x | True | 290/290 |
+| workers2 | 0 | 2 | 16 | 47.20 | 0.929x | True | 290/290 |
+| batch8 | 0 | 0 | 8 | 46.76 | 0.920x | False | 288/290 |
+| batch32 | 0 | 0 | 32 | 48.42 | 0.953x | False | 290/290 |
+| batch32_prefetch2 | 2 | 0 | 32 | 49.24 | 0.969x | False | 290/290 |
+
+END_SUMMARY_MD
+BASELINE_OUTPUTS_SHA256 4e357019a7387fd3d7899cfca3f60f7ae258cb7f0c1d1893a6dcc5710d5a0aad
+[colab] Stopping session 'run-beef1b'...
+[colab] Session terminated.

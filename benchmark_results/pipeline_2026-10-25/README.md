@@ -2,8 +2,11 @@
 
 This round applies the **no-semantic-change, Phase 1** items of
 `GLiNER_Multilingual_v2_1_T4_Optimization_Plan.docx` to the GLiNER2 path (`fastino/gliner2-multi-v1`, `gliner2==2.1.0`).
-That path measured 54.81 chunks/s on one T4. The code and the CPU checks are done. **T4 numbers are pending**: this
-session had no GPU and no Hugging Face access. Run the benchmark below and fill in "T4 results".
+That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4, 3 trials, 290 chunks): nothing beat
+the baseline.** The baseline ran at 50.82 chunks/s on this Colab T4 (see below for why that differs from 54.81). CPU/GPU
+prefetch, collation workers and batch size changes were all 0.92x to 0.99x of it. The GPU was only about 66% busy
+in the baseline, but overlapping the host work did not raise that, because Colab's 2 vCPUs and the GIL-bound Python
+work leave little to overlap. 100 chunks/s is not reachable with these Phase 1 items.
 
 ## What the existing T4 profile actually says
 
@@ -70,4 +73,64 @@ with the VM venv.
 
 ## T4 results
 
-_Pending: to be filled from `results/result.json` and `results/summary.md` of the T4 run._
+Run: Colab T4 (`Tesla T4`, capability [7, 5]), `colab run --gpu T4`, 3 interleaved trials, 290-chunk corpus
+(sha256 `6304617b...`). Raw files: `t4_run.log`, `t4_result.json`, `t4_summary.md`.
+Environment: torch 2.11.0+cu130, triton 3.6.0, transformers 5.20.2, gliner2 2.1.0, disentangled-flash 1.1.1, 2 vCPUs,
+torch threads 1. This is **not** the VM environment (torch 2.6, Triton 3.2) behind the 54.81 figure. The baseline here is
+50.82 chunks/s, 7% lower, so compare configs within this run only. The runner needed no changes.
+
+| config | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |
+|---|---:|---:|---:|---:|---:|---|---:|
+| baseline | 0 | 0 | 16 | 50.82 | 1.000x | True | 290/290 |
+| prefetch1 | 1 | 0 | 16 | 50.11 | 0.986x | True | 290/290 |
+| prefetch2 | 2 | 0 | 16 | 49.88 | 0.982x | True | 290/290 |
+| workers1 | 0 | 1 | 16 | 49.96 | 0.983x | True | 290/290 |
+| workers2 | 0 | 2 | 16 | 47.20 | 0.929x | True | 290/290 |
+| batch8 | 0 | 0 | 8 | 46.76 | 0.920x | False | 288/290 |
+| batch32 | 0 | 0 | 32 | 48.42 | 0.953x | False | 290/290 |
+| batch32_prefetch2 | 2 | 0 | 32 | 49.24 | 0.969x | False | 290/290 |
+
+
+- **Baseline: 50.82 chunks/s** (expected about 54.8; Colab environment differs, see above).
+- **Zero-loss (identical full output):** baseline, prefetch1, prefetch2, workers1, workers2. All are slower than the
+  baseline (0.986x, 0.982x, 0.983x, 0.929x). The `batch8`, `batch32` and `batch32_prefetch2` configs changed the full
+  output (batch8 changed kept values in 2 of 290 chunks), so they do not count as zero-loss, and they are slower anyway.
+- **No config beat the baseline.** Run-to-run spread was about 1-2% (trial times in `t4_result.json`), so prefetch1,
+  prefetch2 and workers1 are a tie with the baseline to slightly worse. workers2 and the batch configs are clearly worse.
+
+### Stage breakdown, baseline (ms/chunk, one profiled pass of 6.02 s)
+
+| stage | ms/chunk |
+|---|---:|
+| collate | 3.69 |
+| to_device | 0.04 |
+| encoder | 11.40 |
+| embeddings | 0.11 |
+| span_head | 4.89 |
+| decode | 0.47 |
+| format | 0.02 |
+| other | 0.14 |
+
+The encoder is 55% of the time. Collation (3.69 ms) and the span head (4.89 ms) are the large non-encoder stages.
+The encoder figure includes the host wait from the `unpack` sync described above.
+
+### GPU-busy fraction (torch.profiler)
+
+- Baseline: **65.9%** (4.01 s of kernels in 6.09 s wall).
+- Best prefetch config (prefetch1): **64.7%** (4.03 s of kernels in 6.22 s wall). Kernel time is unchanged, wall time
+  is slightly longer, so overlap added no GPU utilisation here. These numbers are with the profiler on, so wall time is inflated.
+- Top kernels (baseline): cuBLAS fp16 GEMMs about 1.83 s, custom `disentangled_attention_v4_kernel` 1.01 s, GELU, add,
+  LayerNorm and other elementwise about 0.78 s.
+
+### What this implies for 100 chunks/s
+
+- 100 chunks/s means 2.9 s for the corpus. The baseline's GPU kernel time alone is about 4.0 s per pass with the profiler
+  on, so even perfect overlap (GPU 100% busy) caps out near 72 chunks/s on this setup. In this run, scheduling the
+  CPU work differently gave nothing.
+- The host work that should overlap (collate about 3.7 ms/chunk plus span head about 4.9 ms/chunk) is Python and
+  runs under the GIL, so a helper thread competes with the serving thread. With 2 vCPUs, worker processes cost about as
+  much as they save (workers2 was the slowest zero-loss config).
+- Getting to 100 chunks/s therefore needs a reduction in GPU time per chunk, about 30% or more. The candidates are the
+  elementwise fusion (about 0.78 s, 19% of kernel time), a faster attention or GEMM path, and removing the host syncs
+  (`unpack`) before trying CUDA Graphs. These are semantics-changing or kernel work, not Phase 1 items.
+- Caveat: the Colab VM has 2 vCPUs. A host with more cores may show a gain from `workers`, which this run cannot show.
