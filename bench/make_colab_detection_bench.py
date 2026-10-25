@@ -15,14 +15,15 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument("--preset", choices=["round4", "round5"], default="round5")
-parser.add_argument("--runs", type=int, default=None, help="runs per configuration (round4: 2, round5: 3)")
+parser.add_argument("--preset", choices=["round4", "round5", "round6"], default="round6")
+parser.add_argument("--runs", type=int, default=None, help="runs per configuration (round4: 2, otherwise 3)")
 parser.add_argument("--repeat", type=int, default=4)
 args = parser.parse_args()
 
 names = ["csrc/torch_binding.cpp", "csrc/disentangled_attention.cu", "csrc/disentangled_attention_v2.cu",
          "csrc/disentangled_attention_v3.cu", "csrc/disentangled_attention_v4.cu", "csrc/add_layernorm.cu",
          "torch-ext/gliner_t4/__init__.py", "torch-ext/gliner_t4/_build.py", "serving/gliner2_exact.py",
+         "serving/gliner2_pipelined.py",
          "bench/queue_profile.py", "artifacts/colab_pipeline/gliner2_ner.py",
          "artifacts/colab_pipeline/detection_queue.py", "artifacts/colab_pipeline/bench_detection.py"]
 files = {name: (root / name).read_text() for name in names}
@@ -57,8 +58,22 @@ ROUND5 = {
     "exact_2pass_run32": {"DETECTION_STREAMS": "2", "DETECTION_RUN_SIZE": "32", **SHIP, **NO_SAMPLER},
     "exact_2pass_run64": {"DETECTION_STREAMS": "2", "DETECTION_RUN_SIZE": "64", **SHIP, **NO_SAMPLER},
 }
-CONFIGS = ROUND5 if args.preset == "round5" else ROUND4
-runs = args.runs or (3 if args.preset == "round5" else 2)
+PIPE = {"DETECTION_PIPELINE": "1"}
+# round 6: the one-thread CPU/GPU pipeline (serving/gliner2_pipelined.py); identical results to the same settings without it
+ROUND6 = {
+    "ref_3pass": {"DETECTION_STREAMS": "1", **NO_SAMPLER},
+    "prod_3pass": {"DETECTION_STREAMS": "2", "DETECTION_FAST_COUNT": "1", **NO_SAMPLER},
+    "exact_2pass_1stream": {"DETECTION_STREAMS": "1", **SHIP, **NO_SAMPLER},  # round 5's best, 65.7
+    "pipe_3pass": {"DETECTION_STREAMS": "1", "DETECTION_EXACT_COUNT": "1", "GLINER_T4_FUSE_LAYERNORM": "1", **PIPE,
+                   **NO_SAMPLER},  # zero-loss: must be identical to ref_3pass on every chunk
+    "pipe_2pass": {"DETECTION_STREAMS": "1", **SHIP, **PIPE, **NO_SAMPLER},
+    "pipe_2pass_sampled": {"DETECTION_STREAMS": "1", **SHIP, **PIPE},  # GPU utilisation of the pipeline
+    "pipe_2pass_run32": {"DETECTION_STREAMS": "1", "DETECTION_RUN_SIZE": "32", **SHIP, **PIPE, **NO_SAMPLER},
+    "pipe_2pass_run64": {"DETECTION_STREAMS": "1", "DETECTION_RUN_SIZE": "64", **SHIP, **PIPE, **NO_SAMPLER},
+    "pipe_2pass_streams2": {"DETECTION_STREAMS": "2", **SHIP, **PIPE, **NO_SAMPLER},
+}
+CONFIGS = {"round4": ROUND4, "round5": ROUND5, "round6": ROUND6}[args.preset]
+runs = args.runs or (2 if args.preset == "round4" else 3)
 
 runner = f'''import base64, gzip, json, os, statistics, subprocess, sys
 from pathlib import Path
@@ -116,10 +131,10 @@ for name, row in summary.items():
                  f" | {{row['identical_chunks_vs_ref']}}/{{row['chunks']}} | {{row['mean_gpu_util']}} | {{row['serving_gpu_mb']}} |")
 print("BEGIN_DETECT_JSON"); print(json.dumps(summary, indent=2)); print("END_DETECT_JSON")
 print("BEGIN_DETECT_MD"); print("\\n".join(lines)); print("END_DETECT_MD", flush=True)
-if {args.preset == "round5"}:
+if {args.preset != "round4"}:
     env = dict(os.environ, TOKENIZERS_PARALLELISM="false")
-    subprocess.run([sys.executable, "bench/queue_profile.py", "--corpus", "corpus.json", "--out", "qprofile"], cwd=root,
-                   env=env, check=True)
+    subprocess.run([sys.executable, "bench/queue_profile.py", "--corpus", "corpus.json", "--out", "qprofile"]
+                   + {["--pipeline"] if args.preset == "round6" else []}, cwd=root, env=env, check=True)
     print("BEGIN_QPROFILE_JSON"); print((root / "qprofile/queue_profile.json").read_text()); print("END_QPROFILE_JSON")
     print("BEGIN_QPROFILE_TXT"); print((root / "qprofile/queue_profile.txt").read_text()); print("END_QPROFILE_TXT", flush=True)
 '''

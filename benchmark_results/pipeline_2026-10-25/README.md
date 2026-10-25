@@ -490,3 +490,43 @@ Per-run chunks/s:
    It is **34.3 chunks/s short of 100 chunks/s** (needs another 1.52x improvement).
    cProfile makes the root cause unambiguous: host-bound synchronization (`tensor.tolist()` and `tensor.cpu()` blocking the CPU thread while GPU work completes) in gliner2's span head and decoding accounts for over 2.9 seconds of wall time. To approach 100 chunks/s on a single-core host, these synchronization points must be replaced with asynchronous, batched GPU kernel postprocessing.
 
+
+## Round 6: one-thread CPU/GPU pipeline (code done, T4 run pending)
+
+**A correction to the round-5 reading.** The 2.5 s on `.tolist()` is not host overhead to remove. The encoder's kernels
+are queued asynchronously, and the first `.tolist()` of each batch (the count head's result) is simply where the CPU
+waits for the encoder to finish. So that time is GPU time.
+
+The round-5 numbers show the real limit: the CPU and the GPU take turns.
+- Per corpus run, the 2-pass GPU work is about 2.8 s and the CPU work about 1.3 s.
+- Measured wall time is about 4.2 s, roughly their sum (queue_runs ≈ whole_corpus, so per-run overhead is not it).
+- Overlapped, the wall time would be about 2.8 s, or about 100 chunks/s.
+- Two serving threads cannot overlap them on Colab's single core, so `streams2` gave nothing.
+
+**`serving/gliner2_pipelined.py`** overlaps them in one thread:
+- Batch i+1's encoder runs on its own CUDA stream while the CPU decodes batch i (gliner2's own `_extract_from_batch`,
+  fed the precomputed encoder output) and collates batch i+2.
+- Host-to-device copies go through a copy stream, so a blocking copy never waits behind a running encoder.
+- `extract_entities_long_many` pipelines every label pass of a run together, so even a 16-chunk queue run (one batch per
+  pass) overlaps its two passes.
+- Kernels, shapes and inputs are those of stock gliner2: only the order in which work is issued changes.
+
+Production switch: `DETECTION_PIPELINE=1` in `gliner2_ner.py`; `detect_batch` precomputes all passes through the
+pipeline, and the per-pass handling is unchanged.
+
+CPU checks, `python tests/test_gliner2_pipelined.py`, PASS:
+- `extract_many` and `extract_entities_long_many` give `==` stock results for batch 7/16/64, one-batch and many-batch
+  jobs, with and without the exact count head.
+- `detect_batch` gives `==` results with the pipeline on and off, for 3 and 2 passes, on a queue-sized run and on the
+  whole set.
+
+Round-6 runner (`python bench/make_colab_detection_bench.py`, 3 runs each, then the queue profile with the pipeline):
+
+| config | what it shows |
+|---|---|
+| exact_2pass_1stream | round 5's best (65.7), the control |
+| pipe_3pass | zero-loss 3-pass with the pipeline: must be identical to ref_3pass on every chunk |
+| **pipe_2pass** | **shipping candidate** |
+| pipe_2pass_sampled | its GPU utilisation |
+| pipe_2pass_run32 / run64 | more batches per pipeline (not byte-exact; accuracy gate) |
+| pipe_2pass_streams2 | pipeline plus two serving threads |

@@ -19,13 +19,15 @@ parser.add_argument("--corpus", required=True)
 parser.add_argument("--out", required=True)
 parser.add_argument("--trials", type=int, default=2)
 parser.add_argument("--standin", action="store_true", help="CPU smoke test of this script with a stand-in model")
+parser.add_argument("--pipeline", action="store_true", help="with the one-thread CPU/GPU pipeline (DETECTION_PIPELINE)")
 args = parser.parse_args()
 out = Path(args.out)
 out.mkdir(parents=True, exist_ok=True)
 
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 os.environ.update(DETECTION_FAST_COUNT="0", DETECTION_SPLIT_CACHE="1", DETECTION_SKIP_EVAL="1", DETECTION_STREAMS="1",
-                  DETECTION_CITY_PASS="0", DETECTION_EXACT_COUNT="1", GLINER_T4_FUSE_LAYERNORM="1")
+                  DETECTION_CITY_PASS="0", DETECTION_EXACT_COUNT="1", GLINER_T4_FUSE_LAYERNORM="1",
+                  DETECTION_PIPELINE="1" if args.pipeline else "0")
 if not args.standin:
     os.environ["DETECTION_ATTENTION_KERNEL"] = str(ROOT)
 sys.path.insert(0, str(ROOT / "artifacts"))
@@ -45,6 +47,10 @@ if args.standin:
 
     ner.loaded_checkpoints[("legacy", "cpu", None)] = gliner2_standin.build()
     gliner2_exact.install(count_step0=True, format_cache=False)
+    if args.pipeline:
+        import gliner2_pipelined
+
+        ner.PIPELINE, ner.gliner2_pipelined = True, gliner2_pipelined
 
 docs = json.loads(Path(args.corpus).read_text())
 chunks = [chunk for doc in docs for chunk in doc["chunks"]]
@@ -76,7 +82,7 @@ def timed(fn):
     return time.perf_counter() - start, result
 
 
-report = {"run_size": RUN_SIZE, "chunks": len(chunks), "device": torch.cuda.get_device_name() if DEVICE == "cuda" else "cpu"}
+report = {"pipeline": args.pipeline, "run_size": RUN_SIZE, "chunks": len(chunks), "device": torch.cuda.get_device_name() if DEVICE == "cuda" else "cpu"}
 for fn in (queue_runs, whole_corpus):  # warm-up: kernel plans for every length either shape produces
     fn()
 for name, fn in (("queue_runs", queue_runs), ("whole_corpus", whole_corpus)):

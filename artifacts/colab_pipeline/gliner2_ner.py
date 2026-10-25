@@ -100,6 +100,16 @@ if ATTENTION_KERNEL and os.getenv("DETECTION_EXACT_COUNT") == "1":
 
     gliner2_exact.install(count_step0=True, format_cache=False)
 
+# one-thread CPU/GPU pipeline over every label pass of a run (serving/gliner2_pipelined.py of the same checkout): the
+# encoder of the next batch runs on its own CUDA stream while the CPU decodes the previous one and builds the next;
+# same kernels and inputs, so results are identical. For hosts where two serving threads cannot overlap (one core).
+PIPELINE = bool(ATTENTION_KERNEL) and os.getenv("DETECTION_PIPELINE") == "1"
+if PIPELINE:
+    import sys
+
+    sys.path.insert(0, os.path.join(ATTENTION_KERNEL, "serving"))
+    import gliner2_pipelined
+
 
 # with more than one run in flight per GPU every serving thread has its own copy: the fused encoder keeps per-call
 # state on the module (the active sequence-length plan) that two threads would overwrite
@@ -357,6 +367,7 @@ class Gliner2NER:
         spans = [[] for _ in texts]
         order = sorted(range(len(texts)), key=lambda index: len(texts[index]))
         ordered = [texts[index] for index in order]
+        passes = []
         for checkpoint_key, group, descriptions in strategy_passes(labels):
             if checkpoint_key == "pii":
                 entity_types = [PII_LABELS[label] for label in group]
@@ -364,15 +375,25 @@ class Gliner2NER:
             else:
                 entity_types = {**_labels_with_desc(group), **descriptions}
                 back = {label: label for label in group}
-            # results = checkpoint(checkpoint_key, device).batch_extract_entities(
-            #     ordered, entity_types, batch_size=batch_size, include_confidence=True, include_spans=True,
-            #     threshold=min(LABEL_THRESHOLDS.get(label, DEFAULT_THRESHOLD) for label in group),
-            # )
-            results = checkpoint(checkpoint_key, device).batch_extract_entities_long(
-                ordered, entity_types, batch_size=batch_size, include_confidence=True, include_spans=True,
-                threshold=min(LABEL_THRESHOLDS.get(label, DEFAULT_THRESHOLD) for label in group),
-                chunk_size=WINDOW_WORDS, chunk_overlap=WINDOW_OVERLAP_WORDS,
-            )
+            passes.append((checkpoint_key, group, entity_types, back,
+                           min(LABEL_THRESHOLDS.get(label, DEFAULT_THRESHOLD) for label in group)))
+        pass_results = {}
+        if PIPELINE:  # every pass of one checkpoint in one pipeline, then the same per-pass handling below
+            for key in dict.fromkeys(p[0] for p in passes):
+                indices = [i for i, p in enumerate(passes) if p[0] == key]
+                merged = gliner2_pipelined.extract_entities_long_many(
+                    checkpoint(key, device), [(ordered, passes[i][2], passes[i][4]) for i in indices],
+                    batch_size=batch_size, include_confidence=True, include_spans=True,
+                    chunk_size=WINDOW_WORDS, chunk_overlap=WINDOW_OVERLAP_WORDS)
+                pass_results.update(zip(indices, merged))
+        for pass_index, (checkpoint_key, group, entity_types, back, pass_threshold) in enumerate(passes):
+            if pass_index in pass_results:
+                results = pass_results[pass_index]
+            else:
+                results = checkpoint(checkpoint_key, device).batch_extract_entities_long(
+                    ordered, entity_types, batch_size=batch_size, include_confidence=True, include_spans=True,
+                    threshold=pass_threshold, chunk_size=WINDOW_WORDS, chunk_overlap=WINDOW_OVERLAP_WORDS,
+                )
             candidates = []
             for index, result in zip(order, results):
                 for entity_type, entities in result.get("entities", {}).items():
@@ -398,7 +419,7 @@ class Gliner2NER:
                 confirmations = checkpoint(checkpoint_key, device).batch_extract_entities(
                     [texts[index][start:end] for index, label, start, end in candidates],
                     entity_types, batch_size=batch_size, include_confidence=True, include_spans=True,
-                    threshold=min(LABEL_THRESHOLDS.get(label, DEFAULT_THRESHOLD) for label in group),
+                    threshold=pass_threshold,
                 )
                 for (index, label, piece_start, piece_end), result in zip(candidates, confirmations):
                     for entity_type, entities in result.get("entities", {}).items():
