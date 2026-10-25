@@ -1,0 +1,631 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-0040d3'...
+[colab] Session READY (run-0040d3). Executing artifacts/colab_pipeline_bench.py...
+PACKAGES_READY
+BEGIN_RESULT_JSON
+{
+  "env": {
+    "gpu": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ],
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "triton": "3.6.0",
+      "gliner2": "2.1.0",
+      "disentangled-flash": "1.1.1",
+      "transformers": "5.20.2"
+    },
+    "cuda": "13.0",
+    "cpu_count": 2,
+    "torch_threads": 1,
+    "lscpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  2\nOn-line CPU(s) list:                     0,1\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.00GHz\nCPU family:                              6\nModel:                                   85\nThread(s) per core:                      2\nCore(s) per socket:                      1\nSocket(s):                               1\nStepping:                                3\nBogoMIPS:                                4000.30\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               32 KiB (1 instance)\nL1i cache:                               32 KiB (1 instance)\nL2 cache:                                1 MiB (1 instance)\nL3 cache:                                38.5 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0,1\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Vulnerable\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Vulnerable; SMT Host state unknown\nVulnerability Meltdown:                  Vulnerable\nVulnerability Mmio stale data:           Vulnerable\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Vulnerable: __user pointer sanitization and usercopy barriers only; no swapgs barriers\nVulnerability Spectre v2:                Vulnerable; IBPB: disabled; STIBP: disabled; PBRSB-eIBRS: Not affected; BHI: Vulnerable\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Vulnerable\nVulnerability Vmscape:                   Not affected",
+    "git_commit": null
+  },
+  "corpus": {
+    "chunks": 290,
+    "sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40"
+  },
+  "bulk_lookup_installed": [
+    true,
+    true
+  ],
+  "configs": {
+    "baseline": {
+      "seconds": [
+        5.451954440999998,
+        5.789153229000021,
+        5.7076561199999105,
+        5.618259100000159,
+        5.696086556999944
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": false,
+      "format_cache": false,
+      "streams": 1,
+      "fused_add_layernorm": false,
+      "median_seconds": 5.696086556999944,
+      "chunks_per_s": 50.912147682099004,
+      "speedup_vs_baseline": 1.0,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "count0": {
+      "seconds": [
+        5.260935014000097,
+        5.376542350999898,
+        5.728804740999976,
+        5.431021515999873,
+        5.5467028890000165
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": false,
+      "streams": 1,
+      "fused_add_layernorm": false,
+      "median_seconds": 5.431021515999873,
+      "chunks_per_s": 53.39695288366204,
+      "speedup_vs_baseline": 1.0488057431220232,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "count0_streams2": {
+      "seconds": [
+        5.026894078999931,
+        5.160290537999799,
+        5.444701437000049,
+        5.1108702540000195,
+        5.2620659600002
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": false,
+      "streams": 2,
+      "fused_add_layernorm": false,
+      "median_seconds": 5.160290537999799,
+      "chunks_per_s": 56.19838609172732,
+      "speedup_vs_baseline": 1.1038305915247608,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "ln": {
+      "seconds": [
+        5.418555185000059,
+        5.592397183999992,
+        5.73267705100011,
+        5.507436134000045,
+        5.659599797000055
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": false,
+      "format_cache": false,
+      "streams": 1,
+      "fused_add_layernorm": true,
+      "median_seconds": 5.592397183999992,
+      "chunks_per_s": 51.85611652006733,
+      "speedup_vs_baseline": 1.0185411317523387,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "count0_streams2_ln": {
+      "seconds": [
+        4.896974130000217,
+        5.117968332000146,
+        5.1984774130000915,
+        4.995683694999798,
+        4.989714294999885
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": false,
+      "streams": 2,
+      "fused_add_layernorm": true,
+      "median_seconds": 4.995683694999798,
+      "chunks_per_s": 58.050112398081225,
+      "speedup_vs_baseline": 1.1402016029760216,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    }
+  },
+  "breakdown_baseline": {
+    "total_seconds": 5.769184206000091,
+    "stages_seconds": {
+      "collate": 0.7064413570001307,
+      "to_device": 0.011573637000083181,
+      "encoder": 3.562096440000232,
+      "embeddings": 0.02848596799981351,
+      "span_head": 1.3065635719997317,
+      "decode": 0.11452068499966117,
+      "format": 0.004690035999828979,
+      "other": 0.03481251100060945
+    },
+    "stages_ms_per_chunk": {
+      "collate": 2.4360046793107952,
+      "to_device": 0.03990909310373511,
+      "encoder": 12.283091172414593,
+      "embeddings": 0.0982274758614259,
+      "span_head": 4.505391627585282,
+      "decode": 0.3948989137919351,
+      "format": 0.016172537930444753,
+      "other": 0.1200431413814119
+    }
+  },
+  "breakdown_count0": {
+    "total_seconds": 5.539080363999801,
+    "stages_seconds": {
+      "collate": 0.6958557150005618,
+      "to_device": 0.011460061999287063,
+      "encoder": 3.623718105999842,
+      "embeddings": 0.02715413400005673,
+      "span_head": 1.0322914110004149,
+      "decode": 0.11072187800027677,
+      "format": 0.004426912997814725,
+      "other": 0.03345214500154725
+    },
+    "stages_ms_per_chunk": {
+      "collate": 2.3995024655191783,
+      "to_device": 0.03951745516995539,
+      "encoder": 12.495579675861524,
+      "embeddings": 0.09363494482778183,
+      "span_head": 3.5596255551738443,
+      "decode": 0.3817995793112992,
+      "format": 0.01526521723384388,
+      "other": 0.11535222414326639
+    }
+  },
+  "gpu_busy": {
+    "baseline": {
+      "wall_seconds": 6.062578684999835,
+      "kernel_seconds": 4.243199024999977,
+      "gpu_busy_fraction": 0.6999000335448995,
+      "top_kernels": [
+        [
+          "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, _",
+          1091.3523509999918
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn",
+          1085.9456349999873
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn",
+          577.1755859999982
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_stages_32x1_tn",
+          229.95570299999787
+        ],
+        [
+          "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<a",
+          209.79481300001257
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::GeluCUDAKernelImpl",
+          186.20140500000437
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c1",
+          158.81042799997377
+        ],
+        [
+          "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<c10::Half, ",
+          156.4149890000185
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_t",
+          100.67018999999567
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespa",
+          83.78097500000294
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn",
+          57.655049000003466
+        ],
+        [
+          "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, f",
+          46.94337599999404
+        ]
+      ]
+    },
+    "count0_streams2_ln": {
+      "wall_seconds": 5.022741408999991,
+      "kernel_seconds": 4.7306708579999945,
+      "gpu_busy_fraction": 0.9418503707006197,
+      "top_kernels": [
+        [
+          "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, _",
+          1306.437575000002
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn",
+          1286.6856150000049
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn",
+          667.9942600000045
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_stages_32x1_tn",
+          264.6257269999968
+        ],
+        [
+          "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<a",
+          215.54976800001344
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::GeluCUDAKernelImpl",
+          191.3252569999957
+        ],
+        [
+          "(anonymous namespace)::add_layernorm_kernel(__half const*, __half const*, __half",
+          171.43592399999562
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_t",
+          134.81622000000047
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespa",
+          89.08842299999611
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn",
+          62.9297960000069
+        ],
+        [
+          "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, f",
+          42.05668699999861
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_32x1_tn",
+          36.105263999999735
+        ]
+      ]
+    }
+  },
+  "peak_allocated_mb": 2135.1171875
+}
+END_RESULT_JSON
+BEGIN_SUMMARY_MD
+| config | count0 | fmtcache | ln | streams | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|
+| baseline | False | False | False | 1 | 0 | 0 | 16 | 50.91 | 1.000x | True | 290/290 |
+| count0 | True | False | False | 1 | 0 | 0 | 16 | 53.40 | 1.049x | True | 290/290 |
+| count0_streams2 | True | False | False | 2 | 0 | 0 | 16 | 56.20 | 1.104x | True | 290/290 |
+| ln | False | False | True | 1 | 0 | 0 | 16 | 51.86 | 1.019x | True | 290/290 |
+| count0_streams2_ln | True | False | True | 2 | 0 | 0 | 16 | 58.05 | 1.140x | True | 290/290 |
+
+END_SUMMARY_MD
+BASELINE_OUTPUTS_SHA256 4e357019a7387fd3d7899cfca3f60f7ae258cb7f0c1d1893a6dcc5710d5a0aad
+BEGIN_PASS_JSON
+{
+  "corpus": {
+    "documents": 10,
+    "chunks": 290,
+    "sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40"
+  },
+  "env": {
+    "device": "Tesla T4",
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "gliner2": "2.1.0",
+      "transformers": "5.20.2"
+    }
+  },
+  "layouts": {
+    "current_3pass": [
+      [
+        [
+          "Organization"
+        ],
+        {}
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {}
+      ],
+      [
+        [
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ]
+    ],
+    "drop_city_pass": [
+      [
+        [
+          "Organization"
+        ],
+        {}
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {}
+      ]
+    ],
+    "merged_city_desc": [
+      [
+        [
+          "Organization"
+        ],
+        {}
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ]
+    ],
+    "city_with_org": [
+      [
+        [
+          "Organization",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {}
+      ]
+    ],
+    "city_with_org_desc": [
+      [
+        [
+          "Organization",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ]
+    ]
+  },
+  "results": {
+    "current_3pass": {
+      "seconds": [
+        5.49658974099998,
+        5.378472671000054
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.93,
+          "detected": 172
+        }
+      },
+      "passes": 3,
+      "median_seconds": 5.437531206000017,
+      "chunks_per_s": 53.33302725325069,
+      "speedup": 1.0,
+      "worse_than_current": [],
+      "accepted": true,
+      "identical_chunks_vs_current": 290
+    },
+    "drop_city_pass": {
+      "seconds": [
+        3.7504498210000747,
+        3.7132171050000125
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.947,
+          "detected": 169
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.7318334630000436,
+      "chunks_per_s": 77.70979141359305,
+      "speedup": 1.45706695111436,
+      "worse_than_current": [],
+      "accepted": true,
+      "identical_chunks_vs_current": 286
+    },
+    "merged_city_desc": {
+      "seconds": [
+        3.8072374930000024,
+        3.7513428009999643
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 153
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.936,
+          "detected": 171
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.7792901469999833,
+      "chunks_per_s": 76.73398673298563,
+      "speedup": 1.4387705083496574,
+      "worse_than_current": [],
+      "accepted": true,
+      "identical_chunks_vs_current": 269
+    },
+    "city_with_org": {
+      "seconds": [
+        3.837205565999966,
+        3.8152850920000674
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.857,
+          "detected": 147
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.884,
+          "detected": 181
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.8262453290000167,
+      "chunks_per_s": 75.79231728870639,
+      "speedup": 1.421114104939295,
+      "worse_than_current": [
+        "City precision"
+      ],
+      "accepted": false,
+      "identical_chunks_vs_current": 277
+    },
+    "city_with_org_desc": {
+      "seconds": [
+        3.859342129999959,
+        3.8442620289999923
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.857,
+          "detected": 147
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 153
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.889,
+          "detected": 180
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.8518020794999757,
+      "chunks_per_s": 75.28943440355755,
+      "speedup": 1.4116849967290879,
+      "worse_than_current": [
+        "City precision"
+      ],
+      "accepted": false,
+      "identical_chunks_vs_current": 259
+    }
+  }
+}
+END_PASS_JSON
+BEGIN_PASS_MD
+| layout | passes | chunks/s | speedup | Person R/P | Organization R/P | Street R/P | City R/P | identical chunks | accepted |
+|---|---|---|---|---|---|---|---|---|---|
+| current_3pass | 3 | 53.33 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 290/290 | yes |
+| drop_city_pass | 2 | 77.71 | 1.457x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 286/290 | yes |
+| merged_city_desc | 2 | 76.73 | 1.439x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.936 | 269/290 | yes |
+| city_with_org | 2 | 75.79 | 1.421x | 0.994/0.961 | 0.977/0.857 | 0.861/1.000 | 1.000/0.884 | 277/290 | no: City precision |
+| city_with_org_desc | 2 | 75.29 | 1.412x | 0.994/0.961 | 0.977/0.857 | 0.861/1.000 | 1.000/0.889 | 259/290 | no: City precision |
+
+END_PASS_MD
+[colab] Stopping session 'run-0040d3'...
+[colab] Session terminated.

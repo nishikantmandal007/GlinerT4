@@ -2,12 +2,14 @@
 
 This round applies the **no-semantic-change, Phase 1** items of
 `GLiNER_Multilingual_v2_1_T4_Optimization_Plan.docx` to the GLiNER2 path (`fastino/gliner2-multi-v1`, `gliner2==2.1.0`).
-That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4, 3 trials, 290 chunks):** round 1
-(prefetch, workers, batch size) did not beat the baseline: 0.92x to 0.99x. Round 2 (exact host-side cuts, all with
-identical full output) gave small gains: `exact` 1.036x, `streams2` 1.041x, `exact_streams2` 1.053x (50.32 vs
-47.79 chunks/s). These are the only configs that came out ahead, but the gain is 3-5%, about the same as the baseline's own
-trial-to-trial spread (6.05-6.31 s, 4%), so treat it as a small, unconfirmed gain. 100 chunks/s is not reachable this
-way: with two streams the GPU is already about 98% busy, so the remaining limit is GPU time per chunk.
+That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4):**
+- Zero-loss (identical full output), 5 trials: the best config, `count0_streams2_ln`, reached **1.140x** the baseline
+  (58.05 vs 50.91 chunks/s). Rounds 1 and 2 gave 0.92-0.99x and up to 1.053x. The fused add+LayerNorm (`ln`) adds about
+  3% on top of `count0_streams2` (1.104x to 1.140x). This is now outside noise on this run, since `ln` was faster in all
+  5 interleaved trials. It is still far from 100 chunks/s.
+- Fewer label passes (changes the computation, not zero-loss): dropping the City-alone pass runs at about 1.46x (77.7 chunks/s)
+  with no label's recall or precision below the 3-pass layout (City precision .930 to .947), but only 286/290 chunks
+  are identical. It is accepted by the rule on a 10-document corpus, and **needs held-out confirmation before shipping.**
 
 ## What the existing T4 profile actually says
 
@@ -221,7 +223,7 @@ The host-side cuts gave about 5% at best. With streams2 the GPU is the limit, an
 throughput. That has to come from less GPU time per chunk (elementwise fusion, attention, removing the pad/unpack syncs),
 not from more host-side work.
 
-## Round 3: fewer label passes (accuracy-checked) and fused add+LayerNorm (code done, T4 run pending)
+## Round 3: fewer label passes (accuracy-checked) and fused add+LayerNorm
 
 With byte-identical output, round 2 reached +5.3%, and kernel time alone caps one Colab T4 near 65 chunks/s. The
 largest remaining lever changes what is computed: each label pass re-encodes the whole chunk, and detection runs three
@@ -241,3 +243,57 @@ largest remaining lever changes what is computed: each label pass re-encodes the
   5 trials. `ln` is gliner_t4's bit-identical fused residual add + LayerNorm. Earlier it was off because it gained
   nothing while the pipeline was host-bound; with two streams the GPU is now the limit. Round-2 configs remain available
   (`--configs all`).
+
+### T4 results (round 3)
+
+Run: Colab T4 (`Tesla T4`, capability [7, 5]), `colab run --gpu T4`, torch 2.11.0+cu130, gliner2 2.1.0. Raw files:
+`t4_run_round3.log`, `t4_result_round3.json`, `t4_summary_round3.md`, `t4_pass_round3.json`, `t4_pass_round3.md`.
+The runner needed no changes and the run completed on the first attempt.
+
+#### a) Pipeline (5 interleaved trials, same output as stock required)
+
+| config | count0 | fmtcache | ln | streams | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|
+| baseline | False | False | False | 1 | 0 | 0 | 16 | 50.91 | 1.000x | True | 290/290 |
+| count0 | True | False | False | 1 | 0 | 0 | 16 | 53.40 | 1.049x | True | 290/290 |
+| count0_streams2 | True | False | False | 2 | 0 | 0 | 16 | 56.20 | 1.104x | True | 290/290 |
+| ln | False | False | True | 1 | 0 | 0 | 16 | 51.86 | 1.019x | True | 290/290 |
+| count0_streams2_ln | True | False | True | 2 | 0 | 0 | 16 | 58.05 | 1.140x | True | 290/290 |
+
+
+- **Every config has identical full output = True** (290/290), so all count as zero-loss.
+- **Baseline: 50.91 chunks/s** (this VM; round 2's was 47.79, so compare within the run).
+- **Does `ln` add speed on top of `count0_streams2`? Yes, about 3.3%**: 56.20 to 58.05 chunks/s (median 5.16 s to 4.99 s per
+  pass). `count0_streams2_ln` was faster than `count0_streams2` in each of the 5 trials (4.90 vs 5.03, 5.12 vs 5.16,
+  5.20 vs 5.44, 5.00 vs 5.11, 4.99 vs 5.26 s), but the gap per trial is small and 5 trials on a shared Colab VM is a
+  modest sample. Alone, `ln` gave only 1.019x (not faster in every trial).
+- **GPU busy:** baseline 70.0% (4.24 s of kernels in 6.06 s wall); `count0_streams2_ln` 94.2% (4.73 s in 5.02 s wall).
+  The GPU is close to saturated, so more host-side work will not help much. Kernel time alone caps this near 65-70 chunks/s,
+  short of 100.
+
+#### b) Label-pass layouts (`pass_bench.py`, 2 trials, production `detect_batch`)
+
+| layout | passes | chunks/s | speedup | Person R/P | Organization R/P | Street R/P | City R/P | identical chunks | accepted |
+|---|---|---|---|---|---|---|---|---|---|
+| current_3pass | 3 | 53.33 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 290/290 | yes |
+| drop_city_pass | 2 | 77.71 | 1.457x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 286/290 | yes |
+| merged_city_desc | 2 | 76.73 | 1.439x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.936 | 269/290 | yes |
+| city_with_org | 2 | 75.79 | 1.421x | 0.994/0.961 | 0.977/0.857 | 0.861/1.000 | 1.000/0.884 | 277/290 | no: City precision |
+| city_with_org_desc | 2 | 75.29 | 1.412x | 0.994/0.961 | 0.977/0.857 | 0.861/1.000 | 1.000/0.889 | 259/290 | no: City precision |
+
+
+Acceptance rule: no label's recall or precision below `current_3pass`.
+
+- `drop_city_pass`: **accepted.** Same Person/Organization/Street numbers; City recall 1.000 and precision up from .930
+  to .947. 1.457x faster (77.71 chunks/s). 286 of 290 chunks give identical output.
+- `merged_city_desc`: **accepted.** Organization unchanged and City precision .936 (up from .930). 1.439x. Only 269/290 chunks
+  are identical, so more outputs changed than with `drop_city_pass`.
+- `city_with_org`: **rejected**, City precision fell to .884 (from .930), though Organization precision rose to .857.
+- `city_with_org_desc`: **rejected**, City precision fell to .889.
+
+**Best accepted layout: `drop_city_pass`** (2 passes, 1.457x, the highest speed and the most identical chunks of the
+accepted layouts). This is not zero-loss: it changes the computation, and 4 chunks differ from the 3-pass output.
+**The corpus is only 10 documents, so a layout accepted here needs held-out confirmation** (for example the
+25-language corpus on the VM) before it ships. Per-label numbers are rounded to 3 decimals, and the speed is from 2 trials.
+Combining `drop_city_pass` with the zero-loss `count0_streams2_ln` path was not measured, and I'd expect the gains to
+partly overlap rather than multiply.

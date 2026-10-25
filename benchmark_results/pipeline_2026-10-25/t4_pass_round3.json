@@ -1,0 +1,296 @@
+{
+  "corpus": {
+    "documents": 10,
+    "chunks": 290,
+    "sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40"
+  },
+  "env": {
+    "device": "Tesla T4",
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "gliner2": "2.1.0",
+      "transformers": "5.20.2"
+    }
+  },
+  "layouts": {
+    "current_3pass": [
+      [
+        [
+          "Organization"
+        ],
+        {}
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {}
+      ],
+      [
+        [
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ]
+    ],
+    "drop_city_pass": [
+      [
+        [
+          "Organization"
+        ],
+        {}
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {}
+      ]
+    ],
+    "merged_city_desc": [
+      [
+        [
+          "Organization"
+        ],
+        {}
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ]
+    ],
+    "city_with_org": [
+      [
+        [
+          "Organization",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {}
+      ]
+    ],
+    "city_with_org_desc": [
+      [
+        [
+          "Organization",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ],
+      [
+        [
+          "Person",
+          "Street",
+          "City"
+        ],
+        {
+          "City": "Name of a city, town or village."
+        }
+      ]
+    ]
+  },
+  "results": {
+    "current_3pass": {
+      "seconds": [
+        5.49658974099998,
+        5.378472671000054
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.93,
+          "detected": 172
+        }
+      },
+      "passes": 3,
+      "median_seconds": 5.437531206000017,
+      "chunks_per_s": 53.33302725325069,
+      "speedup": 1.0,
+      "worse_than_current": [],
+      "accepted": true,
+      "identical_chunks_vs_current": 290
+    },
+    "drop_city_pass": {
+      "seconds": [
+        3.7504498210000747,
+        3.7132171050000125
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.947,
+          "detected": 169
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.7318334630000436,
+      "chunks_per_s": 77.70979141359305,
+      "speedup": 1.45706695111436,
+      "worse_than_current": [],
+      "accepted": true,
+      "identical_chunks_vs_current": 286
+    },
+    "merged_city_desc": {
+      "seconds": [
+        3.8072374930000024,
+        3.7513428009999643
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 153
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.936,
+          "detected": 171
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.7792901469999833,
+      "chunks_per_s": 76.73398673298563,
+      "speedup": 1.4387705083496574,
+      "worse_than_current": [],
+      "accepted": true,
+      "identical_chunks_vs_current": 269
+    },
+    "city_with_org": {
+      "seconds": [
+        3.837205565999966,
+        3.8152850920000674
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.857,
+          "detected": 147
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.884,
+          "detected": 181
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.8262453290000167,
+      "chunks_per_s": 75.79231728870639,
+      "speedup": 1.421114104939295,
+      "worse_than_current": [
+        "City precision"
+      ],
+      "accepted": false,
+      "identical_chunks_vs_current": 277
+    },
+    "city_with_org_desc": {
+      "seconds": [
+        3.859342129999959,
+        3.8442620289999923
+      ],
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.857,
+          "detected": 147
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 153
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.889,
+          "detected": 180
+        }
+      },
+      "passes": 2,
+      "median_seconds": 3.8518020794999757,
+      "chunks_per_s": 75.28943440355755,
+      "speedup": 1.4116849967290879,
+      "worse_than_current": [
+        "City precision"
+      ],
+      "accepted": false,
+      "identical_chunks_vs_current": 259
+    }
+  }
+}
