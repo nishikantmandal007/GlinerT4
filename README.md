@@ -6,6 +6,8 @@ Experimental CUDA implementation of DeBERTa disentangled attention for GLiNER2's
 
 The single-T4 GLiNER2 2.1.0 path measured 54.81 chunks/s on a 290-chunk synthetic corpus. This is well below the 100 chunks/s goal. Two T4-compatible changes reduced register use and preserved exact outputs, but did not improve throughput. The new candidates are retained as experiments and are not enabled by the original loader.
 
+A re-read of that profile shows the time once attributed to CPU "span unpacking" is the host waiting for the GPU. The no-semantic-change pipeline items from the plan (collation prefetch, worker collation, batch sweep) are implemented and verified for identical outputs on CPU; their T4 benchmark is pending. See [the 2026-10-25 pipeline round](benchmark_results/pipeline_2026-10-25/README.md).
+
 See [the T4 profile and optimization report](benchmark_results/colab_2026-10-24/t4_optimization/RESULTS.md) and the [plan assessment](benchmark_results/colab_2026-10-24/t4_optimization/PLAN_ASSESSMENT.md).
 
 ## Important benchmark context
@@ -18,6 +20,7 @@ The 2026-10-24 Colab artifacts include the A100/L4 comparison, exact-output opti
 
 - `csrc/`, `torch-ext/`: CUDA sources and experimental GLiNER2 attention adapter.
 - `tests/`, `bench/`: existing correctness tests and benchmark/profiling scripts.
+- `serving/`: pipeline-side changes to gliner2 2.1.0 that leave model math untouched (collation prefetch).
 - `artifacts/`: earlier source references, Colab runs, and serving-path experiments.
 - `benchmark_results/colab_2026-10-24/`: reproducible A100/L4 results and T4 optimization experiments.
 - `kernel_log.xlsx`: historical kernel iteration notes and timings.
