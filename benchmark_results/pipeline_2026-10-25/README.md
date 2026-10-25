@@ -2,11 +2,12 @@
 
 This round applies the **no-semantic-change, Phase 1** items of
 `GLiNER_Multilingual_v2_1_T4_Optimization_Plan.docx` to the GLiNER2 path (`fastino/gliner2-multi-v1`, `gliner2==2.1.0`).
-That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4, 3 trials, 290 chunks): nothing beat
-the baseline.** The baseline ran at 50.82 chunks/s on this Colab T4 (see below for why that differs from 54.81). CPU/GPU
-prefetch, collation workers and batch size changes were all 0.92x to 0.99x of it. The GPU was only about 66% busy
-in the baseline, but overlapping the host work did not raise that, because Colab's 2 vCPUs and the GIL-bound Python
-work leave little to overlap. 100 chunks/s is not reachable with these Phase 1 items.
+That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4, 3 trials, 290 chunks):** round 1
+(prefetch, workers, batch size) did not beat the baseline: 0.92x to 0.99x. Round 2 (exact host-side cuts, all with
+identical full output) gave small gains: `exact` 1.036x, `streams2` 1.041x, `exact_streams2` 1.053x (50.32 vs
+47.79 chunks/s). These are the only configs that came out ahead, but the gain is 3-5%, about the same as the baseline's own
+trial-to-trial spread (6.05-6.31 s, 4%), so treat it as a small, unconfirmed gain. 100 chunks/s is not reachable this
+way: with two streams the GPU is already about 98% busy, so the remaining limit is GPU time per chunk.
 
 ## What the existing T4 profile actually says
 
@@ -135,7 +136,7 @@ The encoder figure includes the host wait from the `unpack` sync described above
   (`unpack`) before trying CUDA Graphs. These are semantics-changing or kernel work, not Phase 1 items.
 - Caveat: the Colab VM has 2 vCPUs. A host with more cores may show a gain from `workers`, which this run cannot show.
 
-## Round 2: exact host-side cuts (code done, T4 run pending)
+## Round 2: exact host-side cuts
 
 The run above showed no gain from moving host work onto other threads or processes: Colab's 2 vCPUs share one core.
 So round 2 cuts host work outright, and every change must leave outputs byte-identical (`serving/gliner2_exact.py`,
@@ -159,3 +160,63 @@ CPU checks: `python tests/test_gliner2_exact.py` (PASS: every combination `==` s
 `--standin` ran every config with identical outputs. The bench now defaults to the round-2 set (`baseline`, `count0`,
 `fmtcache`, `exact`, `exact_prefetch1`, `streams2`, `exact_streams2`); `--configs all` adds the earlier ones. It
 records `lscpu` and a stage breakdown of `exact` next to the baseline's.
+
+### T4 results (round 2)
+
+Run: Colab T4 (`Tesla T4`, capability [7, 5]), `colab run --gpu T4`, 3 interleaved trials, same 290-chunk corpus and
+software as round 1 (torch 2.11.0+cu130, triton 3.6.0, gliner2 2.1.0). Raw files: `t4_run_round2.log`,
+`t4_result_round2.json`, `t4_summary_round2.md`. The runner needed no changes. The first launch failed immediately with a
+local DNS error from the colab CLI (before any code ran), and I reran the same command unchanged.
+
+**CPU (`lscpu`): 1 physical core** (1 socket x 1 core x 2 threads = 2 vCPUs, Xeon 2.00 GHz). So the 2 vCPUs are
+hyperthreads of one core, which explains why threads and processes gave nothing in round 1.
+
+| config | count0 | fmtcache | streams | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |
+|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|
+| baseline | False | False | 1 | 0 | 0 | 16 | 47.79 | 1.000x | True | 290/290 |
+| count0 | True | False | 1 | 0 | 0 | 16 | 49.64 | 1.039x | True | 290/290 |
+| fmtcache | False | True | 1 | 0 | 0 | 16 | 47.31 | 0.990x | True | 290/290 |
+| exact | True | True | 1 | 0 | 0 | 16 | 49.52 | 1.036x | True | 290/290 |
+| exact_prefetch1 | True | True | 1 | 1 | 0 | 16 | 49.62 | 1.038x | True | 290/290 |
+| streams2 | False | False | 2 | 0 | 0 | 16 | 49.74 | 1.041x | True | 290/290 |
+| exact_streams2 | True | True | 2 | 0 | 0 | 16 | 50.32 | 1.053x | True | 290/290 |
+
+
+- **Every config has an identical full output** (`True`, 290/290), so all of them count as zero-loss.
+- **Baseline: 47.79 chunks/s.** This is lower than round 1's 50.82 on the same GPU type and software, a different Colab VM,
+  so compare within this run only.
+- **Did anything beat the baseline? Marginally.** Six configs measured 1.036x to 1.053x, except `fmtcache` (0.990x, no
+  gain). Trial spread is about 2-4% (baseline 6.05-6.31 s; `exact_streams2` 5.59-5.87 s), so the gains are comparable
+  to noise. The ordering `exact_streams2` > `streams2` > `count0` ~ `exact` is plausible but not established by 3 trials.
+  `exact` (1.036x) is no better than `count0` alone (1.039x), so format_cache added nothing measurable.
+
+### Stage breakdown, baseline vs exact (ms/chunk)
+
+| stage | baseline | exact | change |
+|---|---:|---:|---:|
+| collate | 2.55 | 2.20 | -0.35 |
+| to_device | 0.04 | 0.04 | 0 |
+| encoder | 13.08 | 13.49 | +0.41 |
+| embeddings | 0.10 | 0.10 | 0 |
+| span_head | 4.74 | 3.76 | -0.97 |
+| decode | 0.43 | 0.40 | -0.03 |
+| format | 0.02 | 0.02 | 0 |
+| other | 0.12 | 0.12 | 0 |
+| total (s per pass) | 6.11 | 5.84 | -4.4% |
+
+`span_head` dropped 0.97 ms/chunk (20%) and `collate` 0.35 ms/chunk (14%), as intended. The encoder column rose 0.41 ms
+(this includes the host wait on the GPU, and is probably noise or work moved there). Net: about 0.9 ms/chunk saved of
+about 21, which is the 4% seen. The span head still costs 3.8 ms/chunk.
+
+### GPU-busy fraction (torch.profiler)
+
+- Baseline: **71.5%** (4.48 s of kernels in 6.27 s wall).
+- `exact_streams2`: **98.1%** (5.47 s of kernels in 5.57 s wall). Kernel time sums across both streams, and kernels from
+  the two streams may overlap, so this number can overstate busy time. Even so, the GPU is saturated, and the extra kernel
+  time (5.47 vs 4.48 s) comes from kernels running slower when two streams share the SMs.
+
+### Implication
+
+The host-side cuts gave about 5% at best. With streams2 the GPU is the limit, and 100 chunks/s needs about 2x the baseline
+throughput. That has to come from less GPU time per chunk (elementwise fusion, attention, removing the pad/unpack syncs),
+not from more host-side work.
