@@ -60,7 +60,7 @@ results = {{}}
 for run in range({args.runs}):
     for name, extra in CONFIGS.items():
         out = root / f"out_{{name}}_{{run}}.json"
-        env = dict(os.environ, **COMMON, **extra)
+        env = dict(os.environ, **{{**COMMON, **extra}})
         done = subprocess.run([sys.executable, "scripts/bench_detection.py", "run", "corpus.json", "--mode", "queue",
                                "--repeat", "{args.repeat}", "--out", str(out)], cwd=root, env=env,
                               capture_output=True, text=True)

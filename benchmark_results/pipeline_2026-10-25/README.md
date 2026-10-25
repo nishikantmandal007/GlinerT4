@@ -3,13 +3,14 @@
 This round applies the **no-semantic-change, Phase 1** items of
 `GLiNER_Multilingual_v2_1_T4_Optimization_Plan.docx` to the GLiNER2 path (`fastino/gliner2-multi-v1`, `gliner2==2.1.0`).
 That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4):**
-- Zero-loss (identical full output), 5 trials: the best config, `count0_streams2_ln`, reached **1.140x** the baseline
-  (58.05 vs 50.91 chunks/s). Rounds 1 and 2 gave 0.92-0.99x and up to 1.053x. The fused add+LayerNorm (`ln`) adds about
-  3% on top of `count0_streams2` (1.104x to 1.140x). This is now outside noise on this run, since `ln` was faster in all
-  5 interleaved trials. It is still far from 100 chunks/s.
-- Fewer label passes (changes the computation, not zero-loss): dropping the City-alone pass runs at about 1.46x (77.7 chunks/s)
-  with no label's recall or precision below the 3-pass layout (City precision .930 to .947), but only 286/290 chunks
-  are identical. It is accepted by the rule on a 10-document corpus, and **needs held-out confirmation before shipping.**
+- Zero-loss pipeline work (rounds 1-3) reached 1.14x in the encoder-plus-head benchmark (`count0_streams2_ln`, 58.05 vs 50.91).
+- **End to end through the production queue (round 4), no config reaches 100 chunks/s.** The best, `exact_2pass`
+  (drop the City-alone pass, exact count head, fused add+LayerNorm, 2 streams), ran at **66.3 chunks/s** versus 48.6 for today's
+  serving settings (`prod_3pass`), 1.36x, and 33.7 chunks/s short of 100. It meets or beats the 3-pass reference on every
+  label (City precision .930 to .947, the rest equal) but is not zero-loss: 1144 of 1160 chunks match the reference.
+  The 2-pass layout was checked on only 10 documents and needs held-out confirmation.
+- The zero-loss 3-pass config with the same kernels (`exact_3pass`, 45.7 chunks/s) was not faster than today's settings.
+  Almost all of the end-to-end gain comes from dropping a label pass.
 
 ## What the existing T4 profile actually says
 
@@ -298,7 +299,7 @@ accepted layouts). This is not zero-loss: it changes the computation, and 4 chun
 Combining `drop_city_pass` with the zero-loss `count0_streams2_ln` path was not measured, and I'd expect the gains to
 partly overlap rather than multiply.
 
-## Round 4: shipping candidates end to end (code done, T4 run pending)
+## Round 4: shipping candidates end to end
 
 Rounds 2 and 3 measured the pieces separately. Round 4 measures them together through the production serving path: the
 ai-utils detection queue, driven by `bench_detection.py` in queue mode, on one T4, with 4 repeats of the corpus (1160
@@ -321,3 +322,47 @@ defaults unchanged):
 
 Expected from rounds 2-3: with two passes, kernel time puts the one-T4 ceiling near 100 chunks/s. A realistic estimate
 on Colab's single physical core is 85-95.
+
+### T4 results (round 4)
+
+Run: `colab run --gpu T4`, `bench_detection.py` in queue mode, 4 repeats of the corpus (1160 chunks), 2 runs per config.
+Raw files: `t4_run_round4.log`, `t4_detect_round4.json`, `t4_detect_round4.md`.
+
+- **GPU model not confirmed from the log.** The runner's `nvidia-smi` output did not reach the captured log, so the log
+  has no Tesla T4 line. The session was requested with `--gpu T4`, and the round 1-3 sessions started the same way
+  reported Tesla T4 / [7, 5].
+- **Runner fix (setup only).** The runner merged `COMMON` and each config's env with `dict(os.environ, **COMMON, **extra)`,
+  which raised a `TypeError` because both set `DETECTION_FAST_COUNT`. This stopped the first run after `ref_3pass`. I
+  changed it in `bench/make_colab_detection_bench.py` so the config's value overrides the common one and reran from the start.
+  Several earlier launches failed with local DNS errors before any code ran and were rerun unchanged. No `CONFIG_FAILED` appeared.
+
+| config | chunks/s | vs prod_3pass | Person R/P | Organization R/P | Street R/P | City R/P | identical vs ref | GPU util % | serving MB |
+|---|---|---|---|---|---|---|---|---|---|
+| ref_3pass | 45.4 | 0.933x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[73], [76]] | [1943] |
+| prod_3pass | 48.6 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[83], [88]] | [3095] |
+| exact_3pass | 45.7 | 0.940x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[81], [83]] | [3057] |
+| exact_2pass | 66.3 | 1.364x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[75], [78]] | [2997] |
+| fast_2pass | 65.9 | 1.357x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[85], [81]] | [3007] |
+
+Per-run chunks/s: ref_3pass 48.1 / 42.6, prod_3pass 50.4 / 46.8, exact_3pass 46.4 / 45.0, exact_2pass 65.8 / 66.8,
+fast_2pass 66.6 / 65.3. The runs of the same config differ by up to 5.5 chunks/s (ref_3pass), so differences of a few chunks/s
+between the 3-pass configs are within noise.
+
+- **Speed vs `prod_3pass` (48.6):** `exact_2pass` 1.364x, `fast_2pass` 1.357x. The two 3-pass configs `ref_3pass` (0.933x)
+  and `exact_3pass` (0.940x) were slower than today's settings. In this run, 2 streams plus exact count plus fused LN gave no
+  gain over the single-stream `ref_3pass` (45.7 vs 45.4). This differs from round 3's encoder benchmark, which showed
+  `count0_streams2_ln` ahead. Here the exact count head (a loop of per-pair steps) did not keep up with the batched fast count of `prod_3pass`.
+  I did not investigate further.
+- **Does `exact_2pass` meet or beat `ref_3pass` on every label? Yes.** Person, Organization and Street are equal
+  (.994/.961, .977/.846, .861/1.000), and City precision rose from .930 to .947 with recall unchanged at 1.000.
+- **Identical vs ref:** `exact_3pass` is identical on **1160/1160** chunks, as expected. `prod_3pass` (fast count) was also 1160/1160 here.
+  `exact_2pass` and `fast_2pass` are 1144/1160 (16 chunks differ, all from dropping the City pass). `fast_2pass` gave the same
+  accuracy and speed as `exact_2pass` (65.9 vs 66.3), so it offers no advantage here.
+- **GPU utilisation (mean `nvidia-smi` %, per run):** ref_3pass 73/76, prod_3pass 83/88, exact_3pass 81/83, exact_2pass 75/78,
+  fast_2pass 85/81. Utilisation is not saturated for any config. This is the coarse `nvidia-smi` measure, not kernel-busy time.
+- **Serving memory:** 1943 MB for one stream (`ref_3pass`) and 2997-3095 MB for the 2-stream configs.
+- **Does `exact_2pass` reach 100 chunks/s? No.** It reached 66.3, 33.7 chunks/s (34%) short. It would need another 1.51x. The
+  expected 85-95 from the plan above was too optimistic on this Colab VM (1 physical core). Getting closer needs less GPU
+  time per chunk or a faster host, and the GPU is only 75-78% utilised in this config, so the host is part of the limit.
+- **Ship status:** `exact_2pass` is the shipping candidate, but only after held-out confirmation of the 2-pass layout
+  (10-document corpus) and acceptance of the 16 changed chunks.

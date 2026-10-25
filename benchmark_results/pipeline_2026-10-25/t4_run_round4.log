@@ -1,0 +1,272 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-b7917b'...
+[colab] Session READY (run-b7917b). Executing ../../artifacts/colab_detection_bench.py...
+PACKAGES_READY
+RUN {"config": "ref_3pass", "run": 0, "chunks_per_s": 48.1, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [73], "serving_gpu_mb": [1943]}
+RUN {"config": "prod_3pass", "run": 0, "chunks_per_s": 50.4, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [83], "serving_gpu_mb": [3095]}
+RUN {"config": "exact_3pass", "run": 0, "chunks_per_s": 46.4, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [81], "serving_gpu_mb": [3057]}
+RUN {"config": "exact_2pass", "run": 0, "chunks_per_s": 65.8, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [75], "serving_gpu_mb": [2997]}
+RUN {"config": "fast_2pass", "run": 0, "chunks_per_s": 66.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [85], "serving_gpu_mb": [3007]}
+RUN {"config": "ref_3pass", "run": 1, "chunks_per_s": 42.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [76], "serving_gpu_mb": [1943]}
+RUN {"config": "prod_3pass", "run": 1, "chunks_per_s": 46.8, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [88], "serving_gpu_mb": [3045]}
+RUN {"config": "exact_3pass", "run": 1, "chunks_per_s": 45.0, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [83], "serving_gpu_mb": [3057]}
+RUN {"config": "exact_2pass", "run": 1, "chunks_per_s": 66.8, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [78], "serving_gpu_mb": [3021]}
+RUN {"config": "fast_2pass", "run": 1, "chunks_per_s": 65.3, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [81], "serving_gpu_mb": [3021]}
+BEGIN_DETECT_JSON
+{
+  "ref_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "1"
+    },
+    "chunks_per_s_runs": [
+      48.1,
+      42.6
+    ],
+    "chunks_per_s": 45.35,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        73
+      ],
+      [
+        76
+      ]
+    ],
+    "serving_gpu_mb": [
+      1943
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "prod_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_FAST_COUNT": "1"
+    },
+    "chunks_per_s_runs": [
+      50.4,
+      46.8
+    ],
+    "chunks_per_s": 48.599999999999994,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        83
+      ],
+      [
+        88
+      ]
+    ],
+    "serving_gpu_mb": [
+      3095
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "exact_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1"
+    },
+    "chunks_per_s_runs": [
+      46.4,
+      45.0
+    ],
+    "chunks_per_s": 45.7,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        81
+      ],
+      [
+        83
+      ]
+    ],
+    "serving_gpu_mb": [
+      3057
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "exact_2pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0"
+    },
+    "chunks_per_s_runs": [
+      65.8,
+      66.8
+    ],
+    "chunks_per_s": 66.3,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        75
+      ],
+      [
+        78
+      ]
+    ],
+    "serving_gpu_mb": [
+      2997
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "fast_2pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_FAST_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0"
+    },
+    "chunks_per_s_runs": [
+      66.6,
+      65.3
+    ],
+    "chunks_per_s": 65.94999999999999,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        85
+      ],
+      [
+        81
+      ]
+    ],
+    "serving_gpu_mb": [
+      3007
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  }
+}
+END_DETECT_JSON
+BEGIN_DETECT_MD
+| config | chunks/s | vs prod_3pass | Person R/P | Organization R/P | Street R/P | City R/P | identical vs ref | GPU util % | serving MB |
+|---|---|---|---|---|---|---|---|---|---|
+| ref_3pass | 45.4 | 0.933x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[73], [76]] | [1943] |
+| prod_3pass | 48.6 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[83], [88]] | [3095] |
+| exact_3pass | 45.7 | 0.940x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[81], [83]] | [3057] |
+| exact_2pass | 66.3 | 1.364x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[75], [78]] | [2997] |
+| fast_2pass | 65.9 | 1.357x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[85], [81]] | [3007] |
+END_DETECT_MD
+[colab] Stopping session 'run-b7917b'...
+[colab] Session terminated.
