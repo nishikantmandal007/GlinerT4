@@ -1,0 +1,911 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-d6f5bc'...
+[colab] Session READY (run-d6f5bc). Executing artifacts/colab_memory_bench.py...
+Sun Oct 25 16:09:21 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |
+| N/A   48C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+[1/4] /usr/local/cuda/bin/nvcc -MD -MF add_layernorm.cuda.o.d -DTORCH_EXTENSION_NAME=glinert4 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.13/dist-packages/torch/include -isystem /usr/local/lib/python3.13/dist-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.13 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -O3 -gencode=arch=compute_75,code=sm_75 --use_fast_math -std=c++17 -c /usr/local/lib/python3.13/dist-packages/glinert4/csrc/add_layernorm.cu -o add_layernorm.cuda.o 
+[2/4] /usr/local/cuda/bin/nvcc -MD -MF attention.cuda.o.d -DTORCH_EXTENSION_NAME=glinert4 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.13/dist-packages/torch/include -isystem /usr/local/lib/python3.13/dist-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.13 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -O3 -gencode=arch=compute_75,code=sm_75 --use_fast_math -std=c++17 -c /usr/local/lib/python3.13/dist-packages/glinert4/csrc/attention.cu -o attention.cuda.o 
+[3/4] c++ -MMD -MF ops.o.d -DTORCH_EXTENSION_NAME=glinert4 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.13/dist-packages/torch/include -isystem /usr/local/lib/python3.13/dist-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.13 -fPIC -std=c++17 -O3 -c /usr/local/lib/python3.13/dist-packages/glinert4/csrc/ops.cpp -o ops.o 
+[4/4] c++ ops.o attention.cuda.o add_layernorm.cuda.o -shared -L/usr/local/lib/python3.13/dist-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o glinert4.so
+/usr/local/lib/python3.13/dist-packages/glinert4/_glinert4.so
+
+BUILD rc=0
+......................................                                   [100%]
+38 passed in 193.52s (0:03:13)
+
+PYTEST rc=0
+CONTRACT {"model_seconds": 3.6, "words": 50805, "pages": 104, "truth_occurrences": 518, "controls": 102, "not_scored": {"Emails": 302, "Dates": 1, "Zip Code": 2, "Phone": 200}, "variants": {"off": {"per_label": {"Person": {"tp": 307, "fp": 0, "fn": 5, "precision": 1.0, "recall": 0.984}, "Organization": {"tp": 201, "fp": 0, "fn": 1, "precision": 1.0, "recall": 0.995}, "Street": {"tp": 2, "fp": 6, "fn": 0, "precision": 0.25, "recall": 1.0}, "City": {"tp": 2, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 1, "missed": 6, "invented": 2, "control flagged": 3}, "controls_flagged": 3, "memory_added": {}, "memory_ms": 49.3}, "labels": {"per_label": {"Person": {"tp": 307, "fp": 0, "fn": 5, "precision": 1.0, "recall": 0.984}, "Organization": {"tp": 201, "fp": 0, "fn": 1, "precision": 1.0, "recall": 0.995}, "Street": {"tp": 2, "fp": 6, "fn": 0, "precision": 0.25, "recall": 1.0}, "City": {"tp": 2, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 1, "missed": 6, "invented": 2, "control flagged": 3}, "controls_flagged": 3, "memory_added": {}, "memory_ms": 50.3}, "labels+pool": {"per_label": {"Person": {"tp": 307, "fp": 0, "fn": 5, "precision": 1.0, "recall": 0.984}, "Organization": {"tp": 201, "fp": 0, "fn": 1, "precision": 1.0, "recall": 0.995}, "Street": {"tp": 2, "fp": 6, "fn": 0, "precision": 0.25, "recall": 1.0}, "City": {"tp": 2, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 1, "missed": 6, "invented": 2, "control flagged": 3}, "controls_flagged": 3, "memory_added": {}, "memory_ms": 49.9}, "labels+pool+spread": {"per_label": {"Person": {"tp": 307, "fp": 0, "fn": 5, "precision": 1.0, "recall": 0.984}, "Organization": {"tp": 202, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Street": {"tp": 2, "fp": 6, "fn": 0, "precision": 0.25, "recall": 1.0}, "City": {"tp": 2, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 1, "missed": 5, "invented": 2, "control flagged": 3}, "controls_flagged": 3, "memory_added": {"memory:spread right": 1}, "memory_ms": 142.7}, "all four": {"per_label": {"Person": {"tp": 307, "fp": 1, "fn": 5, "precision": 0.9968, "recall": 0.984}, "Organization": {"tp": 202, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Street": {"tp": 2, "fp": 6, "fn": 0, "precision": 0.25, "recall": 1.0}, "City": {"tp": 2, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 2, "missed": 5, "invented": 2, "control flagged": 3}, "controls_flagged": 3, "memory_added": {"memory:alias boundary": 1, "memory:spread right": 1}, "memory_ms": 1020.9}, "all four, no bare surnames": {"per_label": {"Person": {"tp": 307, "fp": 0, "fn": 5, "precision": 1.0, "recall": 0.984}, "Organization": {"tp": 202, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Street": {"tp": 2, "fp": 6, "fn": 0, "precision": 0.25, "recall": 1.0}, "City": {"tp": 2, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 1, "missed": 5, "invented": 2, "control flagged": 3}, "controls_flagged": 3, "memory_added": {"memory:spread right": 1}, "memory_ms": 1054.6}}}
+REALISTIC {"size": "040", "model_seconds": 3.541, "documents": 10, "words": 37985, "variants": {"off": {"per_label": {"Person": {"tp": 1358, "fp": 2, "fn": 0, "precision": 0.9985, "recall": 1.0}, "Organization": {"tp": 399, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}, "Street": {"tp": 31, "fp": 341, "fn": 48, "precision": 0.0833, "recall": 0.3924}, "City": {"tp": 400, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}}, "errors": {"boundary": 344, "missed": 48, "wrong label": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 115.4}, "labels": {"per_label": {"Person": {"tp": 1358, "fp": 2, "fn": 0, "precision": 0.9985, "recall": 1.0}, "Organization": {"tp": 399, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}, "Street": {"tp": 31, "fp": 341, "fn": 48, "precision": 0.0833, "recall": 0.3924}, "City": {"tp": 400, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}}, "errors": {"boundary": 344, "missed": 48, "wrong label": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 143.6}, "labels+pool": {"per_label": {"Person": {"tp": 1358, "fp": 2, "fn": 0, "precision": 0.9985, "recall": 1.0}, "Organization": {"tp": 399, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}, "Street": {"tp": 31, "fp": 343, "fn": 48, "precision": 0.0829, "recall": 0.3924}, "City": {"tp": 400, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}}, "errors": {"boundary": 346, "missed": 48, "wrong label": 1}, "controls_flagged": 0, "memory_added": {"memory:pooled boundary": 2}, "memory_ms": 126.7}, "labels+pool+spread": {"per_label": {"Person": {"tp": 1358, "fp": 2, "fn": 0, "precision": 0.9985, "recall": 1.0}, "Organization": {"tp": 399, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}, "Street": {"tp": 31, "fp": 343, "fn": 48, "precision": 0.0829, "recall": 0.3924}, "City": {"tp": 400, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}}, "errors": {"boundary": 346, "missed": 48, "wrong label": 1}, "controls_flagged": 0, "memory_added": {"memory:pooled boundary": 2}, "memory_ms": 184.5}, "all four": {"per_label": {"Person": {"tp": 1358, "fp": 4, "fn": 0, "precision": 0.9971, "recall": 1.0}, "Organization": {"tp": 399, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}, "Street": {"tp": 31, "fp": 343, "fn": 48, "precision": 0.0829, "recall": 0.3924}, "City": {"tp": 400, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}}, "errors": {"boundary": 348, "missed": 48, "wrong label": 1}, "controls_flagged": 0, "memory_added": {"memory:alias boundary": 2, "memory:pooled boundary": 2}, "memory_ms": 1165.7}, "all four, no bare surnames": {"per_label": {"Person": {"tp": 1358, "fp": 2, "fn": 0, "precision": 0.9985, "recall": 1.0}, "Organization": {"tp": 399, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}, "Street": {"tp": 31, "fp": 343, "fn": 48, "precision": 0.0829, "recall": 0.3924}, "City": {"tp": 400, "fp": 1, "fn": 0, "precision": 0.9975, "recall": 1.0}}, "errors": {"boundary": 346, "missed": 48, "wrong label": 1}, "controls_flagged": 0, "memory_added": {"memory:pooled boundary": 2}, "memory_ms": 1140.6}}}
+REALISTIC {"size": "020", "model_seconds": 1.678, "documents": 10, "words": 18954, "variants": {"off": {"per_label": {"Person": {"tp": 680, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Organization": {"tp": 199, "fp": 1, "fn": 0, "precision": 0.995, "recall": 1.0}, "Street": {"tp": 14, "fp": 174, "fn": 24, "precision": 0.0745, "recall": 0.3684}, "City": {"tp": 200, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 174, "missed": 24, "invented": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 60.4}, "labels": {"per_label": {"Person": {"tp": 680, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Organization": {"tp": 199, "fp": 1, "fn": 0, "precision": 0.995, "recall": 1.0}, "Street": {"tp": 14, "fp": 174, "fn": 24, "precision": 0.0745, "recall": 0.3684}, "City": {"tp": 200, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 174, "missed": 24, "invented": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 37.0}, "labels+pool": {"per_label": {"Person": {"tp": 680, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Organization": {"tp": 199, "fp": 1, "fn": 0, "precision": 0.995, "recall": 1.0}, "Street": {"tp": 14, "fp": 174, "fn": 24, "precision": 0.0745, "recall": 0.3684}, "City": {"tp": 200, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 174, "missed": 24, "invented": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 38.1}, "labels+pool+spread": {"per_label": {"Person": {"tp": 680, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Organization": {"tp": 199, "fp": 1, "fn": 0, "precision": 0.995, "recall": 1.0}, "Street": {"tp": 14, "fp": 174, "fn": 24, "precision": 0.0745, "recall": 0.3684}, "City": {"tp": 200, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 174, "missed": 24, "invented": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 68.2}, "all four": {"per_label": {"Person": {"tp": 680, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Organization": {"tp": 199, "fp": 1, "fn": 0, "precision": 0.995, "recall": 1.0}, "Street": {"tp": 14, "fp": 174, "fn": 24, "precision": 0.0745, "recall": 0.3684}, "City": {"tp": 200, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 174, "missed": 24, "invented": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 619.3}, "all four, no bare surnames": {"per_label": {"Person": {"tp": 680, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}, "Organization": {"tp": 199, "fp": 1, "fn": 0, "precision": 0.995, "recall": 1.0}, "Street": {"tp": 14, "fp": 174, "fn": 24, "precision": 0.0745, "recall": 0.3684}, "City": {"tp": 200, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0}}, "errors": {"boundary": 174, "missed": 24, "invented": 1}, "controls_flagged": 0, "memory_added": {}, "memory_ms": 602.0}}}
+Document memory on Tesla T4, candidates from a second decode at 0.3
+
+### Contract: 104 parts, 50,805 words, 518 ground-truth occurrences, 102 controls, model 3.6 s
+
+| variant | Person P / R | Organization P / R | Street P / R | City P / R | FP | FN | controls flagged | memory ms |
+|---|---|---|---|---|---|---|---|---|
+| off | 1.000 / 0.984 | 1.000 / 0.995 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 6 | 3 | 49.3 |
+| labels | 1.000 / 0.984 | 1.000 / 0.995 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 6 | 3 | 50.3 |
+| labels+pool | 1.000 / 0.984 | 1.000 / 0.995 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 6 | 3 | 49.9 |
+| labels+pool+spread | 1.000 / 0.984 | 1.000 / 1.000 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 5 | 3 | 142.7 |
+| all four | 0.997 / 0.984 | 1.000 / 1.000 | 0.250 / 1.000 | 1.000 / 1.000 | 7 | 5 | 3 | 1020.9 |
+| all four, no bare surnames | 1.000 / 0.984 | 1.000 / 1.000 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 5 | 3 | 1054.6 |
+
+Spans the memory added or relabelled (all four steps), by verdict: memory:alias boundary 1, memory:spread right 1
+
+### Realistic corpus 040: 10 documents, 37,985 words, model 3.541 s
+
+| variant | Person P / R | Organization P / R | Street P / R | City P / R | FP | FN | controls flagged | memory ms |
+|---|---|---|---|---|---|---|---|---|
+| off | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 345 | 48 | 0 | 115.4 |
+| labels | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 345 | 48 | 0 | 143.6 |
+| labels+pool | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 347 | 48 | 0 | 126.7 |
+| labels+pool+spread | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 347 | 48 | 0 | 184.5 |
+| all four | 0.997 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 349 | 48 | 0 | 1165.7 |
+| all four, no bare surnames | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 347 | 48 | 0 | 1140.6 |
+
+Spans the memory added or relabelled (all four steps), by verdict: memory:alias boundary 2, memory:pooled boundary 2
+
+### Realistic corpus 020: 10 documents, 18,954 words, model 1.678 s
+
+| variant | Person P / R | Organization P / R | Street P / R | City P / R | FP | FN | controls flagged | memory ms |
+|---|---|---|---|---|---|---|---|---|
+| off | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 60.4 |
+| labels | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 37.0 |
+| labels+pool | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 38.1 |
+| labels+pool+spread | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 68.2 |
+| all four | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 619.3 |
+| all four, no bare surnames | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 602.0 |
+
+Spans the memory added or relabelled (all four steps), by verdict: none
+
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+
+BENCH rc=0
+BEGIN_MEMORY
+Document memory on Tesla T4, candidates from a second decode at 0.3
+
+### Contract: 104 parts, 50,805 words, 518 ground-truth occurrences, 102 controls, model 3.6 s
+
+| variant | Person P / R | Organization P / R | Street P / R | City P / R | FP | FN | controls flagged | memory ms |
+|---|---|---|---|---|---|---|---|---|
+| off | 1.000 / 0.984 | 1.000 / 0.995 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 6 | 3 | 49.3 |
+| labels | 1.000 / 0.984 | 1.000 / 0.995 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 6 | 3 | 50.3 |
+| labels+pool | 1.000 / 0.984 | 1.000 / 0.995 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 6 | 3 | 49.9 |
+| labels+pool+spread | 1.000 / 0.984 | 1.000 / 1.000 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 5 | 3 | 142.7 |
+| all four | 0.997 / 0.984 | 1.000 / 1.000 | 0.250 / 1.000 | 1.000 / 1.000 | 7 | 5 | 3 | 1020.9 |
+| all four, no bare surnames | 1.000 / 0.984 | 1.000 / 1.000 | 0.250 / 1.000 | 1.000 / 1.000 | 6 | 5 | 3 | 1054.6 |
+
+Spans the memory added or relabelled (all four steps), by verdict: memory:alias boundary 1, memory:spread right 1
+
+### Realistic corpus 040: 10 documents, 37,985 words, model 3.541 s
+
+| variant | Person P / R | Organization P / R | Street P / R | City P / R | FP | FN | controls flagged | memory ms |
+|---|---|---|---|---|---|---|---|---|
+| off | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 345 | 48 | 0 | 115.4 |
+| labels | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 345 | 48 | 0 | 143.6 |
+| labels+pool | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 347 | 48 | 0 | 126.7 |
+| labels+pool+spread | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 347 | 48 | 0 | 184.5 |
+| all four | 0.997 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 349 | 48 | 0 | 1165.7 |
+| all four, no bare surnames | 0.999 / 1.000 | 0.998 / 1.000 | 0.083 / 0.392 | 0.998 / 1.000 | 347 | 48 | 0 | 1140.6 |
+
+Spans the memory added or relabelled (all four steps), by verdict: memory:alias boundary 2, memory:pooled boundary 2
+
+### Realistic corpus 020: 10 documents, 18,954 words, model 1.678 s
+
+| variant | Person P / R | Organization P / R | Street P / R | City P / R | FP | FN | controls flagged | memory ms |
+|---|---|---|---|---|---|---|---|---|
+| off | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 60.4 |
+| labels | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 37.0 |
+| labels+pool | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 38.1 |
+| labels+pool+spread | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 68.2 |
+| all four | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 619.3 |
+| all four, no bare surnames | 1.000 / 1.000 | 0.995 / 1.000 | 0.074 / 0.368 | 1.000 / 1.000 | 175 | 24 | 0 | 602.0 |
+
+Spans the memory added or relabelled (all four steps), by verdict: none
+
+
+{
+ "device": "Tesla T4",
+ "floor": 0.3,
+ "contract": {
+  "model_seconds": 3.6,
+  "words": 50805,
+  "pages": 104,
+  "truth_occurrences": 518,
+  "controls": 102,
+  "not_scored": {
+   "Emails": 302,
+   "Dates": 1,
+   "Zip Code": 2,
+   "Phone": 200
+  },
+  "variants": {
+   "off": {
+    "per_label": {
+     "Person": {
+      "tp": 307,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.984
+     },
+     "Organization": {
+      "tp": 201,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.995
+     },
+     "Street": {
+      "tp": 2,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0
+     },
+     "City": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "errors": {
+     "boundary": 1,
+     "missed": 6,
+     "invented": 2,
+     "control flagged": 3
+    },
+    "controls_flagged": 3,
+    "memory_added": {},
+    "memory_ms": 49.3
+   },
+   "labels": {
+    "per_label": {
+     "Person": {
+      "tp": 307,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.984
+     },
+     "Organization": {
+      "tp": 201,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.995
+     },
+     "Street": {
+      "tp": 2,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0
+     },
+     "City": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "errors": {
+     "boundary": 1,
+     "missed": 6,
+     "invented": 2,
+     "control flagged": 3
+    },
+    "controls_flagged": 3,
+    "memory_added": {},
+    "memory_ms": 50.3
+   },
+   "labels+pool": {
+    "per_label": {
+     "Person": {
+      "tp": 307,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.984
+     },
+     "Organization": {
+      "tp": 201,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.995
+     },
+     "Street": {
+      "tp": 2,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0
+     },
+     "City": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "errors": {
+     "boundary": 1,
+     "missed": 6,
+     "invented": 2,
+     "control flagged": 3
+    },
+    "controls_flagged": 3,
+    "memory_added": {},
+    "memory_ms": 49.9
+   },
+   "labels+pool+spread": {
+    "per_label": {
+     "Person": {
+      "tp": 307,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.984
+     },
+     "Organization": {
+      "tp": 202,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "Street": {
+      "tp": 2,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0
+     },
+     "City": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "errors": {
+     "boundary": 1,
+     "missed": 5,
+     "invented": 2,
+     "control flagged": 3
+    },
+    "controls_flagged": 3,
+    "memory_added": {
+     "memory:spread right": 1
+    },
+    "memory_ms": 142.7
+   },
+   "all four": {
+    "per_label": {
+     "Person": {
+      "tp": 307,
+      "fp": 1,
+      "fn": 5,
+      "precision": 0.9968,
+      "recall": 0.984
+     },
+     "Organization": {
+      "tp": 202,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "Street": {
+      "tp": 2,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0
+     },
+     "City": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "errors": {
+     "boundary": 2,
+     "missed": 5,
+     "invented": 2,
+     "control flagged": 3
+    },
+    "controls_flagged": 3,
+    "memory_added": {
+     "memory:alias boundary": 1,
+     "memory:spread right": 1
+    },
+    "memory_ms": 1020.9
+   },
+   "all four, no bare surnames": {
+    "per_label": {
+     "Person": {
+      "tp": 307,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.984
+     },
+     "Organization": {
+      "tp": 202,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "Street": {
+      "tp": 2,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0
+     },
+     "City": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "errors": {
+     "boundary": 1,
+     "missed": 5,
+     "invented": 2,
+     "control flagged": 3
+    },
+    "controls_flagged": 3,
+    "memory_added": {
+     "memory:spread right": 1
+    },
+    "memory_ms": 1054.6
+   }
+  }
+ },
+ "realistic": {
+  "040": {
+   "model_seconds": 3.541,
+   "documents": 10,
+   "words": 37985,
+   "variants": {
+    "off": {
+     "per_label": {
+      "Person": {
+       "tp": 1358,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.9985,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 399,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 31,
+       "fp": 341,
+       "fn": 48,
+       "precision": 0.0833,
+       "recall": 0.3924
+      },
+      "City": {
+       "tp": 400,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 344,
+      "missed": 48,
+      "wrong label": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 115.4
+    },
+    "labels": {
+     "per_label": {
+      "Person": {
+       "tp": 1358,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.9985,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 399,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 31,
+       "fp": 341,
+       "fn": 48,
+       "precision": 0.0833,
+       "recall": 0.3924
+      },
+      "City": {
+       "tp": 400,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 344,
+      "missed": 48,
+      "wrong label": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 143.6
+    },
+    "labels+pool": {
+     "per_label": {
+      "Person": {
+       "tp": 1358,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.9985,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 399,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 31,
+       "fp": 343,
+       "fn": 48,
+       "precision": 0.0829,
+       "recall": 0.3924
+      },
+      "City": {
+       "tp": 400,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 346,
+      "missed": 48,
+      "wrong label": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {
+      "memory:pooled boundary": 2
+     },
+     "memory_ms": 126.7
+    },
+    "labels+pool+spread": {
+     "per_label": {
+      "Person": {
+       "tp": 1358,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.9985,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 399,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 31,
+       "fp": 343,
+       "fn": 48,
+       "precision": 0.0829,
+       "recall": 0.3924
+      },
+      "City": {
+       "tp": 400,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 346,
+      "missed": 48,
+      "wrong label": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {
+      "memory:pooled boundary": 2
+     },
+     "memory_ms": 184.5
+    },
+    "all four": {
+     "per_label": {
+      "Person": {
+       "tp": 1358,
+       "fp": 4,
+       "fn": 0,
+       "precision": 0.9971,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 399,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 31,
+       "fp": 343,
+       "fn": 48,
+       "precision": 0.0829,
+       "recall": 0.3924
+      },
+      "City": {
+       "tp": 400,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 348,
+      "missed": 48,
+      "wrong label": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {
+      "memory:alias boundary": 2,
+      "memory:pooled boundary": 2
+     },
+     "memory_ms": 1165.7
+    },
+    "all four, no bare surnames": {
+     "per_label": {
+      "Person": {
+       "tp": 1358,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.9985,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 399,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 31,
+       "fp": 343,
+       "fn": 48,
+       "precision": 0.0829,
+       "recall": 0.3924
+      },
+      "City": {
+       "tp": 400,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9975,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 346,
+      "missed": 48,
+      "wrong label": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {
+      "memory:pooled boundary": 2
+     },
+     "memory_ms": 1140.6
+    }
+   }
+  },
+  "020": {
+   "model_seconds": 1.678,
+   "documents": 10,
+   "words": 18954,
+   "variants": {
+    "off": {
+     "per_label": {
+      "Person": {
+       "tp": 680,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 199,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.995,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 14,
+       "fp": 174,
+       "fn": 24,
+       "precision": 0.0745,
+       "recall": 0.3684
+      },
+      "City": {
+       "tp": 200,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 174,
+      "missed": 24,
+      "invented": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 60.4
+    },
+    "labels": {
+     "per_label": {
+      "Person": {
+       "tp": 680,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 199,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.995,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 14,
+       "fp": 174,
+       "fn": 24,
+       "precision": 0.0745,
+       "recall": 0.3684
+      },
+      "City": {
+       "tp": 200,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 174,
+      "missed": 24,
+      "invented": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 37.0
+    },
+    "labels+pool": {
+     "per_label": {
+      "Person": {
+       "tp": 680,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 199,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.995,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 14,
+       "fp": 174,
+       "fn": 24,
+       "precision": 0.0745,
+       "recall": 0.3684
+      },
+      "City": {
+       "tp": 200,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 174,
+      "missed": 24,
+      "invented": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 38.1
+    },
+    "labels+pool+spread": {
+     "per_label": {
+      "Person": {
+       "tp": 680,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 199,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.995,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 14,
+       "fp": 174,
+       "fn": 24,
+       "precision": 0.0745,
+       "recall": 0.3684
+      },
+      "City": {
+       "tp": 200,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 174,
+      "missed": 24,
+      "invented": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 68.2
+    },
+    "all four": {
+     "per_label": {
+      "Person": {
+       "tp": 680,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 199,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.995,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 14,
+       "fp": 174,
+       "fn": 24,
+       "precision": 0.0745,
+       "recall": 0.3684
+      },
+      "City": {
+       "tp": 200,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 174,
+      "missed": 24,
+      "invented": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 619.3
+    },
+    "all four, no bare surnames": {
+     "per_label": {
+      "Person": {
+       "tp": 680,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      },
+      "Organization": {
+       "tp": 199,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.995,
+       "recall": 1.0
+      },
+      "Street": {
+       "tp": 14,
+       "fp": 174,
+       "fn": 24,
+       "precision": 0.0745,
+       "recall": 0.3684
+      },
+      "City": {
+       "tp": 200,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0
+      }
+     },
+     "errors": {
+      "boundary": 174,
+      "missed": 24,
+      "invented": 1
+     },
+     "controls_flagged": 0,
+     "memory_added": {},
+     "memory_ms": 602.0
+    }
+   }
+  }
+ }
+}
+END_MEMORY
+[colab] Stopping session 'run-d6f5bc'...
+[colab] Session terminated.
