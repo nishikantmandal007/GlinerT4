@@ -220,3 +220,24 @@ about 21, which is the 4% seen. The span head still costs 3.8 ms/chunk.
 The host-side cuts gave about 5% at best. With streams2 the GPU is the limit, and 100 chunks/s needs about 2x the baseline
 throughput. That has to come from less GPU time per chunk (elementwise fusion, attention, removing the pad/unpack syncs),
 not from more host-side work.
+
+## Round 3: fewer label passes (accuracy-checked) and fused add+LayerNorm (code done, T4 run pending)
+
+With byte-identical output, round 2 reached +5.3%, and kernel time alone caps one Colab T4 near 65 chunks/s. The
+largest remaining lever changes what is computed: each label pass re-encodes the whole chunk, and detection runs three
+(Organization; Person+Street+City; City alone).
+
+- **`bench/pass_bench.py`** runs the production `Gliner2NER.detect_batch` (`artifacts/colab_pipeline/gliner2_ner.py`:
+  thresholds, cross-pass City union, table-cell confirmation, span resolution) with five pass layouts. It scores each
+  against the corpus ground truth exactly as `bench_detection.py` does.
+  - Layouts: `current_3pass`; `drop_city_pass`; `merged_city_desc` (City's alone-pass description inside the shared
+    pass); `city_with_org` (the City-alone query moved into the Organization pass, still two passes); and
+    `city_with_org_desc`.
+  - A layout is accepted only if **no label's recall or precision falls below `current_3pass`**.
+  - The corpus is only 10 documents: confirm an accepted layout on a held-out set (the 25-language corpus on the VM)
+    before shipping.
+  - Exact count0 is on for every layout; the non-exact `DETECTION_FAST_COUNT` is off.
+- **`pipeline_bench.py`** now defaults to `baseline`, `count0`, `count0_streams2`, `ln` and `count0_streams2_ln`, with
+  5 trials. `ln` is gliner_t4's bit-identical fused residual add + LayerNorm. Earlier it was off because it gained
+  nothing while the pipeline was host-bound; with two streams the GPU is now the limit. Round-2 configs remain available
+  (`--configs all`).

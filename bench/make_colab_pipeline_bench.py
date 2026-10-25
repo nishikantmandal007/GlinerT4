@@ -1,8 +1,8 @@
 # Writes artifacts/colab_pipeline_bench.py: one self-contained file for `colab run` (which uploads a single file) that
-# unpacks the kernel sources, serving/gliner2_pipeline.py, bench/pipeline_bench.py and the 290-chunk corpus into
-# /content/gliner-pipe, installs gliner2 2.1.0 + disentangled-flash 1.1.1, runs the benchmark on the T4 and prints
-# result.json, summary.md and the baseline outputs' sha256 between markers so they can be copied back from the log.
-#   python bench/make_colab_pipeline_bench.py [--trials 3]
+# unpacks the kernel sources, serving modules, the benchmarks, the production detection code and the 290-chunk corpus
+# into /content/gliner-pipe, installs gliner2 2.1.0 + disentangled-flash 1.1.1, runs bench/pipeline_bench.py and
+# bench/pass_bench.py on the T4 and prints their result files between markers so they can be copied back from the log.
+#   python bench/make_colab_pipeline_bench.py [--trials 5] [--pass-trials 2] [--only pipeline|pass]
 import argparse
 import base64
 import gzip
@@ -11,13 +11,16 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument("--trials", type=int, default=3)
+parser.add_argument("--trials", type=int, default=5)
+parser.add_argument("--pass-trials", type=int, default=2)
+parser.add_argument("--only", choices=["pipeline", "pass"], default=None)
 args = parser.parse_args()
 
 names = ["csrc/torch_binding.cpp", "csrc/disentangled_attention.cu", "csrc/disentangled_attention_v2.cu",
          "csrc/disentangled_attention_v3.cu", "csrc/disentangled_attention_v4.cu", "csrc/add_layernorm.cu",
          "torch-ext/gliner_t4/__init__.py", "torch-ext/gliner_t4/_build.py", "serving/gliner2_pipeline.py",
-         "serving/gliner2_exact.py",
+         "serving/gliner2_exact.py", "bench/pass_bench.py", "artifacts/colab_pipeline/gliner2_ner.py",
+         "artifacts/colab_pipeline/detection_queue.py", "artifacts/colab_pipeline/bench_detection.py",
          "bench/pipeline_bench.py", "benchmark_results/colab_2026-10-24/exact_optimization/exact_prep.py"]
 files = {name: (root / name).read_text() for name in names}
 # the corpus of the 54.81 chunks/s baseline, as shipped in the 2026-10-24 Colab payload
@@ -35,12 +38,18 @@ subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "gliner2[lo
                        "ninja"])
 print("PACKAGES_READY", flush=True)
 out = root / "results"
-subprocess.run([sys.executable, str(root / "bench/pipeline_bench.py"), "--corpus", str(root / "corpus.json"),
-                "--out", str(out), "--trials", "{args.trials}"], check=True)
-import hashlib
-print("BEGIN_RESULT_JSON"); print((out / "result.json").read_text()); print("END_RESULT_JSON")
-print("BEGIN_SUMMARY_MD"); print((out / "summary.md").read_text()); print("END_SUMMARY_MD")
-print("BASELINE_OUTPUTS_SHA256", hashlib.sha256((out / "baseline_outputs.json").read_bytes()).hexdigest(), flush=True)
+if {args.only!r} in (None, "pipeline"):
+    subprocess.run([sys.executable, str(root / "bench/pipeline_bench.py"), "--corpus", str(root / "corpus.json"),
+                    "--out", str(out), "--trials", "{args.trials}"], check=True)
+    import hashlib
+    print("BEGIN_RESULT_JSON"); print((out / "result.json").read_text()); print("END_RESULT_JSON")
+    print("BEGIN_SUMMARY_MD"); print((out / "summary.md").read_text()); print("END_SUMMARY_MD")
+    print("BASELINE_OUTPUTS_SHA256", hashlib.sha256((out / "baseline_outputs.json").read_bytes()).hexdigest(), flush=True)
+if {args.only!r} in (None, "pass"):
+    subprocess.run([sys.executable, str(root / "bench/pass_bench.py"), "--corpus", str(root / "corpus.json"),
+                    "--out", str(out), "--trials", "{args.pass_trials}"], check=True)
+    print("BEGIN_PASS_JSON"); print((out / "pass_result.json").read_text()); print("END_PASS_JSON")
+    print("BEGIN_PASS_MD"); print((out / "pass_summary.md").read_text()); print("END_PASS_MD", flush=True)
 '''
 target = root / "artifacts" / "colab_pipeline_bench.py"
 target.write_text(runner)

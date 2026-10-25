@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT / "benchmark_results" / "colab_2026-10-24" / "exact_
 parser = argparse.ArgumentParser()
 parser.add_argument("--corpus", required=True, help="corpus.json: a list of documents, each with a 'chunks' list")
 parser.add_argument("--out", required=True)
-parser.add_argument("--trials", type=int, default=3)
+parser.add_argument("--trials", type=int, default=5)
 parser.add_argument("--configs", default="", help="comma-separated config names, or 'all'; default: the exact set")
 parser.add_argument("--standin", action="store_true", help="CPU smoke test of this script with a stand-in model")
 args = parser.parse_args()
@@ -164,15 +164,23 @@ passes = [{"Organization": labels["Organization"]}, {k: labels[k] for k in ("Per
 
 
 
-def config(depth=0, workers=0, batch=16, count0=False, fmt=False, streams=1):
+def config(depth=0, workers=0, batch=16, count0=False, fmt=False, streams=1, ln=False):
     return {"prefetch_depth": depth, "num_workers": workers, "batch_size": batch, "count_step0": count0,
-            "format_cache": fmt, "streams": streams}
+            "format_cache": fmt, "streams": streams, "fused_add_layernorm": ln}
 
 
 # depth 0, no exact flags, one stream is stock gliner2 (plus the baseline preparation above)
 EXACT_CONFIGS = {
     "baseline": config(),
     "count0": config(count0=True),
+    "count0_streams2": config(count0=True, streams=2),
+    # gliner_t4's bit-identical fused residual add + LayerNorm (tests/test_add_layernorm.py), off in serving because it
+    # gained nothing while the pipeline was host-bound; with two streams the GPU is the limit
+    "ln": config(ln=True),
+    "count0_streams2_ln": config(count0=True, streams=2, ln=True),
+}
+# round 2 (2026-10-25): count0 +3.9%, fmtcache no gain, streams2 +4.1%, all three +5.3%
+ROUND2_CONFIGS = {
     "fmtcache": config(fmt=True),
     "exact": config(count0=True, fmt=True),
     "exact_prefetch1": config(depth=1, count0=True, fmt=True),
@@ -189,9 +197,9 @@ EARLIER_CONFIGS = {
     "batch32": config(batch=32),
 }
 if args.configs == "all":
-    CONFIGS = {**EXACT_CONFIGS, **EARLIER_CONFIGS}
+    CONFIGS = {**EXACT_CONFIGS, **ROUND2_CONFIGS, **EARLIER_CONFIGS}
 elif args.configs:
-    every = {**EXACT_CONFIGS, **EARLIER_CONFIGS}
+    every = {**EXACT_CONFIGS, **ROUND2_CONFIGS, **EARLIER_CONFIGS}
     CONFIGS = {k: every[k] for k in ["baseline"] + [n for n in args.configs.split(",") if n != "baseline"]}
 else:
     CONFIGS = EXACT_CONFIGS
@@ -200,8 +208,26 @@ second_model = load_model(first=model) if any(c["streams"] > 1 for c in CONFIGS.
 streams = [torch.cuda.Stream() for _ in range(2)] if CUDA else [None, None]
 
 
+_deberta_outputs = {}
+
+
+def fused_add_layernorm(on):
+    if not CUDA:
+        return
+    from transformers.models.deberta_v2 import modeling_deberta_v2 as deberta
+
+    classes = (deberta.DebertaV2SelfOutput, deberta.DebertaV2Output)
+    if not _deberta_outputs:
+        _deberta_outputs.update({cls: cls.forward for cls in classes})
+    for cls in classes:
+        cls.forward = _deberta_outputs[cls]
+    if on:
+        gliner_t4.fuse_add_layernorm()
+
+
 def configure(name):
     c = CONFIGS[name]
+    fused_add_layernorm(c["fused_add_layernorm"])
     if c["prefetch_depth"]:
         gliner2_pipeline.install(c["prefetch_depth"])
     else:
@@ -381,9 +407,10 @@ def stage_breakdown(name):
 
 report["breakdown_baseline"] = stage_breakdown("baseline")
 emit("BREAKDOWN", report["breakdown_baseline"])
-if "exact" in CONFIGS:
-    report["breakdown_exact"] = stage_breakdown("exact")
-    emit("BREAKDOWN_EXACT", report["breakdown_exact"])
+for name in ("count0", "exact"):
+    if name in CONFIGS:
+        report["breakdown_" + name] = stage_breakdown(name)
+        emit("BREAKDOWN_" + name.upper(), report["breakdown_" + name])
 save()
 
 
@@ -414,10 +441,11 @@ if CUDA:
 gliner2_pipeline.uninstall()
 save()
 
-lines = ["| config | count0 | fmtcache | streams | depth | workers | batch | chunks/s | vs baseline | identical full output "
-         "| identical kept values |", "|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|"]
+lines = ["| config | count0 | fmtcache | ln | streams | depth | workers | batch | chunks/s | vs baseline | identical full "
+         "output | identical kept values |", "|---|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|"]
 for name, row in results.items():
-    shape = (f"| {name} | {row['count_step0']} | {row['format_cache']} | {row['streams']} | {row['prefetch_depth']} | "
+    shape = (f"| {name} | {row['count_step0']} | {row['format_cache']} | {row['fused_add_layernorm']} | "
+             f"{row['streams']} | {row['prefetch_depth']} | "
              f"{row['num_workers']} | {row['batch_size']} | ")
     if "chunks_per_s" not in row:
         lines.append(shape + f"failed: {row['errors'][:1]} | | | |")
