@@ -22,13 +22,12 @@ md(f"""
 # Making GLiNER2 fast on a T4 without losing accuracy
 
 I wanted GLiNER2 to run fast on a Tesla T4, the cheapest GPU on most clouds, without changing a single prediction.
-This notebook runs the same model on the same text five times, adding one optimisation at a time, and scores every
-run against the gold labels.
+This notebook runs the same model on the same text four times, adding one optimisation at a time, and scores every
+run against the gold labels. The starting point is GLiNER2 in fp16: in my tests fp32 was slower and no more accurate.
 
 | Step | What changes |
 |---|---|
-| fp32 | GLiNER2 out of the box |
-| fp16 | half-precision weights (`quantize=True`) |
+| fp16 | GLiNER2 with half-precision weights (`quantize=True`) |
 | + disentangled_flash | GLiNER2's fused Triton attention (`attention_backend="disentangled_flash"`) |
 | + glinert4 kernels | my CUDA attention kernel for the T4, residual add fused into LayerNorm, a count head that skips work it throws away, a word-split cache |
 | + pipeline | the CPU prepares batch *n+1* while the GPU runs batch *n*, and lengths are padded to multiples of 32 |
@@ -152,7 +151,7 @@ display(Markdown(table(["Domain", "labels", "sentences", "documents", "words"],
 """)
 
 md("""
-## 2. Five runs, one optimisation at a time
+## 2. Four runs, one optimisation at a time
 
 Every run calls the same GLiNER2 long-text API with the same batch size, labels and threshold. Only the last run
 swaps it for glinert4's pipelined version of that API.
@@ -194,11 +193,8 @@ def measure(model, pipelined=False):
 
 
 runs = {}
-stock = load()
-runs["fp32"] = measure(stock)
-model = load(quantize=True)
-runs["fp16"] = measure(model)
-del model
+stock = load(quantize=True)
+runs["fp16"] = measure(stock)
 fast = load(quantize=True, attention_backend="disentangled_flash")
 runs["+ disentangled_flash"] = measure(fast)
 glinert4.install()
@@ -210,8 +206,8 @@ runs["+ pipeline"] = measure(fast, pipelined=True)
 md("""
 ## 3. Results
 
-Speed is relative to fp32. "Same as fp32" is the share of texts whose predicted spans are exactly the ones fp32
-predicts; anything below 100% is fp16 rounding flipping a score that sits right at the threshold.
+Speed is relative to GLiNER2 fp16. "Same as fp16" is the share of texts whose predicted spans are exactly the ones
+GLiNER2 fp16 predicts; anything below 100% is rounding flipping a score that sits right at the threshold.
 """)
 
 code("""
@@ -224,13 +220,13 @@ def f1(kind, found):
 
 for kind in ("sentences", "documents"):
     count = sum(len(domain[kind]) for domain in data.values())
-    base = runs["fp32"][kind]
+    base = runs["fp16"][kind]
     rows = [[step, f"{run[kind]['seconds']:.1f} s", f"{count / run[kind]['seconds']:.1f}",
              f"**{base['seconds'] / run[kind]['seconds']:.1f}×**", f"{f1(kind, run[kind]['found']):.3f}",
              f"{sum(a == b for a, b in zip(run[kind]['found'], base['found'])) / count:.1%}"]
             for step, run in runs.items()]
     display(Markdown(f"**{count:,} {kind}**\\n\\n" + table(["Step", "time", f"{kind}/s", "speed-up", "F1",
-                                                             "same as fp32"], rows)))
+                                                             "same as fp16"], rows)))
 """)
 
 code("""
@@ -238,10 +234,10 @@ plt.rcParams.update({"font.size": 11, "axes.edgecolor": "#d5d4cf", "axes.labelco
                      "xtick.color": "#52514e", "ytick.color": "#0b0b0b"})
 fig, axes = plt.subplots(1, 2, figsize=(12, 3.6), sharey=True)
 for ax, kind in zip(axes, ("sentences", "documents")):
-    speedup = [runs["fp32"][kind]["seconds"] / run[kind]["seconds"] for run in runs.values()]
+    speedup = [runs["fp16"][kind]["seconds"] / run[kind]["seconds"] for run in runs.values()]
     bars = ax.barh(list(runs), speedup, height=0.55, color="#2a78d6")
     ax.bar_label(bars, labels=[f"{s:.1f}×" for s in speedup], padding=5, color="#0b0b0b")
-    ax.set_title(f"{kind.capitalize()}: times faster than fp32", loc="left", color="#0b0b0b", pad=12)
+    ax.set_title(f"{kind.capitalize()}: times faster than GLiNER2 fp16", loc="left", color="#0b0b0b", pad=12)
     ax.set_xlim(0, max(speedup) * 1.18)
     ax.grid(axis="x", color="#ecebe7")
     ax.set_axisbelow(True)
@@ -254,7 +250,7 @@ plt.show()
 md("""
 ## 4. Try your own text
 
-GLiNER2 out of the box (fp32) against glinert4 on any text and labels. The timings are the best of three runs.
+GLiNER2 fp16 against glinert4 on any text and labels. The timings are the best of three runs.
 """)
 
 code("""
@@ -295,7 +291,7 @@ def compare(text, labels):
     glinert4.install()
     after, after_ms = timed(fast, text, labels, True)
     verdict = "same entities" if before == after else "entities differ"
-    rows = [("GLiNER2 fp32", before_ms, before), ("glinert4", after_ms, after)]
+    rows = [("GLiNER2 fp16", before_ms, before), ("glinert4", after_ms, after)]
     display(HTML("".join(
         f'<div style="margin:10px 0;line-height:1.9"><b>{name}</b> · {ms:.0f} ms<br>{highlight(text, found, labels)}</div>'
         for name, ms, found in rows) + f"<p><b>{before_ms / after_ms:.1f}× faster</b>, {verdict}.</p>"))
