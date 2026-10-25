@@ -366,3 +366,27 @@ between the 3-pass configs are within noise.
   time per chunk or a faster host, and the GPU is only 75-78% utilised in this config, so the host is part of the limit.
 - **Ship status:** `exact_2pass` is the shipping candidate, but only after held-out confirmation of the 2-pass layout
   (10-document corpus) and acceptance of the 16 changed chunks.
+
+## Round 5: what limits the shipping path (code done, T4 run pending)
+
+Round 4's `exact_2pass` reached 66.3 chunks/s through the queue, with the GPU 75-78% busy, so the host side limits it.
+The pass benchmark ran the same 2-pass layout at 77.7 chunks/s with one stream. Two suspects:
+
+1. **The benchmark's own sampler.** `bench_detection.py` starts an `nvidia-smi` subprocess every 0.5 s. On Colab's
+   single physical core, that competes with the serving threads.
+   - New switch: `DETECTION_BENCH_GPU_SAMPLE_S` (0 means one sample at the end only).
+2. **Per-run overhead in the queue path.** Every run of 16 chunks repeats each pass's setup: schema, collator, window
+   split and merge, span resolution.
+   - `bench/queue_profile.py` times `detect_batch` in queue-style runs against one whole-corpus call, then profiles the
+     queue-style runs with cProfile on the T4.
+
+Round-5 runner configs (`python bench/make_colab_detection_bench.py`, 3 runs each, 1160 chunks):
+
+| config | what it isolates |
+|---|---|
+| ref_3pass | accuracy reference (sampler off) |
+| prod_3pass | today's serving settings, sampler off |
+| exact_2pass_sampled | round 4's measurement (sampler on), the control |
+| exact_2pass | sampler off: the artifact |
+| exact_2pass_1stream | whether 2 streams help on one core in the queue path |
+| exact_2pass_run32 / run64 | larger queue runs (`DETECTION_RUN_SIZE`); not byte-exact, accuracy gate applies; longer wait for urgent requests |

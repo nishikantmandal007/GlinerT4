@@ -4,7 +4,9 @@
 # 290-chunk detbench corpus (1160 chunks, as the reference runs), two runs per configuration. Per configuration it
 # prints chunks/s, ground-truth recall/precision per label, GPU busy and memory, and how many chunks return the same
 # values as the 3-pass exact reference.
-#   python bench/make_colab_detection_bench.py [--runs 2] [--repeat 4]
+# The round5 preset (default) also measures the benchmark's own nvidia-smi sampler (a subprocess every 0.5 s, which on
+# Colab's one physical core competes with the serving threads), one vs two streams, and then runs bench/queue_profile.py.
+#   python bench/make_colab_detection_bench.py [--preset round5|round4] [--runs N] [--repeat 4]
 import argparse
 import base64
 import gzip
@@ -13,13 +15,16 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument("--runs", type=int, default=2)
+parser.add_argument("--preset", choices=["round4", "round5"], default="round5")
+parser.add_argument("--runs", type=int, default=None, help="runs per configuration (round4: 2, round5: 3)")
 parser.add_argument("--repeat", type=int, default=4)
 args = parser.parse_args()
 
 names = ["csrc/torch_binding.cpp", "csrc/disentangled_attention.cu", "csrc/disentangled_attention_v2.cu",
          "csrc/disentangled_attention_v3.cu", "csrc/disentangled_attention_v4.cu", "csrc/add_layernorm.cu",
-         "torch-ext/gliner_t4/__init__.py", "torch-ext/gliner_t4/_build.py", "serving/gliner2_exact.py"]
+         "torch-ext/gliner_t4/__init__.py", "torch-ext/gliner_t4/_build.py", "serving/gliner2_exact.py",
+         "bench/queue_profile.py", "artifacts/colab_pipeline/gliner2_ner.py",
+         "artifacts/colab_pipeline/detection_queue.py", "artifacts/colab_pipeline/bench_detection.py"]
 files = {name: (root / name).read_text() for name in names}
 pipeline = root / "artifacts/colab_pipeline"
 files.update({"app/__init__.py": "", "app/models/__init__.py": "",
@@ -30,7 +35,7 @@ files["corpus.json"] = json.loads((root / "benchmark_results/colab_2026-10-24/pa
 blob = base64.b64encode(gzip.compress(json.dumps(files).encode())).decode()
 
 # name: environment on top of the common serving settings; ref_3pass is the accuracy reference (one stream, exact)
-CONFIGS = {
+ROUND4 = {
     "ref_3pass": {"DETECTION_STREAMS": "1"},
     "prod_3pass": {"DETECTION_STREAMS": "2", "DETECTION_FAST_COUNT": "1"},
     "exact_3pass": {"DETECTION_STREAMS": "2", "DETECTION_EXACT_COUNT": "1", "GLINER_T4_FUSE_LAYERNORM": "1"},
@@ -39,6 +44,21 @@ CONFIGS = {
     "fast_2pass": {"DETECTION_STREAMS": "2", "DETECTION_FAST_COUNT": "1", "GLINER_T4_FUSE_LAYERNORM": "1",
                    "DETECTION_CITY_PASS": "0"},
 }
+SHIP = {"DETECTION_EXACT_COUNT": "1", "GLINER_T4_FUSE_LAYERNORM": "1", "DETECTION_CITY_PASS": "0"}
+NO_SAMPLER = {"DETECTION_BENCH_GPU_SAMPLE_S": "0"}
+ROUND5 = {
+    "ref_3pass": {"DETECTION_STREAMS": "1", **NO_SAMPLER},
+    "prod_3pass": {"DETECTION_STREAMS": "2", "DETECTION_FAST_COUNT": "1", **NO_SAMPLER},
+    "exact_2pass_sampled": {"DETECTION_STREAMS": "2", **SHIP},  # round 4's measurement, for comparison
+    "exact_2pass": {"DETECTION_STREAMS": "2", **SHIP, **NO_SAMPLER},
+    "exact_2pass_1stream": {"DETECTION_STREAMS": "1", **SHIP, **NO_SAMPLER},
+    # larger queue runs: fewer per-run setups and better length sorting, but batch composition changes (not byte-exact)
+    # and an urgent request can wait up to one run (about 0.4 s per 16 chunks on a T4)
+    "exact_2pass_run32": {"DETECTION_STREAMS": "2", "DETECTION_RUN_SIZE": "32", **SHIP, **NO_SAMPLER},
+    "exact_2pass_run64": {"DETECTION_STREAMS": "2", "DETECTION_RUN_SIZE": "64", **SHIP, **NO_SAMPLER},
+}
+CONFIGS = ROUND5 if args.preset == "round5" else ROUND4
+runs = args.runs or (3 if args.preset == "round5" else 2)
 
 runner = f'''import base64, gzip, json, os, statistics, subprocess, sys
 from pathlib import Path
@@ -57,7 +77,7 @@ COMMON = dict(DETECTION_DEVICES="cuda:0", DETECTION_SPLIT_CACHE="1", DETECTION_S
               TOKENIZERS_PARALLELISM="false")
 CONFIGS = {json.dumps(CONFIGS)}
 results = {{}}
-for run in range({args.runs}):
+for run in range({runs}):
     for name, extra in CONFIGS.items():
         out = root / f"out_{{name}}_{{run}}.json"
         env = dict(os.environ, **{{**COMMON, **extra}})
@@ -96,6 +116,12 @@ for name, row in summary.items():
                  f" | {{row['identical_chunks_vs_ref']}}/{{row['chunks']}} | {{row['mean_gpu_util']}} | {{row['serving_gpu_mb']}} |")
 print("BEGIN_DETECT_JSON"); print(json.dumps(summary, indent=2)); print("END_DETECT_JSON")
 print("BEGIN_DETECT_MD"); print("\\n".join(lines)); print("END_DETECT_MD", flush=True)
+if {args.preset == "round5"}:
+    env = dict(os.environ, TOKENIZERS_PARALLELISM="false")
+    subprocess.run([sys.executable, "bench/queue_profile.py", "--corpus", "corpus.json", "--out", "qprofile"], cwd=root,
+                   env=env, check=True)
+    print("BEGIN_QPROFILE_JSON"); print((root / "qprofile/queue_profile.json").read_text()); print("END_QPROFILE_JSON")
+    print("BEGIN_QPROFILE_TXT"); print((root / "qprofile/queue_profile.txt").read_text()); print("END_QPROFILE_TXT", flush=True)
 '''
 target = root / "artifacts" / "colab_detection_bench.py"
 target.write_text(runner)
