@@ -5,9 +5,11 @@
 #   occ-overlap:  every annotated occurrence (test_corpus/ground_truth char offsets): recalled if a detected span of the
 #                 same label overlaps it; a detected span is correct if it overlaps an annotated one of that label
 #   occ-exact:    the same with identical character spans
+# Two input shapes: the corpus's own pre-cut chunks (~131 words, as in rounds 1-7), and whole documents, which
+# detect_batch reads in GLiNER2's own overlapping windows (WINDOW_WORDS=384, WINDOW_OVERLAP_WORDS=64), as production does.
 # The 040-section corpus is the rounds 1-7 corpus (the round-7 thresholds were chosen on it); the 020-section corpus is
 # the same documents cut shorter and chunked at other boundaries. Neither is held-out data.
-#   python bench/realistic_bench.py --out results_dir [--sizes 040,020] [--prepared realistic.json] [--standin]
+#   python bench/realistic_bench.py --out results_dir [--sizes 040,020] [--inputs chunks,documents] [--prepared x.json]
 import argparse
 import codecs
 import json
@@ -37,7 +39,7 @@ def prepare(test_corpus, size):
     docs = json.loads((test_corpus / f"corpus_{size}sections.json").read_text())
     for doc in docs:
         relative = doc["file"][len("test_corpus/"):] if doc["file"].startswith("test_corpus/") else doc["file"]
-        text = decode((test_corpus / relative).read_bytes())
+        text = original = decode((test_corpus / relative).read_bytes())
         # the 005/010/020 corpora also turned CRLF line ends into LF; the ground truth counts the CR characters, so
         # chunks are located in the LF text and their positions mapped back through position_map
         position_map = None
@@ -63,6 +65,7 @@ def prepare(test_corpus, size):
                     for location in value["locations"]:
                         occurrences.append([LABEL_MAP[kind], location["char_start"], location["char_end"]])
         doc["chunk_offsets"], doc["occurrences"], doc["position_map"] = offsets, occurrences, position_map
+        doc["text"] = original  # the whole decoded document, in the ground truth's coordinates
     return docs
 
 
@@ -101,6 +104,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", required=True)
     parser.add_argument("--sizes", default="040,020")
+    parser.add_argument("--inputs", default="chunks,documents",
+                        help="chunks: the corpus's pre-cut chunks; documents: whole documents, windowed by GLiNER2")
     parser.add_argument("--test-corpus", default=str(ROOT / "test_corpus"))
     parser.add_argument("--prepared", help="JSON from --prepare-only (used on Colab instead of test_corpus/)")
     parser.add_argument("--prepare-only", help="write the prepared corpora to this path and exit")
@@ -171,7 +176,11 @@ def main():
 
     report = {"device": torch.cuda.get_device_name() if device == "cuda" else "cpu (stand-in)", "corpora": {}}
     lines = []
-    for size, docs in corpora.items():
+    runs = [(size, shape) for size in corpora for shape in args.inputs.split(",")]
+    for size, shape in runs:
+        docs = corpora[size]
+        if shape == "documents":  # one text per document, at offset 0 of the ground truth's text
+            docs = [{**doc, "chunks": [doc["text"]], "chunk_offsets": [0], "position_map": None} for doc in docs]
         chunks = [chunk for doc in docs for chunk in doc["chunks"]]
         words = sum(len(chunk.split()) for chunk in chunks)
         rows = {}
@@ -182,10 +191,10 @@ def main():
                 elapsed, found = detect(name, chunks)
                 seconds.append(elapsed)
             median = statistics.median(seconds)
-            rows[name] = {"seconds": seconds, "chunks_per_s": len(chunks) / median, "words_per_s": words / median,
+            rows[name] = {"seconds": seconds, "texts_per_s": len(chunks) / median, "words_per_s": words / median,
                           "doc_set": bench_detection.score(docs, [item["values"] for item in found]),
                           "occurrence": occurrence_scores(docs, found, labels)}
-            print("RESULT " + json.dumps({"corpus": size, "config": name, **rows[name]}), flush=True)
+            print("RESULT " + json.dumps({"corpus": size, "inputs": shape, "config": name, **rows[name]}), flush=True)
         ref = rows["current_3pass"]
         for row in rows.values():
             row["worse_than_current"] = [
@@ -193,9 +202,10 @@ def main():
                 for view, metrics in (("doc_set", ("recall", "precision")),
                                       ("occurrence", ("overlap_recall", "overlap_precision")))
                 for metric in metrics if row[view][label][metric] < ref[view][label][metric]]
-        report["corpora"][size] = {"documents": len(docs), "chunks": len(chunks), "words": words, "configs": rows}
-        lines += [f"### corpus_{size}sections ({len(docs)} documents, {len(chunks)} chunks, {words} words)", "",
-                  "| config | chunks/s | words/s | " + " | ".join(
+        report["corpora"][f"{size}_{shape}"] = {"inputs": shape, "documents": len(docs), "texts": len(chunks),
+                                                "words": words, "configs": rows}
+        lines += [f"### corpus_{size}sections, {shape} ({len(docs)} documents, {len(chunks)} texts in, {words} words)",
+                  "", "| config | texts/s | words/s | " + " | ".join(
                       f"{label} doc R/P · occ R/P · exact R/P" for label in labels) + " | worse than current |",
                   "|" + "---|" * (4 + len(labels))]
         for name, row in rows.items():
@@ -205,7 +215,7 @@ def main():
                 f"{row['occurrence'][l]['exact_recall']:.3f}/{row['occurrence'][l]['exact_precision']:.3f}"
                 for l in labels)
             worse = ", ".join(row["worse_than_current"]) or ("reference" if name == "current_3pass" else "none")
-            lines.append(f"| {name} | {row['chunks_per_s']:.1f} | {row['words_per_s']:.0f} | {cells} | {worse} |")
+            lines.append(f"| {name} | {row['texts_per_s']:.1f} | {row['words_per_s']:.0f} | {cells} | {worse} |")
         lines.append("")
     (out / "realistic_result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
     (out / "realistic_summary.md").write_text("\n".join(lines) + "\n")

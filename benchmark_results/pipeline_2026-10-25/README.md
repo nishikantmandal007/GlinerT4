@@ -767,3 +767,8 @@ Raw files: `t4_run_round8.log`, `t4_realistic_round8.json`, `t4_realistic_round8
    - This realistic corpus is the **tuning corpus** (the 020 documents are prefixes of the 040 documents), not held-out evaluation data.
    - While `single_street_0.5` demonstrates that setting Street to 0.50 completely avoids suppression under occurrence-level scoring without hurting precision, confirmation on external, held-out multilingual documents is still recommended.
 
+
+Whole documents: the corpus files arrive pre-cut into ~131-word chunks, which rounds 1-8 fed in as they were. Production
+does not need that. `detect_batch` reads each text in GLiNER2's own overlapping windows (384 words, 64 overlap) and
+returns document offsets. So `realistic_bench.py --inputs chunks,documents` (now the default) also runs every
+configuration on whole documents, scored in document coordinates. The speed to compare is words/s.

@@ -45,6 +45,9 @@ three ways:
   if a detected span of the same label overlaps it.
 - **occ-exact:** identical spans only.
 
+Each configuration runs on the pre-cut chunks and on whole documents (`--inputs chunks,documents`). For whole
+documents, GLiNER2 windows the text itself (384 words, 64 overlap), as production does.
+
 ```bash
 python bench/realistic_bench.py --out results --sizes 040,020      # on a GPU (Colab T4 or VM)
 python bench/realistic_bench.py --out /tmp/smoke --standin         # CPU smoke test of the script, stand-in model
