@@ -34,6 +34,11 @@ Each clip makes one claim, in one sentence. They share one visual system (`style
 GPU orange, wasted work grey, correct green, error red), Inter for labels, JetBrains Mono for numbers, a charcoal
 background, and slow eased motion with one thing moving at a time.
 
+The clips are silent but narrated on screen: each is split into chapters (top left) and carries a narration line at
+the bottom that changes beat by beat, so a viewer can follow without a voiceover. They run 65–90 s. The method,
+measured from 3Blue1Brown's own scene code, is written up as a reusable skill in
+`.claude/skills/explainer-animations/` in this repository.
+
 Runs on a Colab CPU runtime; rendering a clip at 1080p takes a few minutes.
 """)
 
@@ -68,8 +73,8 @@ def render(source, scene):
 
 
 def gif(video, out):
-    !ffmpeg -v error -y -i {video} -vf "fps=15,scale=800:-1:flags=lanczos,palettegen=stats_mode=diff" palette.png
-    !ffmpeg -v error -y -i {video} -i palette.png -lavfi "fps=15,scale=800:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" {out}
+    !ffmpeg -v error -y -i {video} -vf "fps=12,scale=640:-1:flags=lanczos,palettegen=stats_mode=diff" palette.png
+    !ffmpeg -v error -y -i {video} -i palette.png -lavfi "fps=12,scale=640:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" {out}
     !ls -la {out}
 """)
 

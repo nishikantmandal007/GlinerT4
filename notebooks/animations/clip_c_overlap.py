@@ -1,105 +1,193 @@
 # Clip C: "Overlap means no entity is ever only seen cut in half."
-# Beats: a line of a long document with a name in it; fixed chunks cut through the name and both halves come out wrong;
-# rewind; overlapping windows slide along and one of them holds the whole name; the merge keeps one span; 51 -> 0.
-# Numbers: realistic corpus (040 sections), round 9: 51 annotated names cut by pre-cut chunk boundaries; 0 with
-# GLiNER2's 384-word windows overlapping by 64 words.
+# Chapters: 1 the model reads a long document one window at a time; 2 fixed chunks cut a name in half and each half is
+# judged alone; 3 overlapping windows repeat the last 64 words, so one window holds the whole name; 4 the merge keeps one
+# span, and the measured result and cost.
+# Numbers: realistic corpus (040 sections), round 9 of benchmark_results/pipeline_2026-10-25: 51 annotated names cut by
+# pre-cut chunk boundaries, 0 with GLiNER2's 384-word windows overlapping by 64; windowing costs +22% to +27% time.
 from style import *
 
+FILLER = [
+    "This services agreement is made between the customer and the supplier named below.",
+    "The supplier will provide the services described in the approved schedule of work.",
+    "Each deliverable is reviewed against the acceptance criteria in that schedule.",
+    "Fees follow the rates and quantities in the approved order for each period.",
+    "Invoices identify the service period, the order reference and any variations.",
+    "Disputed lines are held while the parties reconcile the supporting evidence.",
+    "Both parties keep the records needed to reconstruct an approval decision.",
+    "Personnel with the right experience are assigned to the scheduled activities.",
+    "Access to customer systems is limited to the approved working purpose only.",
+    "Information supplied during delivery is used only for the agreed purpose.",
+    "During the term, notices for the customer go to Lakshmi Varma at the Kochi office.",
+    "A proposed change describes the affected deliverable and its revised window.",
+    "Dependencies that threaten the plan are recorded promptly by either party.",
+    "The representatives review each variation before it is authorised in writing.",
+    "Escalations name the service reference and the response that is requested.",
+    "The receiving party acknowledges each notice and assigns an owner to it.",
+    "Operational questions are first reviewed by the delivery coordinators.",
+    "Unresolved questions go to the authorised representatives with evidence.",
+]
+NAME_LINE = 10
 SOURCE = "…notices for the customer go to Lakshmi Varma at the Kochi office…"
-NAME = "Lakshmi Varma"
 
 
 class Overlap(Clip):
     def construct(self):
-        line = words(SOURCE, size=30, color=INK_DIM).move_to(UP * 0.45)
+        self.reading_in_windows()
+        self.cutting_without_overlap()
+        self.overlapping_windows()
+        self.merge_and_result()
+        self.finale("Overlap means no entity is ever only seen cut in half.",
+                    "realistic test corpus · GLiNER2 windows of 384 words, 64 overlap")
+
+    def reading_in_windows(self):
+        self.chapter(1, 4, "A long document, read one window at a time")
+        page = panel(9.2, 4.75).move_to(UP * 0.45)
+        lines = VGroup(*(words(t, size=12, color=INK_DIM) for t in FILLER)).arrange(DOWN, aligned_edge=LEFT, buff=0.11)
+        lines.move_to(page)
+        pitch = lines[0].get_center()[1] - lines[1].get_center()[1]
+        self.page, self.lines = page, lines
+        self.say("A contract can run to 50,000 words. Here is a small piece of one.",
+                 FadeIn(page), LaggedStart(*(FadeIn(l, shift=0.05 * UP) for l in lines), lag_ratio=0.04))
+        self.read()
+
+        window = Rectangle(width=page.width - 0.3, height=6 * pitch).set_stroke(GPU, 3).set_fill(GPU, 0.07)
+        window.move_to(lines[0:6]).align_to(lines[0], UP).shift(UP * 0.06)
+        tag = words("one window", size=18, color=GPU).next_to(window, RIGHT, buff=0.15).align_to(window, UP)
+        self.say("GLiNER2 reads at most about 384 words at a time: one window.",
+                 Create(window), FadeIn(tag, shift=0.1 * LEFT))
+        self.read()
+        self.say("So a long document is read window by window, and each window is judged on its own.",
+                 VGroup(window, tag).animate.shift(DOWN * 6 * pitch), run_time=2.4)
+        self.beat(VGroup(window, tag).animate.shift(DOWN * 6 * pitch), run_time=1.6)
+        self.read()
+        self.beat(FadeOut(window), FadeOut(tag), run_time=0.8)
+
+    def cutting_without_overlap(self):
+        self.chapter(2, 4, "Pre-cut chunks: a fixed word count")
+        line = words(SOURCE, size=30, color=INK_DIM).move_to(UP * 1.55)
+        self.line = line
+        source_line = self.lines[NAME_LINE]
+        self.say("Look closely at one line of it.",
+                 self.lines.animate.set_opacity(0.15), source_line.animate.set_color(INK).set_opacity(1))
+        self.beat(Derive(source_line, line), FadeOut(self.page), FadeOut(self.lines), run_time=1.8)
         first, last = span(line, SOURCE, "Lakshmi"), span(line, SOURCE, "Varma")
-        name = VGroup(first, last)
-        cut_x = (first.get_right()[0] + last.get_left()[0]) / 2
+        self.first, self.last = first, last
+        self.beat(VGroup(first, last).animate.set_color(INK), run_time=0.8)
+        self.read()
 
-        heading = words("Pre-cut chunks", size=26, color=INK).to_corner(UL, buff=0.6)
-        sub = words("the text is split every N words before the model sees it", size=20, color=INK_DIM)
-        sub.next_to(heading, DOWN, buff=0.12, aligned_edge=LEFT)
-
-        self.beat(LaggedStart(*(FadeIn(ch, shift=0.15 * UP) for ch in line), lag_ratio=0.01), run_time=1.6)
-        self.beat(name.animate.set_color(INK), run_time=0.6)
-        self.pause(0.4)
-
+        self.cut_x = cut_x = (first.get_right()[0] + last.get_left()[0]) / 2
         left_edge, right_edge = line.get_left()[0] - 0.1, line.get_right()[0] + 0.1
-        y = line.get_bottom()[1] - 0.35
-        chunk_a = bracket(left_edge, cut_x - 0.05, y, up=False)
-        chunk_b = bracket(cut_x + 0.05, right_edge, y, up=False)
-        labels = VGroup(words("chunk 1", size=20, color=INK_DIM).next_to(chunk_a, DOWN, buff=0.12),
-                        words("chunk 2", size=20, color=INK_DIM).next_to(chunk_b, DOWN, buff=0.12))
-        cut = DashedLine(UP * (line.get_top()[1] + 0.3) + RIGHT * cut_x, UP * (y - 0.1) + RIGHT * cut_x,
-                         dash_length=0.08).set_stroke(ERROR, 3)
-        self.beat(FadeIn(heading, shift=0.2 * DOWN), FadeIn(sub, shift=0.2 * DOWN), run_time=0.8)
-        self.beat(Create(chunk_a), Create(chunk_b), FadeIn(labels), run_time=1.0)
-        self.beat(Create(cut), run_time=0.8)
+        self.edges = (left_edge, right_edge)
+        y = line.get_bottom()[1] - 0.3
+        chunks = VGroup(bracket(left_edge, cut_x - 0.05, y, up=False), bracket(cut_x + 0.05, right_edge, y, up=False))
+        names = VGroup(words("chunk 1", size=19, color=INK_DIM).next_to(chunks[0], DOWN, buff=0.1),
+                       words("chunk 2", size=19, color=INK_DIM).next_to(chunks[1], DOWN, buff=0.1))
+        cut = DashedLine([cut_x, line.get_top()[1] + 0.3, 0], [cut_x, y - 0.1, 0], dash_length=0.08).set_stroke(ERROR, 3)
+        self.say("The old pipeline cut the text into chunks every N words, wherever that landed.",
+                 Create(chunks[0]), Create(chunks[1]), FadeIn(names))
+        self.read()
+        self.say("Here the cut falls between “Lakshmi” and “Varma”.", Create(cut), run_time=1.4)
+        self.read()
 
-        halves = VGroup(box(first, ERROR, fill=0.16, buff=0.06), box(last, ERROR, fill=0.16, buff=0.06))
-        tags = VGroup(words("“Lakshmi”: half a name", size=20, color=ERROR).next_to(halves[0], UP, buff=0.55),
-                      words("“Varma”: missed", size=20, color=ERROR).next_to(halves[1], UP, buff=0.55))
-        tags[0].shift(LEFT * 0.6)
-        tags[1].shift(RIGHT * 0.6)
-        arrows = VGroup(Arrow(tags[0].get_bottom(), halves[0].get_top(), buff=0.08, stroke_width=2.5,
-                              max_tip_length_to_length_ratio=0.18).set_color(ERROR),
-                        Arrow(tags[1].get_bottom(), halves[1].get_top(), buff=0.08, stroke_width=2.5,
-                              max_tip_length_to_length_ratio=0.18).set_color(ERROR))
-        self.beat(LaggedStart(DrawBorderThenFill(halves[0]), DrawBorderThenFill(halves[1]), lag_ratio=0.3),
-                  LaggedStart(*(FadeIn(t, shift=0.1 * DOWN) for t in tags), lag_ratio=0.3),
-                  LaggedStart(*(GrowArrow(a) for a in arrows), lag_ratio=0.3), run_time=1.2)
+        views = VGroup()
+        for title, text in [("chunk 1 sees", "…for the customer go to Lakshmi"), ("chunk 2 sees", "Varma at the Kochi office…")]:
+            body = words(text, size=22, color=INK_DIM)
+            frame = panel(body.width + 0.7, 1.15)
+            head = words(title, size=17, color=INK_DIM).next_to(frame, UP, buff=0.1).align_to(frame, LEFT)
+            views.add(VGroup(frame, body.move_to(frame), head))
+        views.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.3)
+        sources = (span(line, SOURCE, "for the customer go to Lakshmi"), span(line, SOURCE, "Varma at the Kochi office"))
+        self.say("The model never sees the two halves together. Each chunk is judged alone.",
+                 *(Derive(part, view[1]) for part, view in zip(sources, views)),
+                 *(FadeIn(VGroup(v[0], v[2])) for v in views), run_time=2.2)
+        self.read()
+        lakshmi = span(views[0][1], "…for the customer go to Lakshmi", "Lakshmi")
+        varma = span(views[1][1], "Varma at the Kochi office…", "Varma")
+        half = box(lakshmi, ERROR, fill=0.16)
+        missed = DashedVMobject(SurroundingRectangle(varma, buff=0.07, corner_radius=0.06), num_dashes=24)
+        missed.set_stroke(ERROR, 2)
+        notes = VGroup(words("“Lakshmi”: half a name", size=18, color=ERROR).next_to(views[0], DOWN, buff=0.15),
+                       words("“Varma” alone: missed", size=18, color=ERROR).next_to(views[1], DOWN, buff=0.15))
+        self.say("Chunk 1 reports half a name. Chunk 2 sees “Varma” without its first name and misses it.",
+                 DrawBorderThenFill(half), Create(missed), FadeIn(notes, shift=0.1 * UP), run_time=2.2)
+        self.read()
 
-        tally = ValueTracker(0)
+        self.tally = ValueTracker(0)
         self.tally_color = ERROR
-        number = counter(tally, size=56, color=lambda: self.tally_color)
-        caption_left = words("names cut in half", size=22, color=INK_DIM)
-        score = VGroup(number, caption_left)
-        number.add_updater(lambda m: m.move_to(DOWN * 1.75 + LEFT * 1.6))
-        caption_left.add_updater(lambda m: m.next_to(number, RIGHT, buff=0.25).align_to(number, DOWN))
-        corpus = words("in the realistic corpus", size=18, color=INK_FAINT)
-        corpus.add_updater(lambda m: m.next_to(caption_left, DOWN, buff=0.08, aligned_edge=LEFT))
+        number = counter(self.tally, size=54, color=lambda: self.tally_color)
+        label = words("names cut in half", size=22, color=INK_DIM)
+        number.add_updater(lambda m: m.move_to(DOWN * 1.6 + LEFT * 1.4))
+        label.add_updater(lambda m: m.next_to(number, RIGHT, buff=0.25).align_to(number, DOWN))
         number.update()
-        caption_left.update()
-        corpus.update()
+        label.update()
+        self.number, self.number_label = number, label
+        self.beat(FadeOut(views), FadeOut(half), FadeOut(missed), FadeOut(notes), run_time=0.8)
         self.add(number)
-        self.beat(FadeIn(caption_left), FadeIn(corpus), tally.animate.set_value(51), run_time=1.6)
-        self.pause(1.0)
+        self.say("In our ten test documents, 51 names were cut like this.",
+                 FadeIn(label), self.tally.animate.set_value(51), run_time=2.4)
+        self.read()
+        self.chunk_marks = VGroup(chunks, names, cut)
 
-        heading2 = words("Overlapping windows", size=26, color=INK).move_to(heading, aligned_edge=LEFT)
-        sub2 = words("each window repeats the end of the previous one (GLiNER2: 384 words, 64 overlap)", size=20,
-                     color=INK_DIM).move_to(sub, aligned_edge=LEFT)
-        self.beat(FadeOut(VGroup(halves, tags, arrows, cut, chunk_a, chunk_b, labels)),
-                  ReplacementTransform(heading, heading2), ReplacementTransform(sub, sub2), run_time=1.0)
-
+    def overlapping_windows(self):
+        self.chapter(3, 4, "Overlapping windows")
+        line, (left_edge, right_edge) = self.line, self.edges
         top = line.get_top()[1]
-        w1_right = cut_x - 0.05
+        w1_right = self.cut_x - 0.05
         w2_left = span(line, SOURCE, "customer").get_left()[0] - 0.1
         window_1 = bracket(left_edge, w1_right, top + 0.45)
         window_2 = bracket(w2_left, right_edge, top + 0.95)
+        heads = VGroup(words("window 1", size=19, color=INK_DIM).next_to(window_1, UP, buff=0.08).align_to(window_1, LEFT),
+                       words("window 2", size=19, color=INK_DIM).next_to(window_2, UP, buff=0.08).align_to(window_2, RIGHT))
+        self.say("GLiNER2's own long-document mode does it differently: its windows overlap.",
+                 FadeOut(self.chunk_marks), Create(window_1), FadeIn(heads[0]))
+        self.read()
         overlap = Rectangle(width=w1_right - w2_left, height=line.height + 0.3).set_stroke(width=0)
-        overlap.set_fill(GPU, 0.12).move_to([(w1_right + w2_left) / 2, line.get_center()[1], 0])
-        names = VGroup(words("window 1", size=20, color=INK_DIM).next_to(window_1, UP, buff=0.1).align_to(window_1, LEFT),
-                       words("window 2", size=20, color=INK_DIM).next_to(window_2, UP, buff=0.1).align_to(window_2, RIGHT))
-        overlap_label = words("overlap", size=18, color=GPU).next_to(overlap, DOWN, buff=0.08).align_to(overlap, LEFT)
+        overlap.set_fill(GPU, 0.14).move_to([(w1_right + w2_left) / 2, line.get_center()[1], 0])
+        overlap_tag = words("read twice", size=18, color=GPU).next_to(overlap, DOWN, buff=0.1)
+        self.say("Each window starts 64 words before the previous one ends, so those words are read twice.",
+                 Create(window_2), FadeIn(heads[1]), FadeIn(overlap), FadeIn(overlap_tag), run_time=2.4)
+        self.read()
 
-        self.beat(Create(window_1), FadeIn(names[0]), run_time=0.9)
-        partial = box(first, WASTE, fill=0.1, buff=0.06)
-        partial_tag = words("window 1 sees “Lakshmi”", size=20, color=WASTE).next_to(partial, DOWN, buff=0.55)
-        self.beat(DrawBorderThenFill(partial), FadeIn(partial_tag, shift=0.1 * UP), run_time=0.8)
-        self.beat(FadeIn(overlap), Create(window_2), FadeIn(names[1]), FadeIn(overlap_label), run_time=1.1)
-        whole = box(name, CORRECT, fill=0.2, buff=0.06)
-        whole_tag = words("window 2 sees the whole name", size=20, color=CORRECT).next_to(whole, DOWN, buff=0.55)
-        self.beat(DrawBorderThenFill(whole), FadeOut(partial_tag), FadeIn(whole_tag, shift=0.1 * UP), run_time=1.0)
-        self.pause(0.5)
+        text = "customer go to Lakshmi Varma at the Kochi office…"
+        body = words(text, size=22, color=INK_DIM)
+        frame = panel(body.width + 0.7, 1.15)
+        head = words("window 2 sees", size=17, color=INK_DIM).next_to(frame, UP, buff=0.1).align_to(frame, LEFT)
+        view = VGroup(frame, body.move_to(frame), head).move_to(DOWN * 0.05)
+        whole = span(body, text, "Lakshmi Varma")
+        found = box(whole, CORRECT, fill=0.2)
+        self.say("Window 2 starts early enough to hold the whole name, so it finds “Lakshmi Varma”.",
+                 Derive(span(line, SOURCE, "customer go to Lakshmi Varma at the Kochi office"), body),
+                 FadeIn(VGroup(frame, head)), run_time=2.2)
+        self.beat(DrawBorderThenFill(found), whole.animate.set_color(INK), run_time=1.2)
+        self.read()
+        self.say("The rule: a name shorter than the 64-word overlap always fits whole inside some window.",
+                 overlap.animate.set_fill(GPU, 0.28), run_time=1.4)
+        self.read()
+        self.window_parts = VGroup(window_1, window_2, heads, overlap, overlap_tag)
+        self.view = VGroup(view, found)
 
-        merge = words("merge: keep one span, the whole name", size=20, color=INK).move_to(whole_tag)
-        self.beat(FadeOut(partial, scale=0.9), ReplacementTransform(whole_tag, merge), run_time=0.9)
-        self.beat(tally.animate.set_value(0), run_time=1.4)
+    def merge_and_result(self):
+        self.chapter(4, 4, "Merging, and the measured result")
+        partial = box(self.first, WASTE, fill=0.12)
+        full = box(VGroup(self.first, self.last), CORRECT, fill=0.2)
+        tags = VGroup(words("from window 1", size=17, color=WASTE).next_to(partial, DOWN, buff=0.55),
+                      words("from window 2", size=17, color=CORRECT).next_to(full, DOWN, buff=0.55))
+        tags[0].shift(LEFT * 0.8)
+        tags[1].shift(RIGHT * 0.9)
+        self.say("Both windows report what they saw, mapped back onto the document.",
+                 FadeOut(self.view), self.window_parts.animate.set_opacity(0.3),
+                 DrawBorderThenFill(partial), DrawBorderThenFill(full), FadeIn(tags))
+        self.read()
+        self.say("Where reports overlap, the merge keeps one span: here, the whole name.",
+                 FadeOut(partial, scale=0.9), FadeOut(tags[0]), run_time=1.6)
+        self.read()
+        self.say("Across the same ten documents, the names cut in half dropped from 51 to 0.",
+                 self.tally.animate.set_value(0), run_time=2.4)
         self.tally_color = CORRECT
-        self.beat(Flash(number, color=CORRECT, flash_radius=0.6, line_length=0.25), run_time=0.7)
-        self.pause(0.6)
-
-        claim = caption("Overlap means no entity is ever only seen cut in half.")
-        self.beat(FadeIn(claim, shift=0.2 * UP), run_time=1.2)
-        self.wait(HOLD)
-        self.beat(*(FadeOut(mob) for mob in self.mobjects), run_time=1.0)
+        self.beat(Flash(self.number, color=CORRECT, flash_radius=0.6, line_length=0.25), run_time=0.8)
+        self.read()
+        cost = words("cost: 64 of every 384 words are read twice, about 22% more time", size=20, color=INK_DIM)
+        cost.next_to(VGroup(self.number, self.number_label), DOWN, buff=0.2)
+        self.say("The price is re-reading the overlap: about a fifth more time for the whole document.",
+                 FadeIn(cost, shift=0.1 * UP))
+        self.read(extra=0.5)
