@@ -62,6 +62,28 @@ detector = Detector(config, device="cuda:0")
 `Detector(..., fast=False)` runs plain gliner2 with the same settings, as a reference.
 `glinert4.install()` and `glinert4.uninstall()` apply or remove the kernels and patches process-wide.
 
+## Document memory (optional)
+
+Windows are read one at a time, so a name introduced on page 1 is unknown on page 50. `MemoryConfig` adds a step after
+the windows are merged that uses the whole document, without training and without extra encoder passes:
+
+| Step | What it does | Guard |
+|---|---|---|
+| `labels` | the same text gets one label across the document | only when the winner has 2× the runner-up's total confidence |
+| `pool` | a below-threshold text seen in several places is accepted when the combined score clears the threshold | at least 2 different contexts, each ≥ 0.4 |
+| `spread` | a confident name (≥ 0.9) is marked at every other exact occurrence | name-like only: no digits or `@`, capitalised, not a common word |
+| `aliases` | "Lakshmi Varma" also finds "Ms. Varma", "L. Varma", "Varma"; "Kaveri Analytics Private Limited" finds "Kaveri Analytics" | only when the short form belongs to exactly one entity |
+
+```python
+from glinert4 import Detector, DetectorConfig, MemoryConfig
+
+detector = Detector(DetectorConfig(memory=MemoryConfig()))
+```
+
+Candidates for `pool` come from a second decode of the same encoder output at `candidate_floor`, so the spans above
+the thresholds are exactly those without the memory. Every occurrence then carries a `source`: `model`, or the step
+that added or relabelled it. With `memory=None` (the default) the output is unchanged.
+
 ## Tests
 
 ```bash
@@ -80,6 +102,7 @@ encoder outputs match `disentangled_flash` on padded and unpadded batches of 96 
 glinert4/
   __init__.py      Detector, DetectorConfig, install, uninstall
   detector.py      single-pass detection and span post-processing
+  memory.py        document memory: label voting, pooled evidence, name spreading, short forms
   pipeline.py      pipelined long-document extraction
   count.py         exact count head
   attention.py     disentangled_flash integration of the attention kernel

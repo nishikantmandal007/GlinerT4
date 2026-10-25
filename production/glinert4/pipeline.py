@@ -87,16 +87,19 @@ def extract_many(model, jobs):
         if done is not None:
             serving_stream.wait_event(done)
         model.encode_tokens = lambda batch_, hidden_states=None: states
+        thresholds = [job["threshold"]] + ([job["candidate_threshold"]] if job.get("candidate_threshold") else [])
+        decoded = []
         try:
-            batch_results = model._extract_from_batch(batch, job["threshold"], metadata, job["include_confidence"],
-                                                      job["include_spans"], hidden_states=None)
+            for threshold in thresholds:
+                batch_results = model._extract_from_batch(batch, threshold, metadata, job["include_confidence"],
+                                                          job["include_spans"], hidden_states=None)
+                decoded.append([model.format_results(result, job["include_confidence"],
+                                                     meta.get("relation_order", []),
+                                                     meta.get("classification_tasks", []))
+                                for result, meta in zip(batch_results, metadata)])
         finally:
             del model.encode_tokens
-        for i, result in enumerate(batch_results):
-            meta = metadata[i]
-            batch_results[i] = model.format_results(result, job["include_confidence"], meta.get("relation_order", []),
-                                                    meta.get("classification_tasks", []))
-        results[index].extend(batch_results)
+        results[index].extend(decoded[0] if len(decoded) == 1 else zip(*decoded))
 
     pending = None
     for item in work():
@@ -110,7 +113,7 @@ def extract_many(model, jobs):
 
 
 def extract_entities_long_many(model, requests, batch_size=8, include_confidence=False, include_spans=False,
-                               chunk_size=384, chunk_overlap=64, overlap_policy=None):
+                               chunk_size=384, chunk_overlap=64, overlap_policy=None, candidate_threshold=None):
     from gliner2.inference.chunking import merge_chunk_results, split_text_into_chunks
     from gliner2.processing.word_splitter import word_splitter_from
 
@@ -128,15 +131,24 @@ def extract_entities_long_many(model, requests, batch_size=8, include_confidence
         prepared.append((texts, schema, doc_chunks, counts))
         jobs.append({"texts": chunk_texts, "schemas": chunk_schemas, "batch_size": batch_size, "threshold": threshold,
                      "include_confidence": True, "include_spans": True, "max_len": chunk_size,
-                     "overlap_policy": overlap_policy})
+                     "overlap_policy": overlap_policy, "candidate_threshold": candidate_threshold})
     merged_all = []
     for (texts, schema, doc_chunks, counts), results in zip(prepared, extract_many(model, jobs)):
+
+        def merge(text, chunks, chunk_results):
+            return merge_chunk_results(text, chunks, chunk_results, include_confidence=include_confidence,
+                                       include_spans=include_spans,
+                                       scalar_entity_labels=model._scalar_entity_labels(schema),
+                                       overlap_policy=model._resolved_overlap_policy(overlap_policy))
+
         merged, offset = [], 0
         for text, chunks, count in zip(texts, doc_chunks, counts):
-            merged.append(merge_chunk_results(text, chunks, results[offset:offset + count],
-                                              include_confidence=include_confidence, include_spans=include_spans,
-                                              scalar_entity_labels=model._scalar_entity_labels(schema),
-                                              overlap_policy=model._resolved_overlap_policy(overlap_policy)))
+            window = results[offset:offset + count]
+            if candidate_threshold:
+                merged.append((merge(text, chunks, [main for main, _ in window]),
+                               merge(text, chunks, [extra for _, extra in window])))
+            else:
+                merged.append(merge(text, chunks, window))
             offset += count
         merged_all.append(merged)
     return merged_all

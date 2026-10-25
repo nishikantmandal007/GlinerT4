@@ -1,7 +1,8 @@
 from .detector import Detector, DetectorConfig
+from .memory import MemoryConfig
 from .runtime import GLINER2_VERSION
 
-__all__ = ["Detector", "DetectorConfig", "install", "uninstall", "GLINER2_VERSION"]
+__all__ = ["Detector", "DetectorConfig", "MemoryConfig", "install", "uninstall", "GLINER2_VERSION"]
 
 
 def install(kernels=True):
