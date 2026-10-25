@@ -62,14 +62,22 @@ for name, text in json.loads(gzip.decompress(base64.b64decode("{blob}"))).items(
     target = root / name
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(text)
-subprocess.run(["nvidia-smi"])
-subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", str(root / "production") + "[test]"])
-subprocess.check_call([sys.executable, "scripts/build_ops.py"], cwd=root / "production")
+
+
+def run(command, cwd=root):
+    done = subprocess.run(command, cwd=cwd, capture_output=True, text=True)
+    print(done.stdout + done.stderr, flush=True)
+    return done.returncode
+
+
+run(["nvidia-smi"])
+run([sys.executable, "-m", "pip", "install", "-q", str(root / "production") + "[test]"])
+print("BUILD rc=" + str(run([sys.executable, "scripts/build_ops.py"], cwd=root / "production")), flush=True)
 print("BEGIN_PYTEST", flush=True)
-tests = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests"], cwd=root / "production")
-print("END_PYTEST rc=" + str(tests.returncode), flush=True)
+code = run([sys.executable, "-m", "pytest", "-v", "-rs", "-p", "no:cacheprovider", "tests"], cwd=root / "production")
+print("END_PYTEST rc=" + str(code), flush=True)
 (root / "check.py").write_text({check!r})
-subprocess.run([sys.executable, str(root / "check.py")], cwd=root, check=True)
+print("CHECK rc=" + str(run([sys.executable, str(root / "check.py")])), flush=True)
 '''
 target = root / "artifacts" / "colab_production_check.py"
 target.write_text(runner)
