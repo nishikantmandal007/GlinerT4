@@ -10,6 +10,18 @@ A re-read of that profile shows the time once attributed to CPU "span unpacking"
 
 See [the T4 profile and optimization report](benchmark_results/colab_2026-10-24/t4_optimization/RESULTS.md) and the [plan assessment](benchmark_results/colab_2026-10-24/t4_optimization/PLAN_ASSESSMENT.md).
 
+## Production package
+
+`production/` is the shipping code: an installable `glinert4` package. It contains the sm_75 attention kernel and
+fused add + LayerNorm, the exact count head, the one-thread CPU/GPU pipeline, and `Detector`. `Detector` defaults to
+single pass, Street threshold 0.5, and whole documents in GLiNER2's 384/64 windows. See `production/README.md`.
+
+Equivalence checks, all run locally:
+- The cleaned kernels compile to byte-identical sm_75 machine code as `csrc/disentangled_attention_v4.cu` (4-warp
+  path) and `csrc/add_layernorm.cu`.
+- `tests/test_production_port.py` shows `Detector` returns exactly what the validated research path returns.
+- `production/tests` pass on CPU. The GPU tests run on a T4 via `python bench/make_colab_production_check.py`.
+
 ## Important benchmark context
 
 The earlier approximately 100 chunks/s serving result was the combined throughput of **two T4 GPUs**, with two streams per GPU and fast-count enabled. The older 114–120 chunks/s direct result also summed two T4s. Those numbers are not one-T4 capacity results and are not directly comparable to the strict single-T4 GLiNER2 2.1.0 run.
