@@ -1,0 +1,1582 @@
+{
+  "file": "txt/windows_crlf/windows_crlf_010sections.txt",
+  "sha256": "a87b730c28c07db5bada55c88a1cbb557c8b9a7b75da1456d49ec01829d37fad",
+  "pages": null,
+  "logical_sections": 10,
+  "document_group": "windows_crlf",
+  "occurrences": 120,
+  "unique_type_value_pairs": 92,
+  "supported_occurrences": 120,
+  "additional_occurrences": 0,
+  "by_type": {
+    "City": {
+      "occurrences": 10,
+      "unique_values": 8,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "Ahmedabad",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6159",
+              "char_start": 6159,
+              "char_end": 6168,
+              "line": 76
+            }
+          ]
+        },
+        {
+          "value": "Bengaluru",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1999",
+              "char_start": 1999,
+              "char_end": 2008,
+              "line": 26
+            }
+          ]
+        },
+        {
+          "value": "Chennai",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5341",
+              "char_start": 5341,
+              "char_end": 5348,
+              "line": 66
+            }
+          ]
+        },
+        {
+          "value": "Hyderabad",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4511",
+              "char_start": 4511,
+              "char_end": 4520,
+              "line": 56
+            }
+          ]
+        },
+        {
+          "value": "Kochi",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1154",
+              "char_start": 1154,
+              "char_end": 1159,
+              "line": 16
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7783",
+              "char_start": 7783,
+              "char_end": 7788,
+              "line": 96
+            }
+          ]
+        },
+        {
+          "value": "Kolkata",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3674",
+              "char_start": 3674,
+              "char_end": 3681,
+              "line": 46
+            }
+          ]
+        },
+        {
+          "value": "Mumbai",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/345",
+              "char_start": 345,
+              "char_end": 351,
+              "line": 6
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6980",
+              "char_start": 6980,
+              "char_end": 6986,
+              "line": 86
+            }
+          ]
+        },
+        {
+          "value": "New Delhi",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2846",
+              "char_start": 2846,
+              "char_end": 2855,
+              "line": 36
+            }
+          ]
+        }
+      ]
+    },
+    "Dates": {
+      "occurrences": 10,
+      "unique_values": 10,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "07/07/2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5126",
+              "char_start": 5126,
+              "char_end": 5136,
+              "line": 63
+            }
+          ]
+        },
+        {
+          "value": "09.09.2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3454",
+              "char_start": 3454,
+              "char_end": 3464,
+              "line": 43
+            }
+          ]
+        },
+        {
+          "value": "13/01/2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/134",
+              "char_start": 134,
+              "char_end": 144,
+              "line": 3
+            }
+          ]
+        },
+        {
+          "value": "18/10/2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7562",
+              "char_start": 7562,
+              "char_end": 7572,
+              "line": 93
+            }
+          ]
+        },
+        {
+          "value": "20.12.2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5929",
+              "char_start": 5929,
+              "char_end": 5939,
+              "line": 73
+            }
+          ]
+        },
+        {
+          "value": "2031-02-22",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4280",
+              "char_start": 4280,
+              "char_end": 4290,
+              "line": 53
+            }
+          ]
+        },
+        {
+          "value": "2031-05-05",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6758",
+              "char_start": 6758,
+              "char_end": 6768,
+              "line": 83
+            }
+          ]
+        },
+        {
+          "value": "2031-11-11",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1770",
+              "char_start": 1770,
+              "char_end": 1780,
+              "line": 23
+            }
+          ]
+        },
+        {
+          "value": "24/04/2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2635",
+              "char_start": 2635,
+              "char_end": 2645,
+              "line": 33
+            }
+          ]
+        },
+        {
+          "value": "26.06.2031",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/939",
+              "char_start": 939,
+              "char_end": 949,
+              "line": 13
+            }
+          ]
+        }
+      ]
+    },
+    "Emails": {
+      "occurrences": 20,
+      "unique_values": 20,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "ananya.apte+case.660301@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5881",
+              "char_start": 5881,
+              "char_end": 5920,
+              "line": 72
+            }
+          ]
+        },
+        {
+          "value": "anitha.srinivasan+case.660246@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5011",
+              "char_start": 5011,
+              "char_end": 5056,
+              "line": 61
+            }
+          ]
+        },
+        {
+          "value": "anna.schafer+case.660014@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/85",
+              "char_start": 85,
+              "char_end": 125,
+              "line": 2
+            }
+          ]
+        },
+        {
+          "value": "aoi.yamamoto+case.660137@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2586",
+              "char_start": 2586,
+              "char_end": 2626,
+              "line": 32
+            }
+          ]
+        },
+        {
+          "value": "camila.ferreira+case.660219@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4228",
+              "char_start": 4228,
+              "char_end": 4271,
+              "line": 52
+            }
+          ]
+        },
+        {
+          "value": "deepak.kurup+case.660369@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7454",
+              "char_start": 7454,
+              "char_end": 7494,
+              "line": 91
+            }
+          ]
+        },
+        {
+          "value": "deepak.nambiar+case.660041@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/823",
+              "char_start": 823,
+              "char_end": 865,
+              "line": 11
+            }
+          ]
+        },
+        {
+          "value": "devika.kurup+case.660342@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6709",
+              "char_start": 6709,
+              "char_end": 6749,
+              "line": 82
+            }
+          ]
+        },
+        {
+          "value": "elodie.garnier+case.660055@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/888",
+              "char_start": 888,
+              "char_end": 930,
+              "line": 12
+            }
+          ]
+        },
+        {
+          "value": "ganesh.bhat+case.660383@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7514",
+              "char_start": 7514,
+              "char_end": 7553,
+              "line": 92
+            }
+          ]
+        },
+        {
+          "value": "harsh.mehta+case.660287@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5822",
+              "char_start": 5822,
+              "char_end": 5861,
+              "line": 71
+            }
+          ]
+        },
+        {
+          "value": "jinal.pandya+case.660260@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5077",
+              "char_start": 5077,
+              "char_end": 5117,
+              "line": 62
+            }
+          ]
+        },
+        {
+          "value": "manoj.hegde+case.660082@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1659",
+              "char_start": 1659,
+              "char_end": 1698,
+              "line": 21
+            }
+          ]
+        },
+        {
+          "value": "noor.karim+case.660178@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3407",
+              "char_start": 3407,
+              "char_end": 3445,
+              "line": 42
+            }
+          ]
+        },
+        {
+          "value": "pooja.deshmukh+case.660000@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/22",
+              "char_start": 22,
+              "char_end": 64,
+              "line": 1
+            }
+          ]
+        },
+        {
+          "value": "riya.dasgupta+case.660164@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3347",
+              "char_start": 3347,
+              "char_end": 3388,
+              "line": 41
+            }
+          ]
+        },
+        {
+          "value": "sai.yadav+case.660205@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4167",
+              "char_start": 4167,
+              "char_end": 4204,
+              "line": 51
+            }
+          ]
+        },
+        {
+          "value": "sneha.shinde+case.660328@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6648",
+              "char_start": 6648,
+              "char_end": 6688,
+              "line": 81
+            }
+          ]
+        },
+        {
+          "value": "sofia.sanchez+case.660096@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1720",
+              "char_start": 1720,
+              "char_end": 1761,
+              "line": 22
+            }
+          ]
+        },
+        {
+          "value": "vikram.sharma+case.660123@example.invalid",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2524",
+              "char_start": 2524,
+              "char_end": 2565,
+              "line": 31
+            }
+          ]
+        }
+      ]
+    },
+    "Names": {
+      "occurrences": 40,
+      "unique_values": 20,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "Ananya Apte",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5868",
+              "char_start": 5868,
+              "char_end": 5879,
+              "line": 72
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5980",
+              "char_start": 5980,
+              "char_end": 5991,
+              "line": 75
+            }
+          ]
+        },
+        {
+          "value": "Anitha Srinivasan",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4992",
+              "char_start": 4992,
+              "char_end": 5009,
+              "line": 61
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5779",
+              "char_start": 5779,
+              "char_end": 5796,
+              "line": 68
+            }
+          ]
+        },
+        {
+          "value": "Anna Schäfer",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/71",
+              "char_start": 71,
+              "char_end": 83,
+              "line": 2
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/185",
+              "char_start": 185,
+              "char_end": 197,
+              "line": 5
+            }
+          ]
+        },
+        {
+          "value": "Aoi Yamamoto",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2572",
+              "char_start": 2572,
+              "char_end": 2584,
+              "line": 32
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2686",
+              "char_start": 2686,
+              "char_end": 2698,
+              "line": 35
+            }
+          ]
+        },
+        {
+          "value": "Camila Ferreira",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4211",
+              "char_start": 4211,
+              "char_end": 4226,
+              "line": 52
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4331",
+              "char_start": 4331,
+              "char_end": 4346,
+              "line": 55
+            }
+          ]
+        },
+        {
+          "value": "Deepak Kurup",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7440",
+              "char_start": 7440,
+              "char_end": 7452,
+              "line": 91
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/8247",
+              "char_start": 8247,
+              "char_end": 8259,
+              "line": 98
+            }
+          ]
+        },
+        {
+          "value": "Deepak Nambiar",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/807",
+              "char_start": 807,
+              "char_end": 821,
+              "line": 11
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1619",
+              "char_start": 1619,
+              "char_end": 1633,
+              "line": 18
+            }
+          ]
+        },
+        {
+          "value": "Devika Kurup",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6695",
+              "char_start": 6695,
+              "char_end": 6707,
+              "line": 82
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6809",
+              "char_start": 6809,
+              "char_end": 6821,
+              "line": 85
+            }
+          ]
+        },
+        {
+          "value": "Ganesh Bhat",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7501",
+              "char_start": 7501,
+              "char_end": 7512,
+              "line": 92
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7614",
+              "char_start": 7614,
+              "char_end": 7625,
+              "line": 95
+            }
+          ]
+        },
+        {
+          "value": "Harsh Mehta",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5809",
+              "char_start": 5809,
+              "char_end": 5820,
+              "line": 71
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6610",
+              "char_start": 6610,
+              "char_end": 6621,
+              "line": 78
+            }
+          ]
+        },
+        {
+          "value": "Jinal Pandya",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5063",
+              "char_start": 5063,
+              "char_end": 5075,
+              "line": 62
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5177",
+              "char_start": 5177,
+              "char_end": 5189,
+              "line": 65
+            }
+          ]
+        },
+        {
+          "value": "Manoj Hegde",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1646",
+              "char_start": 1646,
+              "char_end": 1657,
+              "line": 21
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2485",
+              "char_start": 2485,
+              "char_end": 2496,
+              "line": 28
+            }
+          ]
+        },
+        {
+          "value": "Noor Karim",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3395",
+              "char_start": 3395,
+              "char_end": 3405,
+              "line": 42
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3505",
+              "char_start": 3505,
+              "char_end": 3515,
+              "line": 45
+            }
+          ]
+        },
+        {
+          "value": "Pooja Deshmukh",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6",
+              "char_start": 6,
+              "char_end": 20,
+              "line": 1
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/780",
+              "char_start": 780,
+              "char_end": 794,
+              "line": 8
+            }
+          ]
+        },
+        {
+          "value": "Riya Dasgupta",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3332",
+              "char_start": 3332,
+              "char_end": 3345,
+              "line": 41
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4130",
+              "char_start": 4130,
+              "char_end": 4143,
+              "line": 48
+            }
+          ]
+        },
+        {
+          "value": "Sai Yadav",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4156",
+              "char_start": 4156,
+              "char_end": 4165,
+              "line": 51
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4970",
+              "char_start": 4970,
+              "char_end": 4979,
+              "line": 58
+            }
+          ]
+        },
+        {
+          "value": "Sneha Shinde",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6634",
+              "char_start": 6634,
+              "char_end": 6646,
+              "line": 81
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7415",
+              "char_start": 7415,
+              "char_end": 7427,
+              "line": 88
+            }
+          ]
+        },
+        {
+          "value": "Sofía Sánchez",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1705",
+              "char_start": 1705,
+              "char_end": 1718,
+              "line": 22
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1821",
+              "char_start": 1821,
+              "char_end": 1834,
+              "line": 25
+            }
+          ]
+        },
+        {
+          "value": "Vikram Sharma",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2509",
+              "char_start": 2509,
+              "char_end": 2522,
+              "line": 31
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3306",
+              "char_start": 3306,
+              "char_end": 3319,
+              "line": 38
+            }
+          ]
+        },
+        {
+          "value": "Élodie Garnier",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/872",
+              "char_start": 872,
+              "char_end": 886,
+              "line": 12
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/990",
+              "char_start": 990,
+              "char_end": 1004,
+              "line": 15
+            }
+          ]
+        }
+      ]
+    },
+    "Organization": {
+      "occurrences": 10,
+      "unique_values": 4,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "Aaranya Logistics Private Limited",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/238",
+              "char_start": 238,
+              "char_end": 271,
+              "line": 6
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5230",
+              "char_start": 5230,
+              "char_end": 5263,
+              "line": 66
+            }
+          ]
+        },
+        {
+          "value": "Kaveri Analytics Private Limited",
+          "occurrences": 2,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1045",
+              "char_start": 1045,
+              "char_end": 1077,
+              "line": 16
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2739",
+              "char_start": 2739,
+              "char_end": 2771,
+              "line": 36
+            }
+          ]
+        },
+        {
+          "value": "Nalanda Technical Services Private Limited",
+          "occurrences": 5,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1875",
+              "char_start": 1875,
+              "char_end": 1917,
+              "line": 26
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3556",
+              "char_start": 3556,
+              "char_end": 3598,
+              "line": 46
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4387",
+              "char_start": 4387,
+              "char_end": 4429,
+              "line": 56
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6862",
+              "char_start": 6862,
+              "char_end": 6904,
+              "line": 86
+            },
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7666",
+              "char_start": 7666,
+              "char_end": 7708,
+              "line": 96
+            }
+          ]
+        },
+        {
+          "value": "Savera Learning Cooperative Private Limited",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6032",
+              "char_start": 6032,
+              "char_end": 6075,
+              "line": 76
+            }
+          ]
+        }
+      ]
+    },
+    "Phone": {
+      "occurrences": 10,
+      "unique_values": 10,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "(+91) 8066336699",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3717",
+              "char_start": 3717,
+              "char_end": 3733,
+              "line": 46
+            }
+          ]
+        },
+        {
+          "value": "(+91) 9442827406",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1195",
+              "char_start": 1195,
+              "char_end": 1211,
+              "line": 16
+            }
+          ]
+        },
+        {
+          "value": "(+91) 9519048136",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6204",
+              "char_start": 6204,
+              "char_end": 6220,
+              "line": 76
+            }
+          ]
+        },
+        {
+          "value": "+91 91209 83571",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/387",
+              "char_start": 387,
+              "char_end": 402,
+              "line": 6
+            }
+          ]
+        },
+        {
+          "value": "+91 92658 48793",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5384",
+              "char_start": 5384,
+              "char_end": 5399,
+              "line": 66
+            }
+          ]
+        },
+        {
+          "value": "+91 93549 82820",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7824",
+              "char_start": 7824,
+              "char_end": 7839,
+              "line": 96
+            }
+          ]
+        },
+        {
+          "value": "+91 96230 97896",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2891",
+              "char_start": 2891,
+              "char_end": 2906,
+              "line": 36
+            }
+          ]
+        },
+        {
+          "value": "+91-70682-32795",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7022",
+              "char_start": 7022,
+              "char_end": 7037,
+              "line": 86
+            }
+          ]
+        },
+        {
+          "value": "+91-88950-64824",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4556",
+              "char_start": 4556,
+              "char_end": 4571,
+              "line": 56
+            }
+          ]
+        },
+        {
+          "value": "+91-95372-95296",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2044",
+              "char_start": 2044,
+              "char_end": 2059,
+              "line": 26
+            }
+          ]
+        }
+      ]
+    },
+    "Street": {
+      "occurrences": 10,
+      "unique_values": 10,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "Flat 14C, Surya Heights, 120 Palash Avenue",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3630",
+              "char_start": 3630,
+              "char_end": 3672,
+              "line": 46
+            }
+          ]
+        },
+        {
+          "value": "Flat 15B, Nisarga Heights, 121 Kaveri Road",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6936",
+              "char_start": 6936,
+              "char_end": 6978,
+              "line": 86
+            }
+          ]
+        },
+        {
+          "value": "Flat 19D, Savera Heights, 153 Amaltas Society Road",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6107",
+              "char_start": 6107,
+              "char_end": 6157,
+              "line": 76
+            }
+          ]
+        },
+        {
+          "value": "Flat 26A, Aaranya Heights, 80 Nisarga Cross Road",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1949",
+              "char_start": 1949,
+              "char_end": 1997,
+              "line": 26
+            }
+          ]
+        },
+        {
+          "value": "Flat 26D, Savera Heights, 67 Malabar Lane",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7740",
+              "char_start": 7740,
+              "char_end": 7781,
+              "line": 96
+            }
+          ]
+        },
+        {
+          "value": "Flat 31A, Nisarga Heights, 159 Malabar Lane",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1109",
+              "char_start": 1109,
+              "char_end": 1152,
+              "line": 16
+            }
+          ]
+        },
+        {
+          "value": "Flat 42C, Savera Heights, 161 Vennela Nagar Road",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4461",
+              "char_start": 4461,
+              "char_end": 4509,
+              "line": 56
+            }
+          ]
+        },
+        {
+          "value": "Flat 6A, Nisarga Heights, 85 Marudham Street",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5295",
+              "char_start": 5295,
+              "char_end": 5339,
+              "line": 66
+            }
+          ]
+        },
+        {
+          "value": "Flat 6C, Savera Heights, 169 Kaveri Road",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/303",
+              "char_start": 303,
+              "char_end": 343,
+              "line": 6
+            }
+          ]
+        },
+        {
+          "value": "Flat 7C, Nisarga Heights, 157 Ashoka Marg",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2803",
+              "char_start": 2803,
+              "char_end": 2844,
+              "line": 36
+            }
+          ]
+        }
+      ]
+    },
+    "Zip Code": {
+      "occurrences": 10,
+      "unique_values": 10,
+      "pipeline_supported": true,
+      "values": [
+        {
+          "value": "110086",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2856",
+              "char_start": 2856,
+              "char_end": 2862,
+              "line": 36
+            }
+          ]
+        },
+        {
+          "value": "380041",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6169",
+              "char_start": 6169,
+              "char_end": 6175,
+              "line": 76
+            }
+          ]
+        },
+        {
+          "value": "400073",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/6987",
+              "char_start": 6987,
+              "char_end": 6993,
+              "line": 86
+            }
+          ]
+        },
+        {
+          "value": "400083",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/352",
+              "char_start": 352,
+              "char_end": 358,
+              "line": 6
+            }
+          ]
+        },
+        {
+          "value": "500054",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/4521",
+              "char_start": 4521,
+              "char_end": 4527,
+              "line": 56
+            }
+          ]
+        },
+        {
+          "value": "560002",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/2009",
+              "char_start": 2009,
+              "char_end": 2015,
+              "line": 26
+            }
+          ]
+        },
+        {
+          "value": "600080",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/5349",
+              "char_start": 5349,
+              "char_end": 5355,
+              "line": 66
+            }
+          ]
+        },
+        {
+          "value": "682018",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/7789",
+              "char_start": 7789,
+              "char_end": 7795,
+              "line": 96
+            }
+          ]
+        },
+        {
+          "value": "682024",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/1160",
+              "char_start": 1160,
+              "char_end": 1166,
+              "line": 16
+            }
+          ]
+        },
+        {
+          "value": "700041",
+          "occurrences": 1,
+          "locations": [
+            {
+              "page": null,
+              "part": "decoded text",
+              "slot": "chars/3682",
+              "char_start": 3682,
+              "char_end": 3688,
+              "line": 46
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "occurrence_count_definition": "Each planted semantic occurrence is counted once. Wrapped PDF rectangles belong to one occurrence. Hidden parts and hyperlink targets are additional occurrences. PDF subsets carry only values present in that PDF."
+}

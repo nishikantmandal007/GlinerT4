@@ -1,0 +1,728 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-24b00a'...
+[colab] Session READY (run-24b00a). Executing artifacts/colab_load_test.py...
+Sun Oct 25 14:11:03 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |
+| N/A   43C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+[1/4] /usr/local/cuda/bin/nvcc -MD -MF attention.cuda.o.d -DTORCH_EXTENSION_NAME=glinert4 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.13/dist-packages/torch/include -isystem /usr/local/lib/python3.13/dist-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.13 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -O3 -gencode=arch=compute_75,code=sm_75 --use_fast_math -std=c++17 -c /usr/local/lib/python3.13/dist-packages/glinert4/csrc/attention.cu -o attention.cuda.o 
+[2/4] /usr/local/cuda/bin/nvcc -MD -MF add_layernorm.cuda.o.d -DTORCH_EXTENSION_NAME=glinert4 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.13/dist-packages/torch/include -isystem /usr/local/lib/python3.13/dist-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.13 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -O3 -gencode=arch=compute_75,code=sm_75 --use_fast_math -std=c++17 -c /usr/local/lib/python3.13/dist-packages/glinert4/csrc/add_layernorm.cu -o add_layernorm.cuda.o 
+[3/4] c++ -MMD -MF ops.o.d -DTORCH_EXTENSION_NAME=glinert4 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.13/dist-packages/torch/include -isystem /usr/local/lib/python3.13/dist-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.13 -fPIC -std=c++17 -O3 -c /usr/local/lib/python3.13/dist-packages/glinert4/csrc/ops.cpp -o ops.o 
+[4/4] c++ ops.o attention.cuda.o add_layernorm.cuda.o -shared -L/usr/local/lib/python3.13/dist-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o glinert4.so
+/usr/local/lib/python3.13/dist-packages/glinert4/_glinert4.so
+
+BUILD rc=0
+BEGIN_RUN_1 --request chunk --setups glinert4,gliner2_fp16 --concurrency 1,2,4,8,16,32,64,128 --duration 30.0
+POOL {"device": "Tesla T4", "request": "chunk", "requests_in_pool": 290, "mean_words": 131.0, "mean_tokens": 265.6, "max_batch": 64, "max_wait_ms": 5.0, "queue_limit": 0, "retries": 3, "backoff_ms": 100.0, "duration_s": 30.0}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 1, "requests": 1917, "seconds": 30.0, "rejected_pct": 0.0, "failed": 0, "rpm": 3834, "tpm": 1018885, "wpm": 502129, "p50_ms": 14.9, "p95_ms": 18.6, "p99_ms": 22.9, "mean_ms": 15.6, "mean_batch": 1, "worker_busy": 0.665, "gpu_util": 39.7}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 2, "requests": 2808, "seconds": 30.0, "rejected_pct": 0.0, "failed": 0, "rpm": 5616, "tpm": 1492233, "wpm": 735538, "p50_ms": 21.1, "p95_ms": 23.8, "p99_ms": 25.7, "mean_ms": 21.4, "mean_batch": 2, "worker_busy": 0.754, "gpu_util": 52.2}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 4, "requests": 3312, "seconds": 30.03, "rejected_pct": 0.0, "failed": 0, "rpm": 6618, "tpm": 1757759, "wpm": 866894, "p50_ms": 36.3, "p95_ms": 40.1, "p99_ms": 42.3, "mean_ms": 36.3, "mean_batch": 4, "worker_busy": 0.854, "gpu_util": 64.0}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 8, "requests": 3832, "seconds": 30.02, "rejected_pct": 0.0, "failed": 0, "rpm": 7660, "tpm": 2033936, "wpm": 1003009, "p50_ms": 62.6, "p95_ms": 67.2, "p99_ms": 70.6, "mean_ms": 62.7, "mean_batch": 8, "worker_busy": 0.915, "gpu_util": 68.4}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 16, "requests": 4080, "seconds": 30.05, "rejected_pct": 0.0, "failed": 0, "rpm": 8147, "tpm": 2163618, "wpm": 1067272, "p50_ms": 117.2, "p95_ms": 126.3, "p99_ms": 130.3, "mean_ms": 117.8, "mean_batch": 16, "worker_busy": 0.954, "gpu_util": 73.8}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 32, "requests": 4096, "seconds": 30.17, "rejected_pct": 0.0, "failed": 0, "rpm": 8147, "tpm": 2163498, "wpm": 1066876, "p50_ms": 234.8, "p95_ms": 247.2, "p99_ms": 259.5, "mean_ms": 235.6, "mean_batch": 32, "worker_busy": 0.976, "gpu_util": 76.6}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 64, "requests": 4207, "seconds": 30.09, "rejected_pct": 0.0, "failed": 0, "rpm": 8390, "tpm": 2228795, "wpm": 1098936, "p50_ms": 457.3, "p95_ms": 473.8, "p99_ms": 475.9, "mean_ms": 457.6, "mean_batch": 63.7, "worker_busy": 0.995, "gpu_util": 79.0}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 128, "requests": 4271, "seconds": 30.66, "rejected_pct": 0.0, "failed": 0, "rpm": 8359, "tpm": 2220902, "wpm": 1095007, "p50_ms": 918.2, "p95_ms": 945.7, "p99_ms": 957.4, "mean_ms": 911.2, "mean_batch": 63.7, "worker_busy": 0.999, "gpu_util": 78.6}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 1, "requests": 899, "seconds": 30.0, "rejected_pct": 0.0, "failed": 0, "rpm": 1798, "tpm": 477060, "wpm": 235377, "p50_ms": 32.4, "p95_ms": 38.5, "p99_ms": 51.4, "mean_ms": 33.4, "mean_batch": 1, "worker_busy": 0.843, "gpu_util": 45.4}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 2, "requests": 1304, "seconds": 30.01, "rejected_pct": 0.0, "failed": 0, "rpm": 2607, "tpm": 692763, "wpm": 341417, "p50_ms": 43.9, "p95_ms": 56.0, "p99_ms": 58.3, "mean_ms": 46.0, "mean_batch": 2, "worker_busy": 0.886, "gpu_util": 66.5}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 4, "requests": 1388, "seconds": 30.05, "rejected_pct": 0.0, "failed": 0, "rpm": 2772, "tpm": 737019, "wpm": 363178, "p50_ms": 80.6, "p95_ms": 105.8, "p99_ms": 109.5, "mean_ms": 86.6, "mean_batch": 4, "worker_busy": 0.939, "gpu_util": 74.0}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 8, "requests": 1344, "seconds": 30.08, "rejected_pct": 0.0, "failed": 0, "rpm": 2681, "tpm": 712598, "wpm": 351129, "p50_ms": 185.4, "p95_ms": 205.8, "p99_ms": 214.3, "mean_ms": 179.0, "mean_batch": 8, "worker_busy": 0.97, "gpu_util": 79.2}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 16, "requests": 1280, "seconds": 30.11, "rejected_pct": 0.0, "failed": 0, "rpm": 2550, "tpm": 677115, "wpm": 334109, "p50_ms": 381.7, "p95_ms": 400.5, "p99_ms": 413.5, "mean_ms": 376.4, "mean_batch": 16, "worker_busy": 0.985, "gpu_util": 82.1}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 32, "requests": 1312, "seconds": 30.31, "rejected_pct": 0.0, "failed": 0, "rpm": 2597, "tpm": 690185, "wpm": 340156, "p50_ms": 738.4, "p95_ms": 819.2, "p99_ms": 823.0, "mean_ms": 739.2, "mean_batch": 32, "worker_busy": 0.992, "gpu_util": 82.2}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 64, "requests": 1320, "seconds": 30.36, "rejected_pct": 0.0, "failed": 0, "rpm": 2609, "tpm": 693464, "wpm": 341731, "p50_ms": 1467.7, "p95_ms": 1543.9, "p99_ms": 2354.1, "mean_ms": 1470.6, "mean_batch": 62.9, "worker_busy": 0.998, "gpu_util": 82.8}
+LEVEL {"setup": "gliner2_fp16", "mode": "closed", "level": 128, "requests": 1383, "seconds": 32.02, "rejected_pct": 0.0, "failed": 0, "rpm": 2592, "tpm": 689134, "wpm": 339612, "p50_ms": 2949.5, "p95_ms": 3078.0, "p99_ms": 3902.8, "mean_ms": 2893.0, "mean_batch": 62.9, "worker_busy": 1.0, "gpu_util": 81.9}
+Load test on Tesla T4: chunk requests (mean 131.0 words, 265.6 tokens), batches up to 64, 5.0 ms collection window, 30 s per level, queue limit none, 3 retries
+
+| setup | load | requests/min | tokens/min | words/min | p50 ms | p95 ms | p99 ms | mean batch | GPU busy | rejected | failed |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glinert4 | 1 clients | 3,834 | 1,018,885 | 502,129 | 14.9 | 18.6 | 22.9 | 1 | 39.7% | 0.0% | 0 |
+| glinert4 | 2 clients | 5,616 | 1,492,233 | 735,538 | 21.1 | 23.8 | 25.7 | 2 | 52.2% | 0.0% | 0 |
+| glinert4 | 4 clients | 6,618 | 1,757,759 | 866,894 | 36.3 | 40.1 | 42.3 | 4 | 64.0% | 0.0% | 0 |
+| glinert4 | 8 clients | 7,660 | 2,033,936 | 1,003,009 | 62.6 | 67.2 | 70.6 | 8 | 68.4% | 0.0% | 0 |
+| glinert4 | 16 clients | 8,147 | 2,163,618 | 1,067,272 | 117.2 | 126.3 | 130.3 | 16 | 73.8% | 0.0% | 0 |
+| glinert4 | 32 clients | 8,147 | 2,163,498 | 1,066,876 | 234.8 | 247.2 | 259.5 | 32 | 76.6% | 0.0% | 0 |
+| glinert4 | 64 clients | 8,390 | 2,228,795 | 1,098,936 | 457.3 | 473.8 | 475.9 | 63.7 | 79.0% | 0.0% | 0 |
+| glinert4 | 128 clients | 8,359 | 2,220,902 | 1,095,007 | 918.2 | 945.7 | 957.4 | 63.7 | 78.6% | 0.0% | 0 |
+| gliner2_fp16 | 1 clients | 1,798 | 477,060 | 235,377 | 32.4 | 38.5 | 51.4 | 1 | 45.4% | 0.0% | 0 |
+| gliner2_fp16 | 2 clients | 2,607 | 692,763 | 341,417 | 43.9 | 56.0 | 58.3 | 2 | 66.5% | 0.0% | 0 |
+| gliner2_fp16 | 4 clients | 2,772 | 737,019 | 363,178 | 80.6 | 105.8 | 109.5 | 4 | 74.0% | 0.0% | 0 |
+| gliner2_fp16 | 8 clients | 2,681 | 712,598 | 351,129 | 185.4 | 205.8 | 214.3 | 8 | 79.2% | 0.0% | 0 |
+| gliner2_fp16 | 16 clients | 2,550 | 677,115 | 334,109 | 381.7 | 400.5 | 413.5 | 16 | 82.1% | 0.0% | 0 |
+| gliner2_fp16 | 32 clients | 2,597 | 690,185 | 340,156 | 738.4 | 819.2 | 823.0 | 32 | 82.2% | 0.0% | 0 |
+| gliner2_fp16 | 64 clients | 2,609 | 693,464 | 341,731 | 1467.7 | 1543.9 | 2354.1 | 62.9 | 82.8% | 0.0% | 0 |
+| gliner2_fp16 | 128 clients | 2,592 | 689,134 | 339,612 | 2949.5 | 3078.0 | 3902.8 | 62.9 | 81.9% | 0.0% | 0 |
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+
+END_RUN_1 rc=0
+BEGIN_LOAD_1
+Load test on Tesla T4: chunk requests (mean 131.0 words, 265.6 tokens), batches up to 64, 5.0 ms collection window, 30 s per level, queue limit none, 3 retries
+
+| setup | load | requests/min | tokens/min | words/min | p50 ms | p95 ms | p99 ms | mean batch | GPU busy | rejected | failed |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glinert4 | 1 clients | 3,834 | 1,018,885 | 502,129 | 14.9 | 18.6 | 22.9 | 1 | 39.7% | 0.0% | 0 |
+| glinert4 | 2 clients | 5,616 | 1,492,233 | 735,538 | 21.1 | 23.8 | 25.7 | 2 | 52.2% | 0.0% | 0 |
+| glinert4 | 4 clients | 6,618 | 1,757,759 | 866,894 | 36.3 | 40.1 | 42.3 | 4 | 64.0% | 0.0% | 0 |
+| glinert4 | 8 clients | 7,660 | 2,033,936 | 1,003,009 | 62.6 | 67.2 | 70.6 | 8 | 68.4% | 0.0% | 0 |
+| glinert4 | 16 clients | 8,147 | 2,163,618 | 1,067,272 | 117.2 | 126.3 | 130.3 | 16 | 73.8% | 0.0% | 0 |
+| glinert4 | 32 clients | 8,147 | 2,163,498 | 1,066,876 | 234.8 | 247.2 | 259.5 | 32 | 76.6% | 0.0% | 0 |
+| glinert4 | 64 clients | 8,390 | 2,228,795 | 1,098,936 | 457.3 | 473.8 | 475.9 | 63.7 | 79.0% | 0.0% | 0 |
+| glinert4 | 128 clients | 8,359 | 2,220,902 | 1,095,007 | 918.2 | 945.7 | 957.4 | 63.7 | 78.6% | 0.0% | 0 |
+| gliner2_fp16 | 1 clients | 1,798 | 477,060 | 235,377 | 32.4 | 38.5 | 51.4 | 1 | 45.4% | 0.0% | 0 |
+| gliner2_fp16 | 2 clients | 2,607 | 692,763 | 341,417 | 43.9 | 56.0 | 58.3 | 2 | 66.5% | 0.0% | 0 |
+| gliner2_fp16 | 4 clients | 2,772 | 737,019 | 363,178 | 80.6 | 105.8 | 109.5 | 4 | 74.0% | 0.0% | 0 |
+| gliner2_fp16 | 8 clients | 2,681 | 712,598 | 351,129 | 185.4 | 205.8 | 214.3 | 8 | 79.2% | 0.0% | 0 |
+| gliner2_fp16 | 16 clients | 2,550 | 677,115 | 334,109 | 381.7 | 400.5 | 413.5 | 16 | 82.1% | 0.0% | 0 |
+| gliner2_fp16 | 32 clients | 2,597 | 690,185 | 340,156 | 738.4 | 819.2 | 823.0 | 32 | 82.2% | 0.0% | 0 |
+| gliner2_fp16 | 64 clients | 2,609 | 693,464 | 341,731 | 1467.7 | 1543.9 | 2354.1 | 62.9 | 82.8% | 0.0% | 0 |
+| gliner2_fp16 | 128 clients | 2,592 | 689,134 | 339,612 | 2949.5 | 3078.0 | 3902.8 | 62.9 | 81.9% | 0.0% | 0 |
+
+{
+ "device": "Tesla T4",
+ "request": "chunk",
+ "requests_in_pool": 290,
+ "mean_words": 131.0,
+ "mean_tokens": 265.6,
+ "max_batch": 64,
+ "max_wait_ms": 5.0,
+ "queue_limit": 0,
+ "retries": 3,
+ "backoff_ms": 100.0,
+ "duration_s": 30.0,
+ "levels": [
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 1,
+   "requests": 1917,
+   "seconds": 30.0,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 3834,
+   "tpm": 1018885,
+   "wpm": 502129,
+   "p50_ms": 14.9,
+   "p95_ms": 18.6,
+   "p99_ms": 22.9,
+   "mean_ms": 15.6,
+   "mean_batch": 1,
+   "worker_busy": 0.665,
+   "gpu_util": 39.7
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 2,
+   "requests": 2808,
+   "seconds": 30.0,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 5616,
+   "tpm": 1492233,
+   "wpm": 735538,
+   "p50_ms": 21.1,
+   "p95_ms": 23.8,
+   "p99_ms": 25.7,
+   "mean_ms": 21.4,
+   "mean_batch": 2,
+   "worker_busy": 0.754,
+   "gpu_util": 52.2
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 4,
+   "requests": 3312,
+   "seconds": 30.03,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 6618,
+   "tpm": 1757759,
+   "wpm": 866894,
+   "p50_ms": 36.3,
+   "p95_ms": 40.1,
+   "p99_ms": 42.3,
+   "mean_ms": 36.3,
+   "mean_batch": 4,
+   "worker_busy": 0.854,
+   "gpu_util": 64.0
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 8,
+   "requests": 3832,
+   "seconds": 30.02,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 7660,
+   "tpm": 2033936,
+   "wpm": 1003009,
+   "p50_ms": 62.6,
+   "p95_ms": 67.2,
+   "p99_ms": 70.6,
+   "mean_ms": 62.7,
+   "mean_batch": 8,
+   "worker_busy": 0.915,
+   "gpu_util": 68.4
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 16,
+   "requests": 4080,
+   "seconds": 30.05,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 8147,
+   "tpm": 2163618,
+   "wpm": 1067272,
+   "p50_ms": 117.2,
+   "p95_ms": 126.3,
+   "p99_ms": 130.3,
+   "mean_ms": 117.8,
+   "mean_batch": 16,
+   "worker_busy": 0.954,
+   "gpu_util": 73.8
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 32,
+   "requests": 4096,
+   "seconds": 30.17,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 8147,
+   "tpm": 2163498,
+   "wpm": 1066876,
+   "p50_ms": 234.8,
+   "p95_ms": 247.2,
+   "p99_ms": 259.5,
+   "mean_ms": 235.6,
+   "mean_batch": 32,
+   "worker_busy": 0.976,
+   "gpu_util": 76.6
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 64,
+   "requests": 4207,
+   "seconds": 30.09,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 8390,
+   "tpm": 2228795,
+   "wpm": 1098936,
+   "p50_ms": 457.3,
+   "p95_ms": 473.8,
+   "p99_ms": 475.9,
+   "mean_ms": 457.6,
+   "mean_batch": 63.7,
+   "worker_busy": 0.995,
+   "gpu_util": 79.0
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 128,
+   "requests": 4271,
+   "seconds": 30.66,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 8359,
+   "tpm": 2220902,
+   "wpm": 1095007,
+   "p50_ms": 918.2,
+   "p95_ms": 945.7,
+   "p99_ms": 957.4,
+   "mean_ms": 911.2,
+   "mean_batch": 63.7,
+   "worker_busy": 0.999,
+   "gpu_util": 78.6
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 1,
+   "requests": 899,
+   "seconds": 30.0,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 1798,
+   "tpm": 477060,
+   "wpm": 235377,
+   "p50_ms": 32.4,
+   "p95_ms": 38.5,
+   "p99_ms": 51.4,
+   "mean_ms": 33.4,
+   "mean_batch": 1,
+   "worker_busy": 0.843,
+   "gpu_util": 45.4
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 2,
+   "requests": 1304,
+   "seconds": 30.01,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2607,
+   "tpm": 692763,
+   "wpm": 341417,
+   "p50_ms": 43.9,
+   "p95_ms": 56.0,
+   "p99_ms": 58.3,
+   "mean_ms": 46.0,
+   "mean_batch": 2,
+   "worker_busy": 0.886,
+   "gpu_util": 66.5
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 4,
+   "requests": 1388,
+   "seconds": 30.05,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2772,
+   "tpm": 737019,
+   "wpm": 363178,
+   "p50_ms": 80.6,
+   "p95_ms": 105.8,
+   "p99_ms": 109.5,
+   "mean_ms": 86.6,
+   "mean_batch": 4,
+   "worker_busy": 0.939,
+   "gpu_util": 74.0
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 8,
+   "requests": 1344,
+   "seconds": 30.08,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2681,
+   "tpm": 712598,
+   "wpm": 351129,
+   "p50_ms": 185.4,
+   "p95_ms": 205.8,
+   "p99_ms": 214.3,
+   "mean_ms": 179.0,
+   "mean_batch": 8,
+   "worker_busy": 0.97,
+   "gpu_util": 79.2
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 16,
+   "requests": 1280,
+   "seconds": 30.11,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2550,
+   "tpm": 677115,
+   "wpm": 334109,
+   "p50_ms": 381.7,
+   "p95_ms": 400.5,
+   "p99_ms": 413.5,
+   "mean_ms": 376.4,
+   "mean_batch": 16,
+   "worker_busy": 0.985,
+   "gpu_util": 82.1
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 32,
+   "requests": 1312,
+   "seconds": 30.31,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2597,
+   "tpm": 690185,
+   "wpm": 340156,
+   "p50_ms": 738.4,
+   "p95_ms": 819.2,
+   "p99_ms": 823.0,
+   "mean_ms": 739.2,
+   "mean_batch": 32,
+   "worker_busy": 0.992,
+   "gpu_util": 82.2
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 64,
+   "requests": 1320,
+   "seconds": 30.36,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2609,
+   "tpm": 693464,
+   "wpm": 341731,
+   "p50_ms": 1467.7,
+   "p95_ms": 1543.9,
+   "p99_ms": 2354.1,
+   "mean_ms": 1470.6,
+   "mean_batch": 62.9,
+   "worker_busy": 0.998,
+   "gpu_util": 82.8
+  },
+  {
+   "setup": "gliner2_fp16",
+   "mode": "closed",
+   "level": 128,
+   "requests": 1383,
+   "seconds": 32.02,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2592,
+   "tpm": 689134,
+   "wpm": 339612,
+   "p50_ms": 2949.5,
+   "p95_ms": 3078.0,
+   "p99_ms": 3902.8,
+   "mean_ms": 2893.0,
+   "mean_batch": 62.9,
+   "worker_busy": 1.0,
+   "gpu_util": 81.9
+  }
+ ]
+}
+END_LOAD_1
+BEGIN_RUN_2 --request chunk --setups glinert4 --concurrency  --rates 25,50,75,100,125,150,200 --queue-limit 256 --retries 3 --backoff-ms 100 --duration 30.0
+POOL {"device": "Tesla T4", "request": "chunk", "requests_in_pool": 290, "mean_words": 131.0, "mean_tokens": 265.6, "max_batch": 64, "max_wait_ms": 5.0, "queue_limit": 256, "retries": 3, "backoff_ms": 100.0, "duration_s": 30.0}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 25.0, "requests": 753, "seconds": 29.98, "rejected_pct": 0.0, "failed": 0, "rpm": 1507, "tpm": 400893, "wpm": 197318, "p50_ms": 24.6, "p95_ms": 51.5, "p99_ms": 63.3, "mean_ms": 28.6, "mean_batch": 1.2, "worker_busy": 0.361, "gpu_util": 25.4}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 50.0, "requests": 1488, "seconds": 30.01, "rejected_pct": 0.0, "failed": 0, "rpm": 2976, "tpm": 789935, "wpm": 389525, "p50_ms": 22.5, "p95_ms": 44.1, "p99_ms": 55.1, "mean_ms": 25.0, "mean_batch": 1.5, "worker_busy": 0.472, "gpu_util": 31.0}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 75.0, "requests": 2203, "seconds": 30.04, "rejected_pct": 0.0, "failed": 0, "rpm": 4400, "tpm": 1169337, "wpm": 576268, "p50_ms": 29.4, "p95_ms": 60.7, "p99_ms": 77.2, "mean_ms": 32.5, "mean_batch": 2.0, "worker_busy": 0.63, "gpu_util": 42.2}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 100.0, "requests": 2947, "seconds": 30.01, "rejected_pct": 0.0, "failed": 0, "rpm": 5892, "tpm": 1564489, "wpm": 771633, "p50_ms": 49.7, "p95_ms": 110.4, "p99_ms": 136.3, "mean_ms": 55.1, "mean_batch": 3.2, "worker_busy": 0.792, "gpu_util": 55.8}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 125.0, "requests": 3682, "seconds": 30.07, "rejected_pct": 0.0, "failed": 0, "rpm": 7346, "tpm": 1951685, "wpm": 962241, "p50_ms": 129.1, "p95_ms": 377.3, "p99_ms": 512.4, "mean_ms": 159.2, "mean_batch": 8.4, "worker_busy": 0.92, "gpu_util": 67.4}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 150.0, "requests": 4306, "seconds": 32.19, "rejected_pct": 21.3, "failed": 125, "rpm": 8027, "tpm": 2131163, "wpm": 1051368, "p50_ms": 1690.6, "p95_ms": 2585.3, "p99_ms": 2957.9, "mean_ms": 1690.6, "mean_batch": 47.8, "worker_busy": 0.994, "gpu_util": 74.7}
+LEVEL {"setup": "glinert4", "mode": "open", "level": 200.0, "requests": 4267, "seconds": 32.59, "rejected_pct": 67.0, "failed": 1660, "rpm": 7855, "tpm": 2084795, "wpm": 1027165, "p50_ms": 2482.7, "p95_ms": 3122.4, "p99_ms": 3365.0, "mean_ms": 2354.0, "mean_batch": 57.7, "worker_busy": 0.997, "gpu_util": 72.9}
+Load test on Tesla T4: chunk requests (mean 131.0 words, 265.6 tokens), batches up to 64, 5.0 ms collection window, 30 s per level, queue limit 256, 3 retries
+
+| setup | load | requests/min | tokens/min | words/min | p50 ms | p95 ms | p99 ms | mean batch | GPU busy | rejected | failed |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glinert4 | 25 req/s offered | 1,507 | 400,893 | 197,318 | 24.6 | 51.5 | 63.3 | 1.2 | 25.4% | 0.0% | 0 |
+| glinert4 | 50 req/s offered | 2,976 | 789,935 | 389,525 | 22.5 | 44.1 | 55.1 | 1.5 | 31.0% | 0.0% | 0 |
+| glinert4 | 75 req/s offered | 4,400 | 1,169,337 | 576,268 | 29.4 | 60.7 | 77.2 | 2.0 | 42.2% | 0.0% | 0 |
+| glinert4 | 100 req/s offered | 5,892 | 1,564,489 | 771,633 | 49.7 | 110.4 | 136.3 | 3.2 | 55.8% | 0.0% | 0 |
+| glinert4 | 125 req/s offered | 7,346 | 1,951,685 | 962,241 | 129.1 | 377.3 | 512.4 | 8.4 | 67.4% | 0.0% | 0 |
+| glinert4 | 150 req/s offered | 8,027 | 2,131,163 | 1,051,368 | 1690.6 | 2585.3 | 2957.9 | 47.8 | 74.7% | 21.3% | 125 |
+| glinert4 | 200 req/s offered | 7,855 | 2,084,795 | 1,027,165 | 2482.7 | 3122.4 | 3365.0 | 57.7 | 72.9% | 67.0% | 1660 |
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+
+END_RUN_2 rc=0
+BEGIN_LOAD_2
+Load test on Tesla T4: chunk requests (mean 131.0 words, 265.6 tokens), batches up to 64, 5.0 ms collection window, 30 s per level, queue limit 256, 3 retries
+
+| setup | load | requests/min | tokens/min | words/min | p50 ms | p95 ms | p99 ms | mean batch | GPU busy | rejected | failed |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glinert4 | 25 req/s offered | 1,507 | 400,893 | 197,318 | 24.6 | 51.5 | 63.3 | 1.2 | 25.4% | 0.0% | 0 |
+| glinert4 | 50 req/s offered | 2,976 | 789,935 | 389,525 | 22.5 | 44.1 | 55.1 | 1.5 | 31.0% | 0.0% | 0 |
+| glinert4 | 75 req/s offered | 4,400 | 1,169,337 | 576,268 | 29.4 | 60.7 | 77.2 | 2.0 | 42.2% | 0.0% | 0 |
+| glinert4 | 100 req/s offered | 5,892 | 1,564,489 | 771,633 | 49.7 | 110.4 | 136.3 | 3.2 | 55.8% | 0.0% | 0 |
+| glinert4 | 125 req/s offered | 7,346 | 1,951,685 | 962,241 | 129.1 | 377.3 | 512.4 | 8.4 | 67.4% | 0.0% | 0 |
+| glinert4 | 150 req/s offered | 8,027 | 2,131,163 | 1,051,368 | 1690.6 | 2585.3 | 2957.9 | 47.8 | 74.7% | 21.3% | 125 |
+| glinert4 | 200 req/s offered | 7,855 | 2,084,795 | 1,027,165 | 2482.7 | 3122.4 | 3365.0 | 57.7 | 72.9% | 67.0% | 1660 |
+
+{
+ "device": "Tesla T4",
+ "request": "chunk",
+ "requests_in_pool": 290,
+ "mean_words": 131.0,
+ "mean_tokens": 265.6,
+ "max_batch": 64,
+ "max_wait_ms": 5.0,
+ "queue_limit": 256,
+ "retries": 3,
+ "backoff_ms": 100.0,
+ "duration_s": 30.0,
+ "levels": [
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 25.0,
+   "requests": 753,
+   "seconds": 29.98,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 1507,
+   "tpm": 400893,
+   "wpm": 197318,
+   "p50_ms": 24.6,
+   "p95_ms": 51.5,
+   "p99_ms": 63.3,
+   "mean_ms": 28.6,
+   "mean_batch": 1.2,
+   "worker_busy": 0.361,
+   "gpu_util": 25.4
+  },
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 50.0,
+   "requests": 1488,
+   "seconds": 30.01,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 2976,
+   "tpm": 789935,
+   "wpm": 389525,
+   "p50_ms": 22.5,
+   "p95_ms": 44.1,
+   "p99_ms": 55.1,
+   "mean_ms": 25.0,
+   "mean_batch": 1.5,
+   "worker_busy": 0.472,
+   "gpu_util": 31.0
+  },
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 75.0,
+   "requests": 2203,
+   "seconds": 30.04,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 4400,
+   "tpm": 1169337,
+   "wpm": 576268,
+   "p50_ms": 29.4,
+   "p95_ms": 60.7,
+   "p99_ms": 77.2,
+   "mean_ms": 32.5,
+   "mean_batch": 2.0,
+   "worker_busy": 0.63,
+   "gpu_util": 42.2
+  },
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 100.0,
+   "requests": 2947,
+   "seconds": 30.01,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 5892,
+   "tpm": 1564489,
+   "wpm": 771633,
+   "p50_ms": 49.7,
+   "p95_ms": 110.4,
+   "p99_ms": 136.3,
+   "mean_ms": 55.1,
+   "mean_batch": 3.2,
+   "worker_busy": 0.792,
+   "gpu_util": 55.8
+  },
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 125.0,
+   "requests": 3682,
+   "seconds": 30.07,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 7346,
+   "tpm": 1951685,
+   "wpm": 962241,
+   "p50_ms": 129.1,
+   "p95_ms": 377.3,
+   "p99_ms": 512.4,
+   "mean_ms": 159.2,
+   "mean_batch": 8.4,
+   "worker_busy": 0.92,
+   "gpu_util": 67.4
+  },
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 150.0,
+   "requests": 4306,
+   "seconds": 32.19,
+   "rejected_pct": 21.3,
+   "failed": 125,
+   "rpm": 8027,
+   "tpm": 2131163,
+   "wpm": 1051368,
+   "p50_ms": 1690.6,
+   "p95_ms": 2585.3,
+   "p99_ms": 2957.9,
+   "mean_ms": 1690.6,
+   "mean_batch": 47.8,
+   "worker_busy": 0.994,
+   "gpu_util": 74.7
+  },
+  {
+   "setup": "glinert4",
+   "mode": "open",
+   "level": 200.0,
+   "requests": 4267,
+   "seconds": 32.59,
+   "rejected_pct": 67.0,
+   "failed": 1660,
+   "rpm": 7855,
+   "tpm": 2084795,
+   "wpm": 1027165,
+   "p50_ms": 2482.7,
+   "p95_ms": 3122.4,
+   "p99_ms": 3365.0,
+   "mean_ms": 2354.0,
+   "mean_batch": 57.7,
+   "worker_busy": 0.997,
+   "gpu_util": 72.9
+  }
+ ]
+}
+END_LOAD_2
+BEGIN_RUN_3 --request page --setups glinert4 --concurrency 1,4,16,64 --duration 30.0
+POOL {"device": "Tesla T4", "request": "page", "requests_in_pool": 70, "mean_words": 542.6, "mean_tokens": 1100.4, "max_batch": 64, "max_wait_ms": 5.0, "queue_limit": 0, "retries": 3, "backoff_ms": 100.0, "duration_s": 30.0}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 1, "requests": 794, "seconds": 30.01, "rejected_pct": 0.0, "failed": 0, "rpm": 1588, "tpm": 1748480, "wpm": 861157, "p50_ms": 35.1, "p95_ms": 72.2, "p99_ms": 75.1, "mean_ms": 37.8, "mean_batch": 1, "worker_busy": 0.861, "gpu_util": 68.2}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 4, "requests": 896, "seconds": 30.11, "rejected_pct": 0.0, "failed": 0, "rpm": 1785, "tpm": 1966740, "wpm": 968942, "p50_ms": 125.9, "p95_ms": 166.5, "p99_ms": 171.6, "mean_ms": 134.4, "mean_batch": 4, "worker_busy": 0.961, "gpu_util": 80.2}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 16, "requests": 944, "seconds": 30.03, "rejected_pct": 0.0, "failed": 0, "rpm": 1886, "tpm": 2078294, "wpm": 1023435, "p50_ms": 508.2, "p95_ms": 596.1, "p99_ms": 602.4, "mean_ms": 508.9, "mean_batch": 16, "worker_busy": 0.989, "gpu_util": 85.2}
+LEVEL {"setup": "glinert4", "mode": "closed", "level": 64, "requests": 991, "seconds": 30.64, "rejected_pct": 0.0, "failed": 0, "rpm": 1941, "tpm": 2136418, "wpm": 1052917, "p50_ms": 1984.5, "p95_ms": 2024.8, "p99_ms": 2937.4, "mean_ms": 1977.7, "mean_batch": 61.9, "worker_busy": 0.999, "gpu_util": 91.0}
+Load test on Tesla T4: page requests (mean 542.6 words, 1100.4 tokens), batches up to 64, 5.0 ms collection window, 30 s per level, queue limit none, 3 retries
+
+| setup | load | requests/min | tokens/min | words/min | p50 ms | p95 ms | p99 ms | mean batch | GPU busy | rejected | failed |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glinert4 | 1 clients | 1,588 | 1,748,480 | 861,157 | 35.1 | 72.2 | 75.1 | 1 | 68.2% | 0.0% | 0 |
+| glinert4 | 4 clients | 1,785 | 1,966,740 | 968,942 | 125.9 | 166.5 | 171.6 | 4 | 80.2% | 0.0% | 0 |
+| glinert4 | 16 clients | 1,886 | 2,078,294 | 1,023,435 | 508.2 | 596.1 | 602.4 | 16 | 85.2% | 0.0% | 0 |
+| glinert4 | 64 clients | 1,941 | 2,136,418 | 1,052,917 | 1984.5 | 2024.8 | 2937.4 | 61.9 | 91.0% | 0.0% | 0 |
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+
+END_RUN_3 rc=0
+BEGIN_LOAD_3
+Load test on Tesla T4: page requests (mean 542.6 words, 1100.4 tokens), batches up to 64, 5.0 ms collection window, 30 s per level, queue limit none, 3 retries
+
+| setup | load | requests/min | tokens/min | words/min | p50 ms | p95 ms | p99 ms | mean batch | GPU busy | rejected | failed |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glinert4 | 1 clients | 1,588 | 1,748,480 | 861,157 | 35.1 | 72.2 | 75.1 | 1 | 68.2% | 0.0% | 0 |
+| glinert4 | 4 clients | 1,785 | 1,966,740 | 968,942 | 125.9 | 166.5 | 171.6 | 4 | 80.2% | 0.0% | 0 |
+| glinert4 | 16 clients | 1,886 | 2,078,294 | 1,023,435 | 508.2 | 596.1 | 602.4 | 16 | 85.2% | 0.0% | 0 |
+| glinert4 | 64 clients | 1,941 | 2,136,418 | 1,052,917 | 1984.5 | 2024.8 | 2937.4 | 61.9 | 91.0% | 0.0% | 0 |
+
+{
+ "device": "Tesla T4",
+ "request": "page",
+ "requests_in_pool": 70,
+ "mean_words": 542.6,
+ "mean_tokens": 1100.4,
+ "max_batch": 64,
+ "max_wait_ms": 5.0,
+ "queue_limit": 0,
+ "retries": 3,
+ "backoff_ms": 100.0,
+ "duration_s": 30.0,
+ "levels": [
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 1,
+   "requests": 794,
+   "seconds": 30.01,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 1588,
+   "tpm": 1748480,
+   "wpm": 861157,
+   "p50_ms": 35.1,
+   "p95_ms": 72.2,
+   "p99_ms": 75.1,
+   "mean_ms": 37.8,
+   "mean_batch": 1,
+   "worker_busy": 0.861,
+   "gpu_util": 68.2
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 4,
+   "requests": 896,
+   "seconds": 30.11,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 1785,
+   "tpm": 1966740,
+   "wpm": 968942,
+   "p50_ms": 125.9,
+   "p95_ms": 166.5,
+   "p99_ms": 171.6,
+   "mean_ms": 134.4,
+   "mean_batch": 4,
+   "worker_busy": 0.961,
+   "gpu_util": 80.2
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 16,
+   "requests": 944,
+   "seconds": 30.03,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 1886,
+   "tpm": 2078294,
+   "wpm": 1023435,
+   "p50_ms": 508.2,
+   "p95_ms": 596.1,
+   "p99_ms": 602.4,
+   "mean_ms": 508.9,
+   "mean_batch": 16,
+   "worker_busy": 0.989,
+   "gpu_util": 85.2
+  },
+  {
+   "setup": "glinert4",
+   "mode": "closed",
+   "level": 64,
+   "requests": 991,
+   "seconds": 30.64,
+   "rejected_pct": 0.0,
+   "failed": 0,
+   "rpm": 1941,
+   "tpm": 2136418,
+   "wpm": 1052917,
+   "p50_ms": 1984.5,
+   "p95_ms": 2024.8,
+   "p99_ms": 2937.4,
+   "mean_ms": 1977.7,
+   "mean_batch": 61.9,
+   "worker_busy": 0.999,
+   "gpu_util": 91.0
+  }
+ ]
+}
+END_LOAD_3
+[colab] Stopping session 'run-24b00a'...
+[colab] Session terminated.

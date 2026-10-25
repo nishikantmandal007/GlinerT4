@@ -24,12 +24,21 @@ LABELS = ["Person", "Organization", "Street", "City"]
 COPY_THRESHOLDS = {"Organization": 0.85}
 
 
+# seconds between nvidia-smi samples; each sample is a subprocess, which on a host with one physical core takes CPU
+# from the serving threads, so 0 samples once at the end only (memory then reads the end state, utilisation is not known)
+SAMPLE_SECONDS = float(os.getenv("DETECTION_BENCH_GPU_SAMPLE_S", "0.5"))
+
+
+def gpu_sample(samples):
+    out = subprocess.run(["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
+                         capture_output=True, text=True).stdout
+    samples.append((time.time(), [[int(value) for value in line.split(",")] for line in out.strip().splitlines()]))
+
+
 def gpu_sampler(stop, samples):
     while not stop.is_set():
-        out = subprocess.run(["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
-                             capture_output=True, text=True).stdout
-        samples.append((time.time(), [[int(value) for value in line.split(",")] for line in out.strip().splitlines()]))
-        time.sleep(0.5)
+        gpu_sample(samples)
+        time.sleep(SAMPLE_SECONDS)
 
 
 def copy_worker(gpu, texts, loading, ready, start, results):
@@ -125,13 +134,15 @@ def run(args):
     docs = json.load(open(args.corpus)) * args.repeat
     chunks = [chunk for doc in docs for chunk in doc["chunks"]]
     stop, samples = threading.Event(), []
-    sampler = threading.Thread(target=gpu_sampler, args=(stop, samples), daemon=True)
-    sampler.start()
+    if SAMPLE_SECONDS > 0:
+        threading.Thread(target=gpu_sampler, args=(stop, samples), daemon=True).start()
     if args.mode == "copies":
         found, seconds, extra = run_copies(chunks, [int(count) for count in args.copies.split(",")])
     else:
         found, seconds, extra = run_queue(docs)
     stop.set()
+    if not samples:
+        gpu_sample(samples)
     serving = [sample for at, sample in samples if at >= time.time() - seconds - 1] or [sample for _, sample in samples]
     samples = [sample for _, sample in samples]
     busy = [sample for sample in samples if any(gpu[1] > 0 for gpu in sample)] or samples

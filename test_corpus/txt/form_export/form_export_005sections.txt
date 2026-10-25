@@ -1,0 +1,75 @@
+Record 1
+Names: Ishaan Patil
+Emails: ishaan.patil+case.620000@example.invalid
+Phone: (+91) 7590005963
+Zip Code: 400058
+City: Mumbai
+Street: Flat 30A, Surya Heights, 52 Kaveri Road
+Dates: 25.09.2031
+Insurance Number: LI-571798944-62
+DOB: 25/09/1991
+Organization: Kaveri Analytics Private Limited
+IBAN: DE77 9999 9999 6842 5650 74
+Secret_Keys: sk-proj-d7AEJzLhid1QawXQb9F4ybVX8mViSnlWkEKQx5vp6kpFf9hk
+
+
+Record 2
+Names: Deepak Thampi
+Emails: deepak.thampi+case.620041@example.invalid
+Phone: +91-97440-79590
+Zip Code: 682063
+City: Kochi
+Street: Flat 38B, Aaranya Heights, 147 Malabar Lane
+Dates: 2031-02-10
+Insurance Number: MC-908874921-04
+DOB: 10/02/1972
+Organization: Savera Learning Cooperative Private Limited
+IBAN: DE98 9999 9999 6699 7361 73
+Secret_Keys: sk-proj-ufDhr5eYrGhjGoCGFR6ZwcHTnYBVF19JGljA5jIxSvRYHZ1v
+
+
+Record 3
+Names: Manoj Bhat
+Emails: manoj.bhat+case.620082@example.invalid
+Phone: +91 87206 13106
+Zip Code: 560045
+City: Bengaluru
+Street: Flat 16C, Aaranya Heights, 112 Nisarga Cross Road
+Dates: 23/07/2031
+Insurance Number: MC-956678355-45
+DOB: 23/07/1983
+Organization: Kaveri Analytics Private Limited
+IBAN: DE73 9999 9999 9248 8416 24
+Secret_Keys: sk-proj-B6jcMslugEAIruvz53UjXF5K13GjeNcfV29etIOlj3dUdjSV
+
+
+Record 4
+Names: Aditi Tandon
+Emails: aditi.tandon+case.620123@example.invalid
+Phone: (+91) 9404874897
+Zip Code: 110028
+City: New Delhi
+Street: Flat 4A, Nisarga Heights, 27 Ashoka Marg
+Dates: 08.12.2031
+Insurance Number: LI-675181258-86
+DOB: 08/12/1994
+Organization: Savera Learning Cooperative Private Limited
+IBAN: DE90 9999 9999 4746 5692 46
+Secret_Keys: sk-proj-QWBLypwHH3aQCajVu15OjohiWH4x7MhJ3ri5dXZXAwLTMVU3
+
+
+Record 5
+Names: Anirban Roy
+Emails: anirban.roy+case.620164@example.invalid
+Phone: +91-72010-53508
+Zip Code: 700040
+City: Kolkata
+Street: Flat 32A, Savera Heights, 62 Palash Avenue
+Dates: 2031-05-21
+Insurance Number: LI-582290548-28
+DOB: 21/05/1975
+Organization: Nalanda Technical Services Private Limited
+IBAN: DE86 9999 9999 1038 3861 94
+Secret_Keys: sk-proj-v3l8wGSd4Xet5ZGGe7G8wiZcJPBvrsKDZdJP17GDOoEXfyre
+
+

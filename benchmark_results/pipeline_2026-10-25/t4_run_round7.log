@@ -1,0 +1,975 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-ee8fba'...
+[colab] Session READY (run-ee8fba). Executing ../../artifacts/colab_pipeline_bench.py...
+PACKAGES_READY
+BEGIN_SINGLE_JSON
+{
+  "corpus": {
+    "documents": 10,
+    "chunks": 290,
+    "sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40"
+  },
+  "device": "Tesla T4",
+  "grid": [
+    0.3,
+    0.4,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9
+  ],
+  "reference": {
+    "current_3pass": {
+      "chunks_per_s": 57.710728292799345,
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.93,
+          "detected": 172
+        }
+      }
+    },
+    "drop_city_pass": {
+      "chunks_per_s": 81.92429783083703,
+      "accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.961,
+          "detected": 720
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.846,
+          "detected": 149
+        },
+        "Street": {
+          "recall": 0.861,
+          "precision": 1.0,
+          "detected": 158
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.947,
+          "detected": 169
+        }
+      }
+    }
+  },
+  "single": {
+    "single_person_first": {
+      "sweep": {
+        "0.3": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.953,
+            "detected": 727
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.949,
+            "precision": 1.0,
+            "detected": 231
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.925,
+            "detected": 173
+          }
+        },
+        "0.4": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.955,
+            "detected": 726
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 193
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.936,
+            "detected": 171
+          }
+        },
+        "0.5": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.96,
+            "detected": 722
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.834,
+            "detected": 151
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 178
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.941,
+            "detected": 170
+          }
+        },
+        "0.55": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.961,
+            "detected": 721
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.834,
+            "detected": 151
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 170
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.6": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.84,
+            "detected": 150
+          },
+          "Street": {
+            "recall": 0.871,
+            "precision": 1.0,
+            "detected": 167
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.65": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.846,
+            "detected": 149
+          },
+          "Street": {
+            "recall": 0.85,
+            "precision": 1.0,
+            "detected": 159
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.7": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.967,
+            "detected": 717
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.846,
+            "detected": 149
+          },
+          "Street": {
+            "recall": 0.828,
+            "precision": 1.0,
+            "detected": 148
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.75": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.968,
+            "detected": 716
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.851,
+            "detected": 148
+          },
+          "Street": {
+            "recall": 0.772,
+            "precision": 1.0,
+            "detected": 136
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.8": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.969,
+            "detected": 715
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.716,
+            "precision": 1.0,
+            "detected": 120
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.85": {
+          "Person": {
+            "recall": 0.994,
+            "precision": 0.971,
+            "detected": 713
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.654,
+            "precision": 1.0,
+            "detected": 106
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.958,
+            "detected": 167
+          }
+        },
+        "0.9": {
+          "Person": {
+            "recall": 0.991,
+            "precision": 0.973,
+            "detected": 709
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.574,
+            "precision": 1.0,
+            "detected": 91
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.964,
+            "detected": 166
+          }
+        }
+      },
+      "thresholds": {
+        "Person": 0.85,
+        "Organization": 0.8,
+        "Street": 0.3,
+        "City": 0.9
+      },
+      "no_threshold_meets": [],
+      "final_accuracy": {
+        "Person": {
+          "recall": 0.994,
+          "precision": 0.971,
+          "detected": 713
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.863,
+          "detected": 146
+        },
+        "Street": {
+          "recall": 0.949,
+          "precision": 1.0,
+          "detected": 231
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.964,
+          "detected": 166
+        }
+      },
+      "worse_than_current": [],
+      "accepted": true,
+      "chunks_per_s": 133.53341870281236,
+      "speedup_vs_drop_city": 1.629961101144149,
+      "identical_chunks_vs_current": 184
+    },
+    "single_org_first": {
+      "sweep": {
+        "0.3": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.953,
+            "detected": 727
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.818,
+            "detected": 154
+          },
+          "Street": {
+            "recall": 0.949,
+            "precision": 1.0,
+            "detected": 237
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.93,
+            "detected": 172
+          }
+        },
+        "0.4": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.956,
+            "detected": 725
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.824,
+            "detected": 153
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 198
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.941,
+            "detected": 170
+          }
+        },
+        "0.5": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.961,
+            "detected": 721
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.824,
+            "detected": 153
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 179
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.55": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.963,
+            "detected": 720
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 171
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.6": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.866,
+            "precision": 1.0,
+            "detected": 167
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.65": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.84,
+            "detected": 150
+          },
+          "Street": {
+            "recall": 0.85,
+            "precision": 1.0,
+            "detected": 159
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.7": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.965,
+            "detected": 718
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.846,
+            "detected": 149
+          },
+          "Street": {
+            "recall": 0.823,
+            "precision": 1.0,
+            "detected": 147
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.75": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.967,
+            "detected": 717
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.851,
+            "detected": 148
+          },
+          "Street": {
+            "recall": 0.767,
+            "precision": 1.0,
+            "detected": 135
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.947,
+            "detected": 169
+          }
+        },
+        "0.8": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.971,
+            "detected": 714
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.708,
+            "precision": 1.0,
+            "detected": 118
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.952,
+            "detected": 168
+          }
+        },
+        "0.85": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.971,
+            "detected": 714
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.654,
+            "precision": 1.0,
+            "detected": 106
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.958,
+            "detected": 167
+          }
+        },
+        "0.9": {
+          "Person": {
+            "recall": 0.993,
+            "precision": 0.973,
+            "detected": 710
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.563,
+            "precision": 1.0,
+            "detected": 89
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.964,
+            "detected": 166
+          }
+        }
+      },
+      "thresholds": {
+        "Person": 0.8,
+        "Organization": 0.8,
+        "Street": 0.3,
+        "City": 0.9
+      },
+      "no_threshold_meets": [],
+      "final_accuracy": {
+        "Person": {
+          "recall": 0.996,
+          "precision": 0.971,
+          "detected": 714
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.863,
+          "detected": 146
+        },
+        "Street": {
+          "recall": 0.949,
+          "precision": 1.0,
+          "detected": 237
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.964,
+          "detected": 166
+        }
+      },
+      "worse_than_current": [],
+      "accepted": true,
+      "chunks_per_s": 129.044110514869,
+      "speedup_vs_drop_city": 1.5751628507250466,
+      "identical_chunks_vs_current": 179
+    },
+    "single_org_first_city_desc": {
+      "sweep": {
+        "0.3": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.953,
+            "detected": 727
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.946,
+            "precision": 1.0,
+            "detected": 209
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.904,
+            "detected": 177
+          }
+        },
+        "0.4": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.955,
+            "detected": 726
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 179
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.925,
+            "detected": 173
+          }
+        },
+        "0.5": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.959,
+            "detected": 723
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.829,
+            "detected": 152
+          },
+          "Street": {
+            "recall": 0.936,
+            "precision": 1.0,
+            "detected": 171
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.925,
+            "detected": 173
+          }
+        },
+        "0.55": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.963,
+            "detected": 720
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.84,
+            "detected": 150
+          },
+          "Street": {
+            "recall": 0.871,
+            "precision": 1.0,
+            "detected": 167
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.925,
+            "detected": 173
+          }
+        },
+        "0.6": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.84,
+            "detected": 150
+          },
+          "Street": {
+            "recall": 0.866,
+            "precision": 1.0,
+            "detected": 161
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.925,
+            "detected": 173
+          }
+        },
+        "0.65": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.84,
+            "detected": 150
+          },
+          "Street": {
+            "recall": 0.861,
+            "precision": 1.0,
+            "detected": 154
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.925,
+            "detected": 173
+          }
+        },
+        "0.7": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.964,
+            "detected": 719
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.84,
+            "detected": 150
+          },
+          "Street": {
+            "recall": 0.834,
+            "precision": 1.0,
+            "detected": 147
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.93,
+            "detected": 172
+          }
+        },
+        "0.75": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.967,
+            "detected": 717
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.846,
+            "detected": 149
+          },
+          "Street": {
+            "recall": 0.775,
+            "precision": 1.0,
+            "detected": 134
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.93,
+            "detected": 172
+          }
+        },
+        "0.8": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.969,
+            "detected": 715
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.857,
+            "detected": 147
+          },
+          "Street": {
+            "recall": 0.721,
+            "precision": 1.0,
+            "detected": 122
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.941,
+            "detected": 170
+          }
+        },
+        "0.85": {
+          "Person": {
+            "recall": 0.996,
+            "precision": 0.971,
+            "detected": 714
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.863,
+            "detected": 146
+          },
+          "Street": {
+            "recall": 0.66,
+            "precision": 1.0,
+            "detected": 106
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.941,
+            "detected": 170
+          }
+        },
+        "0.9": {
+          "Person": {
+            "recall": 0.991,
+            "precision": 0.973,
+            "detected": 709
+          },
+          "Organization": {
+            "recall": 0.977,
+            "precision": 0.869,
+            "detected": 145
+          },
+          "Street": {
+            "recall": 0.461,
+            "precision": 1.0,
+            "detected": 76
+          },
+          "City": {
+            "recall": 1.0,
+            "precision": 0.941,
+            "detected": 170
+          }
+        }
+      },
+      "thresholds": {
+        "Person": 0.85,
+        "Organization": 0.9,
+        "Street": 0.3,
+        "City": 0.8
+      },
+      "no_threshold_meets": [],
+      "final_accuracy": {
+        "Person": {
+          "recall": 0.996,
+          "precision": 0.971,
+          "detected": 714
+        },
+        "Organization": {
+          "recall": 0.977,
+          "precision": 0.869,
+          "detected": 145
+        },
+        "Street": {
+          "recall": 0.946,
+          "precision": 1.0,
+          "detected": 209
+        },
+        "City": {
+          "recall": 1.0,
+          "precision": 0.941,
+          "detected": 170
+        }
+      },
+      "worse_than_current": [],
+      "accepted": true,
+      "chunks_per_s": 120.69565507039212,
+      "speedup_vs_drop_city": 1.4732583405183755,
+      "identical_chunks_vs_current": 209
+    }
+  }
+}
+END_SINGLE_JSON
+BEGIN_SINGLE_MD
+| layout | passes | thresholds | chunks/s | Person R/P | Organization R/P | Street R/P | City R/P | accepted |
+|---|---|---|---|---|---|---|---|---|
+| current_3pass | 3 | today's | 57.7 | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | reference |
+| drop_city_pass | 2 | today's | 81.9 | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | reference |
+| single_person_first | 1 | Per 0.85, Org 0.80, Str 0.30, Cit 0.90 | 133.5 | 0.994/0.971 | 0.977/0.863 | 0.949/1.000 | 1.000/0.964 | yes |
+| single_org_first | 1 | Per 0.80, Org 0.80, Str 0.30, Cit 0.90 | 129.0 | 0.996/0.971 | 0.977/0.863 | 0.949/1.000 | 1.000/0.964 | yes |
+| single_org_first_city_desc | 1 | Per 0.85, Org 0.90, Str 0.30, Cit 0.80 | 120.7 | 0.996/0.971 | 0.977/0.869 | 0.946/1.000 | 1.000/0.941 | yes |
+
+Uniform-threshold sweep, single passes (recall/precision per label):
+
+| layout | t | Person | Organization | Street | City |
+|---|---|---|---|---|---|
+| single_person_first | 0.3 | 0.996/0.953 | 0.977/0.829 | 0.949/1.000 | 1.000/0.925 |
+| single_person_first | 0.4 | 0.996/0.955 | 0.977/0.829 | 0.936/1.000 | 1.000/0.936 |
+| single_person_first | 0.5 | 0.996/0.960 | 0.977/0.834 | 0.936/1.000 | 1.000/0.941 |
+| single_person_first | 0.55 | 0.996/0.961 | 0.977/0.834 | 0.936/1.000 | 1.000/0.947 |
+| single_person_first | 0.6 | 0.996/0.964 | 0.977/0.840 | 0.871/1.000 | 1.000/0.947 |
+| single_person_first | 0.65 | 0.996/0.964 | 0.977/0.846 | 0.850/1.000 | 1.000/0.947 |
+| single_person_first | 0.7 | 0.996/0.967 | 0.977/0.846 | 0.828/1.000 | 1.000/0.947 |
+| single_person_first | 0.75 | 0.996/0.968 | 0.977/0.851 | 0.772/1.000 | 1.000/0.947 |
+| single_person_first | 0.8 | 0.996/0.969 | 0.977/0.863 | 0.716/1.000 | 1.000/0.947 |
+| single_person_first | 0.85 | 0.994/0.971 | 0.977/0.863 | 0.654/1.000 | 1.000/0.958 |
+| single_person_first | 0.9 | 0.991/0.973 | 0.977/0.863 | 0.574/1.000 | 1.000/0.964 |
+| single_org_first | 0.3 | 0.996/0.953 | 0.977/0.818 | 0.949/1.000 | 1.000/0.930 |
+| single_org_first | 0.4 | 0.996/0.956 | 0.977/0.824 | 0.936/1.000 | 1.000/0.941 |
+| single_org_first | 0.5 | 0.996/0.961 | 0.977/0.824 | 0.936/1.000 | 1.000/0.947 |
+| single_org_first | 0.55 | 0.996/0.963 | 0.977/0.829 | 0.936/1.000 | 1.000/0.947 |
+| single_org_first | 0.6 | 0.996/0.964 | 0.977/0.829 | 0.866/1.000 | 1.000/0.947 |
+| single_org_first | 0.65 | 0.996/0.964 | 0.977/0.840 | 0.850/1.000 | 1.000/0.947 |
+| single_org_first | 0.7 | 0.996/0.965 | 0.977/0.846 | 0.823/1.000 | 1.000/0.947 |
+| single_org_first | 0.75 | 0.996/0.967 | 0.977/0.851 | 0.767/1.000 | 1.000/0.947 |
+| single_org_first | 0.8 | 0.996/0.971 | 0.977/0.863 | 0.708/1.000 | 1.000/0.952 |
+| single_org_first | 0.85 | 0.996/0.971 | 0.977/0.863 | 0.654/1.000 | 1.000/0.958 |
+| single_org_first | 0.9 | 0.993/0.973 | 0.977/0.863 | 0.563/1.000 | 1.000/0.964 |
+| single_org_first_city_desc | 0.3 | 0.996/0.953 | 0.977/0.829 | 0.946/1.000 | 1.000/0.904 |
+| single_org_first_city_desc | 0.4 | 0.996/0.955 | 0.977/0.829 | 0.936/1.000 | 1.000/0.925 |
+| single_org_first_city_desc | 0.5 | 0.996/0.959 | 0.977/0.829 | 0.936/1.000 | 1.000/0.925 |
+| single_org_first_city_desc | 0.55 | 0.996/0.963 | 0.977/0.840 | 0.871/1.000 | 1.000/0.925 |
+| single_org_first_city_desc | 0.6 | 0.996/0.964 | 0.977/0.840 | 0.866/1.000 | 1.000/0.925 |
+| single_org_first_city_desc | 0.65 | 0.996/0.964 | 0.977/0.840 | 0.861/1.000 | 1.000/0.925 |
+| single_org_first_city_desc | 0.7 | 0.996/0.964 | 0.977/0.840 | 0.834/1.000 | 1.000/0.930 |
+| single_org_first_city_desc | 0.75 | 0.996/0.967 | 0.977/0.846 | 0.775/1.000 | 1.000/0.930 |
+| single_org_first_city_desc | 0.8 | 0.996/0.969 | 0.977/0.857 | 0.721/1.000 | 1.000/0.941 |
+| single_org_first_city_desc | 0.85 | 0.996/0.971 | 0.977/0.863 | 0.660/1.000 | 1.000/0.941 |
+| single_org_first_city_desc | 0.9 | 0.991/0.973 | 0.977/0.869 | 0.461/1.000 | 1.000/0.941 |
+
+END_SINGLE_MD
+[colab] Stopping session 'run-ee8fba'...
+[colab] Session terminated.

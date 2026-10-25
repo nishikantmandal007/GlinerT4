@@ -1,0 +1,20 @@
+{
+  "pipeline": true,
+  "run_size": 16,
+  "chunks": 290,
+  "device": "Tesla T4",
+  "queue_runs": {
+    "seconds": [
+      3.844939557000089,
+      3.901894461999973
+    ],
+    "chunks_per_s": 75.42381244251983
+  },
+  "whole_corpus": {
+    "seconds": [
+      3.865020978000075,
+      3.865611551000029
+    ],
+    "chunks_per_s": 75.03193427686342
+  }
+}

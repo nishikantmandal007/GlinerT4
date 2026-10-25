@@ -1,0 +1,675 @@
+{
+  "device": "Tesla T4",
+  "corpora": {
+    "040": {
+      "documents": 10,
+      "chunks": 290,
+      "words": 37985,
+      "configs": {
+        "current_3pass": {
+          "seconds": [
+            4.887989806000007,
+            4.937646186000052
+          ],
+          "chunks_per_s": 59.02925779789019,
+          "words_per_s": 7731.815025699513,
+          "doc_set": {
+            "Person": {
+              "recall": 0.994,
+              "precision": 0.961,
+              "detected": 720
+            },
+            "Organization": {
+              "recall": 0.977,
+              "precision": 0.846,
+              "detected": 149
+            },
+            "Street": {
+              "recall": 0.861,
+              "precision": 1.0,
+              "detected": 158
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 0.93,
+              "detected": 172
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 0.997,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.98,
+              "exact_precision": 0.979,
+              "annotated": 1360,
+              "detected": 1362
+            },
+            "Organization": {
+              "overlap_recall": 0.993,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.955,
+              "exact_precision": 0.941,
+              "annotated": 400,
+              "detected": 406
+            },
+            "Street": {
+              "overlap_recall": 0.833,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.085,
+              "exact_precision": 0.101,
+              "annotated": 400,
+              "detected": 338
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 0.973,
+              "exact_recall": 0.995,
+              "exact_precision": 0.964,
+              "annotated": 400,
+              "detected": 413
+            }
+          },
+          "worse_than_current": []
+        },
+        "drop_city_pass": {
+          "seconds": [
+            3.4382138409999925,
+            3.45856076900003
+          ],
+          "chunks_per_s": 84.09728210619284,
+          "words_per_s": 11015.2940027715,
+          "doc_set": {
+            "Person": {
+              "recall": 0.994,
+              "precision": 0.961,
+              "detected": 720
+            },
+            "Organization": {
+              "recall": 0.977,
+              "precision": 0.846,
+              "detected": 149
+            },
+            "Street": {
+              "recall": 0.861,
+              "precision": 1.0,
+              "detected": 158
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 0.947,
+              "detected": 169
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 0.997,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.98,
+              "exact_precision": 0.979,
+              "annotated": 1360,
+              "detected": 1362
+            },
+            "Organization": {
+              "overlap_recall": 0.993,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.955,
+              "exact_precision": 0.941,
+              "annotated": 400,
+              "detected": 406
+            },
+            "Street": {
+              "overlap_recall": 0.833,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.085,
+              "exact_precision": 0.101,
+              "annotated": 400,
+              "detected": 338
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 0.988,
+              "exact_recall": 0.995,
+              "exact_precision": 0.978,
+              "annotated": 400,
+              "detected": 407
+            }
+          },
+          "worse_than_current": []
+        },
+        "single_today_thresholds": {
+          "seconds": [
+            2.0529726099999834,
+            2.043592827999987
+          ],
+          "chunks_per_s": 141.58201761404504,
+          "words_per_s": 18544.803238170694,
+          "doc_set": {
+            "Person": {
+              "recall": 0.996,
+              "precision": 0.964,
+              "detected": 719
+            },
+            "Organization": {
+              "recall": 0.977,
+              "precision": 0.863,
+              "detected": 146
+            },
+            "Street": {
+              "recall": 0.85,
+              "precision": 1.0,
+              "detected": 159
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 0.947,
+              "detected": 169
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 0.997,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.981,
+              "exact_precision": 0.981,
+              "annotated": 1360,
+              "detected": 1360
+            },
+            "Organization": {
+              "overlap_recall": 0.993,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.955,
+              "exact_precision": 0.948,
+              "annotated": 400,
+              "detected": 403
+            },
+            "Street": {
+              "overlap_recall": 0.825,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.087,
+              "exact_precision": 0.104,
+              "annotated": 400,
+              "detected": 337
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 0.985,
+              "exact_recall": 0.995,
+              "exact_precision": 0.975,
+              "annotated": 400,
+              "detected": 408
+            }
+          },
+          "worse_than_current": [
+            "Street doc_set recall",
+            "Street occurrence overlap_recall"
+          ]
+        },
+        "single_street_0.5": {
+          "seconds": [
+            2.0486310960000083,
+            2.0315116780000153
+          ],
+          "chunks_per_s": 142.15188833487537,
+          "words_per_s": 18619.44647724221,
+          "doc_set": {
+            "Person": {
+              "recall": 0.996,
+              "precision": 0.964,
+              "detected": 719
+            },
+            "Organization": {
+              "recall": 0.977,
+              "precision": 0.863,
+              "detected": 146
+            },
+            "Street": {
+              "recall": 0.936,
+              "precision": 1.0,
+              "detected": 178
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 0.947,
+              "detected": 169
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 0.997,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.981,
+              "exact_precision": 0.981,
+              "annotated": 1360,
+              "detected": 1360
+            },
+            "Organization": {
+              "overlap_recall": 0.993,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.955,
+              "exact_precision": 0.948,
+              "annotated": 400,
+              "detected": 403
+            },
+            "Street": {
+              "overlap_recall": 0.885,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.087,
+              "exact_precision": 0.093,
+              "annotated": 400,
+              "detected": 377
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 0.985,
+              "exact_recall": 0.995,
+              "exact_precision": 0.975,
+              "annotated": 400,
+              "detected": 408
+            }
+          },
+          "worse_than_current": []
+        },
+        "single_round7": {
+          "seconds": [
+            2.0960340930000143,
+            2.077769692000004
+          ],
+          "chunks_per_s": 138.9619708728108,
+          "words_per_s": 18201.622288288683,
+          "doc_set": {
+            "Person": {
+              "recall": 0.994,
+              "precision": 0.971,
+              "detected": 713
+            },
+            "Organization": {
+              "recall": 0.977,
+              "precision": 0.863,
+              "detected": 146
+            },
+            "Street": {
+              "recall": 0.949,
+              "precision": 1.0,
+              "detected": 231
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 0.964,
+              "detected": 166
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 0.993,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.979,
+              "exact_precision": 0.984,
+              "annotated": 1360,
+              "detected": 1353
+            },
+            "Organization": {
+              "overlap_recall": 0.993,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.955,
+              "exact_precision": 0.948,
+              "annotated": 400,
+              "detected": 403
+            },
+            "Street": {
+              "overlap_recall": 0.91,
+              "overlap_precision": 0.998,
+              "exact_recall": 0.087,
+              "exact_precision": 0.079,
+              "annotated": 400,
+              "detected": 445
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 0.995,
+              "exact_recall": 0.995,
+              "exact_precision": 0.985,
+              "annotated": 400,
+              "detected": 404
+            }
+          },
+          "worse_than_current": [
+            "Person occurrence overlap_recall",
+            "Street occurrence overlap_precision"
+          ]
+        }
+      }
+    },
+    "020": {
+      "documents": 10,
+      "chunks": 200,
+      "words": 18954,
+      "configs": {
+        "current_3pass": {
+          "seconds": [
+            2.536763714000017,
+            2.603641917999994
+          ],
+          "chunks_per_s": 77.81487077788634,
+          "words_per_s": 7374.515303620288,
+          "doc_set": {
+            "Person": {
+              "recall": 0.989,
+              "precision": 0.986,
+              "detected": 361
+            },
+            "Organization": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 98
+            },
+            "Street": {
+              "recall": 0.82,
+              "precision": 1.0,
+              "detected": 132
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 160
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.994,
+              "exact_precision": 0.993,
+              "annotated": 680,
+              "detected": 681
+            },
+            "Organization": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            },
+            "Street": {
+              "overlap_recall": 0.82,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.115,
+              "exact_precision": 0.14,
+              "annotated": 200,
+              "detected": 164
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            }
+          },
+          "worse_than_current": []
+        },
+        "drop_city_pass": {
+          "seconds": [
+            1.8228155869999796,
+            1.8352736990000267
+          ],
+          "chunks_per_s": 109.34670226089153,
+          "words_per_s": 10362.78697326469,
+          "doc_set": {
+            "Person": {
+              "recall": 0.989,
+              "precision": 0.986,
+              "detected": 361
+            },
+            "Organization": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 98
+            },
+            "Street": {
+              "recall": 0.82,
+              "precision": 1.0,
+              "detected": 132
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 160
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.994,
+              "exact_precision": 0.993,
+              "annotated": 680,
+              "detected": 681
+            },
+            "Organization": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            },
+            "Street": {
+              "overlap_recall": 0.82,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.115,
+              "exact_precision": 0.14,
+              "annotated": 200,
+              "detected": 164
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            }
+          },
+          "worse_than_current": []
+        },
+        "single_today_thresholds": {
+          "seconds": [
+            1.0857768459999875,
+            1.0797586109999884
+          ],
+          "chunks_per_s": 184.71182206092342,
+          "words_per_s": 17505.139376713712,
+          "doc_set": {
+            "Person": {
+              "recall": 0.992,
+              "precision": 0.992,
+              "detected": 360
+            },
+            "Organization": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 98
+            },
+            "Street": {
+              "recall": 0.83,
+              "precision": 1.0,
+              "detected": 134
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 160
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.996,
+              "exact_precision": 0.996,
+              "annotated": 680,
+              "detected": 680
+            },
+            "Organization": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            },
+            "Street": {
+              "overlap_recall": 0.83,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.11,
+              "exact_precision": 0.133,
+              "annotated": 200,
+              "detected": 166
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            }
+          },
+          "worse_than_current": []
+        },
+        "single_street_0.5": {
+          "seconds": [
+            1.0852564660000326,
+            1.0756710390000421
+          ],
+          "chunks_per_s": 185.10570071159614,
+          "words_per_s": 17542.467256437965,
+          "doc_set": {
+            "Person": {
+              "recall": 0.992,
+              "precision": 0.992,
+              "detected": 360
+            },
+            "Organization": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 98
+            },
+            "Street": {
+              "recall": 0.965,
+              "precision": 1.0,
+              "detected": 161
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 160
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.996,
+              "exact_precision": 0.996,
+              "annotated": 680,
+              "detected": 680
+            },
+            "Organization": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            },
+            "Street": {
+              "overlap_recall": 0.96,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.115,
+              "exact_precision": 0.116,
+              "annotated": 200,
+              "detected": 198
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            }
+          },
+          "worse_than_current": []
+        },
+        "single_round7": {
+          "seconds": [
+            1.0788672369999972,
+            1.1044096470000113
+          ],
+          "chunks_per_s": 183.21084372365775,
+          "words_per_s": 17362.891659691046,
+          "doc_set": {
+            "Person": {
+              "recall": 0.992,
+              "precision": 0.992,
+              "detected": 360
+            },
+            "Organization": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 98
+            },
+            "Street": {
+              "recall": 0.995,
+              "precision": 1.0,
+              "detected": 210
+            },
+            "City": {
+              "recall": 1.0,
+              "precision": 1.0,
+              "detected": 160
+            }
+          },
+          "occurrence": {
+            "Person": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.996,
+              "exact_precision": 0.996,
+              "annotated": 680,
+              "detected": 680
+            },
+            "Organization": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            },
+            "Street": {
+              "overlap_recall": 0.995,
+              "overlap_precision": 1.0,
+              "exact_recall": 0.115,
+              "exact_precision": 0.092,
+              "annotated": 200,
+              "detected": 249
+            },
+            "City": {
+              "overlap_recall": 1.0,
+              "overlap_precision": 1.0,
+              "exact_recall": 1.0,
+              "exact_precision": 1.0,
+              "annotated": 200,
+              "detected": 200
+            }
+          },
+          "worse_than_current": []
+        }
+      }
+    }
+  }
+}

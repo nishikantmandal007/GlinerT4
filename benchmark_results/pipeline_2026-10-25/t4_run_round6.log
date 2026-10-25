@@ -1,0 +1,672 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-8aeacd'...
+[colab] Session READY (run-8aeacd). Executing ../../artifacts/colab_detection_bench.py...
+PACKAGES_READY
+RUN {"config": "ref_3pass", "run": 0, "chunks_per_s": 51.8, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [77], "serving_gpu_mb": [1943]}
+RUN {"config": "prod_3pass", "run": 0, "chunks_per_s": 57.4, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [94], "serving_gpu_mb": [3095]}
+RUN {"config": "exact_2pass_1stream", "run": 0, "chunks_per_s": 74.0, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [83], "serving_gpu_mb": [1829]}
+RUN {"config": "pipe_3pass", "run": 0, "chunks_per_s": 53.4, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [100], "serving_gpu_mb": [2509]}
+RUN {"config": "pipe_2pass", "run": 0, "chunks_per_s": 72.9, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [90], "serving_gpu_mb": [2697]}
+RUN {"config": "pipe_2pass_sampled", "run": 0, "chunks_per_s": 71.1, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [82], "serving_gpu_mb": [2697]}
+RUN {"config": "pipe_2pass_run32", "run": 0, "chunks_per_s": 72.5, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [100], "serving_gpu_mb": [2737]}
+RUN {"config": "pipe_2pass_run64", "run": 0, "chunks_per_s": 73.3, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [95], "serving_gpu_mb": [2785]}
+RUN {"config": "pipe_2pass_streams2", "run": 0, "chunks_per_s": 69.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [74], "serving_gpu_mb": [4467]}
+RUN {"config": "ref_3pass", "run": 1, "chunks_per_s": 46.0, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [83], "serving_gpu_mb": [1943]}
+RUN {"config": "prod_3pass", "run": 1, "chunks_per_s": 50.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [96], "serving_gpu_mb": [3095]}
+RUN {"config": "exact_2pass_1stream", "run": 1, "chunks_per_s": 69.8, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [83], "serving_gpu_mb": [1829]}
+RUN {"config": "pipe_3pass", "run": 1, "chunks_per_s": 50.2, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [91], "serving_gpu_mb": [2509]}
+RUN {"config": "pipe_2pass", "run": 1, "chunks_per_s": 72.8, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [89], "serving_gpu_mb": [2697]}
+RUN {"config": "pipe_2pass_sampled", "run": 1, "chunks_per_s": 70.0, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [77], "serving_gpu_mb": [2697]}
+RUN {"config": "pipe_2pass_run32", "run": 1, "chunks_per_s": 73.3, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [100], "serving_gpu_mb": [2737]}
+RUN {"config": "pipe_2pass_run64", "run": 1, "chunks_per_s": 74.1, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [90], "serving_gpu_mb": [2785]}
+RUN {"config": "pipe_2pass_streams2", "run": 1, "chunks_per_s": 68.1, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [94], "serving_gpu_mb": [4467]}
+RUN {"config": "ref_3pass", "run": 2, "chunks_per_s": 46.5, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [70], "serving_gpu_mb": [1943]}
+RUN {"config": "prod_3pass", "run": 2, "chunks_per_s": 49.9, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [84], "serving_gpu_mb": [3097]}
+RUN {"config": "exact_2pass_1stream", "run": 2, "chunks_per_s": 70.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [81], "serving_gpu_mb": [1829]}
+RUN {"config": "pipe_3pass", "run": 2, "chunks_per_s": 49.7, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}, "util": [100], "serving_gpu_mb": [2509]}
+RUN {"config": "pipe_2pass", "run": 2, "chunks_per_s": 72.5, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [90], "serving_gpu_mb": [2697]}
+RUN {"config": "pipe_2pass_sampled", "run": 2, "chunks_per_s": 70.2, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [82], "serving_gpu_mb": [2697]}
+RUN {"config": "pipe_2pass_run32", "run": 2, "chunks_per_s": 73.3, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [100], "serving_gpu_mb": [2737]}
+RUN {"config": "pipe_2pass_run64", "run": 2, "chunks_per_s": 73.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [95], "serving_gpu_mb": [2785]}
+RUN {"config": "pipe_2pass_streams2", "run": 2, "chunks_per_s": 69.6, "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.947, "detected": 676}}, "util": [74], "serving_gpu_mb": [4469]}
+BEGIN_DETECT_JSON
+{
+  "ref_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      51.8,
+      46.0,
+      46.5
+    ],
+    "chunks_per_s": 46.5,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        77
+      ],
+      [
+        83
+      ],
+      [
+        70
+      ]
+    ],
+    "serving_gpu_mb": [
+      1943
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "prod_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_FAST_COUNT": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      57.4,
+      50.6,
+      49.9
+    ],
+    "chunks_per_s": 50.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        94
+      ],
+      [
+        96
+      ],
+      [
+        84
+      ]
+    ],
+    "serving_gpu_mb": [
+      3095
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "exact_2pass_1stream": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      74.0,
+      69.8,
+      70.6
+    ],
+    "chunks_per_s": 70.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        83
+      ],
+      [
+        83
+      ],
+      [
+        81
+      ]
+    ],
+    "serving_gpu_mb": [
+      1829
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      53.4,
+      50.2,
+      49.7
+    ],
+    "chunks_per_s": 50.2,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        100
+      ],
+      [
+        91
+      ],
+      [
+        100
+      ]
+    ],
+    "serving_gpu_mb": [
+      2509
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "pipe_2pass": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      72.9,
+      72.8,
+      72.5
+    ],
+    "chunks_per_s": 72.8,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        90
+      ],
+      [
+        89
+      ],
+      [
+        90
+      ]
+    ],
+    "serving_gpu_mb": [
+      2697
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_sampled": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1"
+    },
+    "chunks_per_s_runs": [
+      71.1,
+      70.0,
+      70.2
+    ],
+    "chunks_per_s": 70.2,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        82
+      ],
+      [
+        77
+      ],
+      [
+        82
+      ]
+    ],
+    "serving_gpu_mb": [
+      2697
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_run32": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_RUN_SIZE": "32",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      72.5,
+      73.3,
+      73.3
+    ],
+    "chunks_per_s": 73.3,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        100
+      ],
+      [
+        100
+      ],
+      [
+        100
+      ]
+    ],
+    "serving_gpu_mb": [
+      2737
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_run64": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_RUN_SIZE": "64",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      73.3,
+      74.1,
+      73.6
+    ],
+    "chunks_per_s": 73.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        95
+      ],
+      [
+        90
+      ],
+      [
+        95
+      ]
+    ],
+    "serving_gpu_mb": [
+      2785
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_streams2": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      69.6,
+      68.1,
+      69.6
+    ],
+    "chunks_per_s": 69.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        74
+      ],
+      [
+        94
+      ],
+      [
+        74
+      ]
+    ],
+    "serving_gpu_mb": [
+      4467
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  }
+}
+END_DETECT_JSON
+BEGIN_DETECT_MD
+| config | chunks/s | vs prod_3pass | Person R/P | Organization R/P | Street R/P | City R/P | identical vs ref | GPU util % | serving MB |
+|---|---|---|---|---|---|---|---|---|---|
+| ref_3pass | 46.5 | 0.919x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[77], [83], [70]] | [1943] |
+| prod_3pass | 50.6 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[94], [96], [84]] | [3095] |
+| exact_2pass_1stream | 70.6 | 1.395x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[83], [83], [81]] | [1829] |
+| pipe_3pass | 50.2 | 0.992x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[100], [91], [100]] | [2509] |
+| pipe_2pass | 72.8 | 1.439x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[90], [89], [90]] | [2697] |
+| pipe_2pass_sampled | 70.2 | 1.387x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[82], [77], [82]] | [2697] |
+| pipe_2pass_run32 | 73.3 | 1.449x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[100], [100], [100]] | [2737] |
+| pipe_2pass_run64 | 73.6 | 1.455x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[95], [90], [95]] | [2785] |
+| pipe_2pass_streams2 | 69.6 | 1.375x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[74], [94], [74]] | [4467] |
+END_DETECT_MD
+BEGIN_QPROFILE_JSON
+{
+  "pipeline": true,
+  "run_size": 16,
+  "chunks": 290,
+  "device": "Tesla T4",
+  "queue_runs": {
+    "seconds": [
+      3.844939557000089,
+      3.901894461999973
+    ],
+    "chunks_per_s": 75.42381244251983
+  },
+  "whole_corpus": {
+    "seconds": [
+      3.865020978000075,
+      3.865611551000029
+    ],
+    "chunks_per_s": 75.03193427686342
+  }
+}
+END_QPROFILE_JSON
+BEGIN_QPROFILE_TXT
+         2203419 function calls (2143089 primitive calls) in 4.490 seconds
+
+   Ordered by: internal time
+   List reduced from 390 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     2367    0.952    0.000    0.952    0.000 {built-in method torch.tensor}
+     2400    0.778    0.000    0.778    0.000 {method 'tolist' of 'torch._C.TensorBase' objects}
+       39    0.625    0.016    0.625    0.016 {method 'cpu' of 'torch._C.TensorBase' objects}
+      582    0.209    0.000    0.573    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1542(_format_input_with_mapping)
+     4604    0.180    0.000    0.180    0.000 {built-in method torch._C._nn.linear}
+   211710    0.093    0.000    0.093    0.000 {method 'token_to_id' of 'tokenizers.Tokenizer' objects}
+   445406    0.089    0.000    0.089    0.000 {method 'append' of 'list' objects}
+   211710    0.082    0.000    0.174    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_tokenizers.py:821(_convert_token_to_id_with_added_voc)
+      582    0.081    0.000    0.816    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:672(_transform_record)
+      582    0.081    0.000    0.255    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_base.py:1465(convert_tokens_to_ids)
+      580    0.068    0.000    0.312    0.001 /content/gliner-detect/serving/gliner2_exact.py:36(count_instance0)
+26788/1164    0.056    0.000    0.150    0.000 /usr/lib/python3.13/copy.py:119(deepcopy)
+   212994    0.056    0.000    0.057    0.000 {method 'extend' of 'list' objects}
+230032/229915    0.039    0.000    0.042    0.000 {built-in method builtins.len}
+     1700    0.038    0.000    0.132    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:56(resolve_overlaps)
+     1927    0.031    0.000    0.031    0.000 {method 'to' of 'torch._C.TensorBase' objects}
+     1162    0.029    0.000    0.046    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1513(_find_spans)
+    46742    0.026    0.000    0.026    0.000 {built-in method builtins.id}
+     1150    0.026    0.000    0.026    0.000 {built-in method torch.arange}
+       41    0.023    0.001    1.641    0.040 /content/gliner-detect/serving/gliner2_exact.py:67(_compute_direct_span_logits_batched)
+    97532    0.022    0.000    0.022    0.000 {method 'get' of 'dict' objects}
+    25129    0.022    0.000    0.026    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:135(<genexpr>)
+     1199    0.021    0.000    0.021    0.000 {built-in method torch.cat}
+       41    0.020    0.000    0.020    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1671(_extract_embeddings_fast)
+      984    0.019    0.000    0.019    0.000 {built-in method torch._ops.gliner_t4.add_layernorm}
+7195/1353    0.019    0.000    0.886    0.001 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1783(_call_impl)
+      580    0.019    0.000    0.036    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:43(split_text_into_chunks)
+14896/580    0.019    0.000    0.028    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:92(remap_result_spans)
+       41    0.018    0.000    0.070    0.002 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:756(_pad_batch)
+     1740    0.018    0.000    0.018    0.000 {built-in method torch.sigmoid}
+    12573    0.017    0.000    0.026    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:83(rank_key)
+     1211    0.017    0.000    0.017    0.000 {built-in method torch.stack}
+104375/101717    0.017    0.000    0.023    0.000 {built-in method builtins.isinstance}
+    22426    0.017    0.000    0.017    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1955(__getattr__)
+       39    0.015    0.000    0.975    0.025 /usr/local/lib/python3.13/dist-packages/gliner2/models/span/model.py:572(compute_span_scores_batched)
+     5033    0.015    0.000    0.025    0.000 /content/gliner-detect/artifacts/colab_pipeline/gliner2_ner.py:462(cell_pieces)
+      621    0.015    0.000    0.015    0.000 {built-in method torch.embedding}
+    95326    0.014    0.000    0.016    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:29(iter_word_offsets)
+      492    0.014    0.000    0.014    0.000 {built-in method torch._ops.gliner_t4.disentangled_attention}
+     3567    0.013    0.000    0.013    0.000 {method 'contiguous' of 'torch._C.TensorBase' objects}
+7195/1353    0.013    0.000    0.890    0.001 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1775(_wrapped_call_impl)
+      580    0.013    0.000    0.074    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:1086(_extract_entities)
+      492    0.013    0.000    0.041    0.000 /content/gliner-detect/torch-ext/gliner_t4/__init__.py:31(real_lengths)
+      699    0.013    0.000    0.013    0.000 {built-in method torch.relu}
+      580    0.012    0.000    0.012    0.000 {built-in method torch.rsub}
+
+
+         2203419 function calls (2143089 primitive calls) in 4.490 seconds
+
+   Ordered by: cumulative time
+   List reduced from 390 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       21    0.007    0.000    4.248    0.202 /usr/local/lib/python3.13/dist-packages/torch/autograd/grad_mode.py:293(__exit__)
+       20    0.005    0.000    4.190    0.209 /content/gliner-detect/serving/gliner2_pipelined.py:73(extract_many)
+       40    0.003    0.000    2.417    0.060 /content/gliner-detect/serving/gliner2_pipelined.py:117(finish)
+       41    0.003    0.000    2.409    0.059 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:446(_extract_from_batch)
+       41    0.023    0.001    1.641    0.040 /content/gliner-detect/serving/gliner2_exact.py:67(_compute_direct_span_logits_batched)
+       60    0.000    0.000    0.983    0.016 /content/gliner-detect/serving/gliner2_pipelined.py:89(work)
+       80    0.001    0.000    0.982    0.012 /content/gliner-detect/serving/gliner2_pipelined.py:42(_batches)
+       41    0.000    0.000    0.979    0.024 /usr/local/lib/python3.13/dist-packages/gliner2/training/trainer.py:539(__call__)
+       41    0.004    0.000    0.979    0.024 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:462(collate_fn_inference)
+       39    0.015    0.000    0.975    0.025 /usr/local/lib/python3.13/dist-packages/gliner2/models/span/model.py:572(compute_span_scores_batched)
+       41    0.005    0.000    0.975    0.024 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:621(_collate_batch)
+     2367    0.952    0.000    0.952    0.000 {built-in method torch.tensor}
+7195/1353    0.013    0.000    0.890    0.001 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1775(_wrapped_call_impl)
+7195/1353    0.019    0.000    0.886    0.001 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1783(_call_impl)
+      582    0.081    0.000    0.816    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:672(_transform_record)
+       40    0.001    0.000    0.783    0.020 /content/gliner-detect/serving/gliner2_pipelined.py:98(launch)
+     2400    0.778    0.000    0.778    0.000 {method 'tolist' of 'torch._C.TensorBase' objects}
+       41    0.000    0.000    0.769    0.019 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:657(encode_tokens)
+       41    0.001    0.000    0.768    0.019 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1795(inner)
+       41    0.010    0.000    0.738    0.018 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:514(_extract_from_batch_sync_collapsed)
+       39    0.625    0.016    0.625    0.016 {method 'cpu' of 'torch._C.TensorBase' objects}
+      582    0.209    0.000    0.573    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1542(_format_input_with_mapping)
+     20/3    0.001    0.000    0.538    0.179 /usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py:120(decorate_context)
+       41    0.001    0.000    0.486    0.012 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:512(prepare_active_length)
+       41    0.000    0.000    0.482    0.012 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:405(select_layout)
+       41    0.001    0.000    0.481    0.012 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:210(_disentangled_flash_packing_layout)
+      580    0.068    0.000    0.312    0.001 /content/gliner-detect/serving/gliner2_exact.py:36(count_instance0)
+        1    0.000    0.000    0.300    0.300 /content/gliner-detect/serving/gliner2_pipelined.py:145(extract_entities_long_many)
+       41    0.001    0.000    0.274    0.007 /usr/local/lib/python3.13/dist-packages/transformers/models/deberta_v2/modeling_deberta_v2.py:719(forward)
+      582    0.081    0.000    0.255    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_base.py:1465(convert_tokens_to_ids)
+       41    0.000    0.000    0.255    0.006 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:441(forward)
+       41    0.000    0.000    0.255    0.006 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:596(forward)
+       41    0.009    0.000    0.254    0.006 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:335(forward_prepared)
+     4604    0.180    0.000    0.180    0.000 {built-in method torch._C._nn.linear}
+   211710    0.082    0.000    0.174    0.000 /usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_tokenizers.py:821(_convert_token_to_id_with_added_voc)
+26788/1164    0.056    0.000    0.150    0.000 /usr/lib/python3.13/copy.py:119(deepcopy)
+2328/1164    0.011    0.000    0.143    0.000 /usr/lib/python3.13/copy.py:218(_deepcopy_dict)
+     1700    0.038    0.000    0.132    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/overlap.py:56(resolve_overlaps)
+      580    0.002    0.000    0.122    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/inference/chunking.py:111(merge_chunk_results)
+      492    0.008    0.000    0.121    0.000 /content/gliner-detect/torch-ext/gliner_t4/__init__.py:70(forward_prepared)
+     2874    0.004    0.000    0.117    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/linear.py:130(forward)
+      290    0.005    0.000    0.105    0.000 /content/gliner-detect/artifacts/colab_pipeline/gliner2_ner.py:477(resolve_spans)
+      699    0.006    0.000    0.093    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/container.py:248(forward)
+   211710    0.093    0.000    0.093    0.000 {method 'token_to_id' of 'tokenizers.Tokenizer' objects}
+   445406    0.089    0.000    0.089    0.000 {method 'append' of 'list' objects}
+
+
+
+END_QPROFILE_TXT
+[colab] Stopping session 'run-8aeacd'...
+[colab] Session terminated.

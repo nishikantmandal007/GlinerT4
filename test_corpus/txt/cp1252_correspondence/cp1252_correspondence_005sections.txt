@@ -1,0 +1,50 @@
+From: Arindam Bose <arindam.bose+case.690000@example.invalid>
+To: Felix Weber <felix.weber+case.690014@example.invalid>
+Date: 25/01/2031
+Subject: Evidence review / REF-1
+Dear Felix Weber,
+Please confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 45B, Aaranya Heights, 170 Palash Avenue, Kolkata 700026. Questions can be raised on +91 96310 55952.
+The service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.
+Regards, Arindam Bose
+
+
+From: Sai Reddy <sai.reddy+case.690041@example.invalid>
+To: Elodie Dubois <elodie.dubois+case.690055@example.invalid>
+Date: 10.06.2031
+Subject: Evidence review / REF-2
+Dear Elodie Dubois,
+Please confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 37C, Surya Heights, 72 Vennela Nagar Road, Hyderabad 500014. Questions can be raised on (+91) 7297441809.
+The quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.
+Regards, Sai Reddy
+
+
+From: Priya Raman <priya.raman+case.690082@example.invalid>
+To: Alvaro Garcia <alvaro.garcia+case.690096@example.invalid>
+Date: 2031-11-23
+Subject: Evidence review / REF-3
+Dear Alvaro Garcia,
+Please confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 22C, Savera Heights, 146 Marudham Street, Chennai 600008. Questions can be raised on +91-78458-79055.
+The training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.
+Regards, Priya Raman
+
+
+From: Harsh Vyas <harsh.vyas+case.690123@example.invalid>
+To: Yui Sato <yui.sato+case.690137@example.invalid>
+Date: 08/04/2031
+Subject: Evidence review / REF-4
+Dear Yui Sato,
+Please confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 46D, Savera Heights, 140 Amaltas Society Road, Ahmedabad 380006. Questions can be raised on +91 86253 46346.
+The forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.
+Regards, Harsh Vyas
+
+
+From: Pooja Deshmukh <pooja.deshmukh+case.690164@example.invalid>
+To: Noor Haddad <noor.haddad+case.690178@example.invalid>
+Date: 21.09.2031
+Subject: Evidence review / REF-5
+Dear Noor Haddad,
+Please confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 38B, Nisarga Heights, 145 Kaveri Road, Mumbai 400042. Questions can be raised on (+91) 9225801417.
+The regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.
+Regards, Pooja Deshmukh
+
+

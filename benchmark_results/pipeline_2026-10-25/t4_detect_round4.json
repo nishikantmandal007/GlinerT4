@@ -1,0 +1,241 @@
+{
+  "ref_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "1"
+    },
+    "chunks_per_s_runs": [
+      48.1,
+      42.6
+    ],
+    "chunks_per_s": 45.35,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        73
+      ],
+      [
+        76
+      ]
+    ],
+    "serving_gpu_mb": [
+      1943
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "prod_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_FAST_COUNT": "1"
+    },
+    "chunks_per_s_runs": [
+      50.4,
+      46.8
+    ],
+    "chunks_per_s": 48.599999999999994,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        83
+      ],
+      [
+        88
+      ]
+    ],
+    "serving_gpu_mb": [
+      3095
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "exact_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1"
+    },
+    "chunks_per_s_runs": [
+      46.4,
+      45.0
+    ],
+    "chunks_per_s": 45.7,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        81
+      ],
+      [
+        83
+      ]
+    ],
+    "serving_gpu_mb": [
+      3057
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "exact_2pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0"
+    },
+    "chunks_per_s_runs": [
+      65.8,
+      66.8
+    ],
+    "chunks_per_s": 66.3,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        75
+      ],
+      [
+        78
+      ]
+    ],
+    "serving_gpu_mb": [
+      2997
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "fast_2pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_FAST_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0"
+    },
+    "chunks_per_s_runs": [
+      66.6,
+      65.3
+    ],
+    "chunks_per_s": 65.94999999999999,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        85
+      ],
+      [
+        81
+      ]
+    ],
+    "serving_gpu_mb": [
+      3007
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  }
+}

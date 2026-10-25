@@ -1,0 +1,489 @@
+{
+  "ref_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      51.8,
+      46.0,
+      46.5
+    ],
+    "chunks_per_s": 46.5,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        77
+      ],
+      [
+        83
+      ],
+      [
+        70
+      ]
+    ],
+    "serving_gpu_mb": [
+      1943
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "prod_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_FAST_COUNT": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      57.4,
+      50.6,
+      49.9
+    ],
+    "chunks_per_s": 50.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        94
+      ],
+      [
+        96
+      ],
+      [
+        84
+      ]
+    ],
+    "serving_gpu_mb": [
+      3095
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "exact_2pass_1stream": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      74.0,
+      69.8,
+      70.6
+    ],
+    "chunks_per_s": 70.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        83
+      ],
+      [
+        83
+      ],
+      [
+        81
+      ]
+    ],
+    "serving_gpu_mb": [
+      1829
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_3pass": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      53.4,
+      50.2,
+      49.7
+    ],
+    "chunks_per_s": 50.2,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.93,
+        "detected": 688
+      }
+    },
+    "mean_gpu_util": [
+      [
+        100
+      ],
+      [
+        91
+      ],
+      [
+        100
+      ]
+    ],
+    "serving_gpu_mb": [
+      2509
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1160,
+    "same_across_runs": true
+  },
+  "pipe_2pass": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      72.9,
+      72.8,
+      72.5
+    ],
+    "chunks_per_s": 72.8,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        90
+      ],
+      [
+        89
+      ],
+      [
+        90
+      ]
+    ],
+    "serving_gpu_mb": [
+      2697
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_sampled": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1"
+    },
+    "chunks_per_s_runs": [
+      71.1,
+      70.0,
+      70.2
+    ],
+    "chunks_per_s": 70.2,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        82
+      ],
+      [
+        77
+      ],
+      [
+        82
+      ]
+    ],
+    "serving_gpu_mb": [
+      2697
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_run32": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_RUN_SIZE": "32",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      72.5,
+      73.3,
+      73.3
+    ],
+    "chunks_per_s": 73.3,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        100
+      ],
+      [
+        100
+      ],
+      [
+        100
+      ]
+    ],
+    "serving_gpu_mb": [
+      2737
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_run64": {
+    "env": {
+      "DETECTION_STREAMS": "1",
+      "DETECTION_RUN_SIZE": "64",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      73.3,
+      74.1,
+      73.6
+    ],
+    "chunks_per_s": 73.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        95
+      ],
+      [
+        90
+      ],
+      [
+        95
+      ]
+    ],
+    "serving_gpu_mb": [
+      2785
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  },
+  "pipe_2pass_streams2": {
+    "env": {
+      "DETECTION_STREAMS": "2",
+      "DETECTION_EXACT_COUNT": "1",
+      "GLINER_T4_FUSE_LAYERNORM": "1",
+      "DETECTION_CITY_PASS": "0",
+      "DETECTION_PIPELINE": "1",
+      "DETECTION_BENCH_GPU_SAMPLE_S": "0"
+    },
+    "chunks_per_s_runs": [
+      69.6,
+      68.1,
+      69.6
+    ],
+    "chunks_per_s": 69.6,
+    "accuracy": {
+      "Person": {
+        "recall": 0.994,
+        "precision": 0.961,
+        "detected": 2880
+      },
+      "Organization": {
+        "recall": 0.977,
+        "precision": 0.846,
+        "detected": 596
+      },
+      "Street": {
+        "recall": 0.861,
+        "precision": 1.0,
+        "detected": 632
+      },
+      "City": {
+        "recall": 1.0,
+        "precision": 0.947,
+        "detected": 676
+      }
+    },
+    "mean_gpu_util": [
+      [
+        74
+      ],
+      [
+        94
+      ],
+      [
+        74
+      ]
+    ],
+    "serving_gpu_mb": [
+      4467
+    ],
+    "chunks": 1160,
+    "identical_chunks_vs_ref": 1144,
+    "same_across_runs": true
+  }
+}

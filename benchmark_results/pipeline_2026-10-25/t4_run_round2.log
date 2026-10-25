@@ -1,0 +1,348 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-b3e573'...
+[colab] Session READY (run-b3e573). Executing artifacts/colab_pipeline_bench.py...
+PACKAGES_READY
+BEGIN_RESULT_JSON
+{
+  "env": {
+    "gpu": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ],
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "triton": "3.6.0",
+      "gliner2": "2.1.0",
+      "disentangled-flash": "1.1.1",
+      "transformers": "5.20.2"
+    },
+    "cuda": "13.0",
+    "cpu_count": 2,
+    "torch_threads": 1,
+    "lscpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  2\nOn-line CPU(s) list:                     0,1\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.00GHz\nCPU family:                              6\nModel:                                   85\nThread(s) per core:                      2\nCore(s) per socket:                      1\nSocket(s):                               1\nStepping:                                3\nBogoMIPS:                                4000.27\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               32 KiB (1 instance)\nL1i cache:                               32 KiB (1 instance)\nL2 cache:                                1 MiB (1 instance)\nL3 cache:                                38.5 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0,1\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Vulnerable\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Vulnerable; SMT Host state unknown\nVulnerability Meltdown:                  Vulnerable\nVulnerability Mmio stale data:           Vulnerable\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Vulnerable: __user pointer sanitization and usercopy barriers only; no swapgs barriers\nVulnerability Spectre v2:                Vulnerable; IBPB: disabled; STIBP: disabled; PBRSB-eIBRS: Not affected; BHI: Vulnerable\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Vulnerable\nVulnerability Vmscape:                   Not affected",
+    "git_commit": null
+  },
+  "corpus": {
+    "chunks": 290,
+    "sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40"
+  },
+  "bulk_lookup_installed": [
+    true,
+    true
+  ],
+  "configs": {
+    "baseline": {
+      "seconds": [
+        6.308951508999996,
+        6.068419508000034,
+        6.047691652000026
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": false,
+      "format_cache": false,
+      "streams": 1,
+      "median_seconds": 6.068419508000034,
+      "chunks_per_s": 47.78839030783737,
+      "speedup_vs_baseline": 1.0,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "count0": {
+      "seconds": [
+        6.168510626,
+        5.7826150540000185,
+        5.84178691599999
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": false,
+      "streams": 1,
+      "median_seconds": 5.84178691599999,
+      "chunks_per_s": 49.64234474313382,
+      "speedup_vs_baseline": 1.0387950802141248,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "fmtcache": {
+      "seconds": [
+        6.141616838999994,
+        6.129655495999998,
+        6.049049905000004
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": false,
+      "format_cache": true,
+      "streams": 1,
+      "median_seconds": 6.129655495999998,
+      "chunks_per_s": 47.310978600550065,
+      "speedup_vs_baseline": 0.9900098809729315,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "exact": {
+      "seconds": [
+        5.855936630000031,
+        5.7431270710000035,
+        5.884584523000001
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": true,
+      "streams": 1,
+      "median_seconds": 5.855936630000031,
+      "chunks_per_s": 49.522393824128265,
+      "speedup_vs_baseline": 1.0362850371213805,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "exact_prefetch1": {
+      "seconds": [
+        5.844042200999979,
+        5.841462747000037,
+        5.9288170120000245
+      ],
+      "errors": [],
+      "prefetch_depth": 1,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": true,
+      "streams": 1,
+      "median_seconds": 5.844042200999979,
+      "chunks_per_s": 49.62318717520176,
+      "speedup_vs_baseline": 1.0383941969073496,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "streams2": {
+      "seconds": [
+        5.705144283000038,
+        5.830359821999991,
+        5.870864111000003
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": false,
+      "format_cache": false,
+      "streams": 2,
+      "median_seconds": 5.830359821999991,
+      "chunks_per_s": 49.7396402372506,
+      "speedup_vs_baseline": 1.0408310452987413,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    },
+    "exact_streams2": {
+      "seconds": [
+        5.590345625999987,
+        5.7636584009999865,
+        5.871807613999977
+      ],
+      "errors": [],
+      "prefetch_depth": 0,
+      "num_workers": 0,
+      "batch_size": 16,
+      "count_step0": true,
+      "format_cache": true,
+      "streams": 2,
+      "median_seconds": 5.7636584009999865,
+      "chunks_per_s": 50.3152650319605,
+      "speedup_vs_baseline": 1.0528763305866933,
+      "identical_full_output": true,
+      "identical_kept_values_chunks": 290
+    }
+  },
+  "breakdown_baseline": {
+    "total_seconds": 6.112599925999973,
+    "stages_seconds": {
+      "collate": 0.738831019000429,
+      "to_device": 0.012196101999847997,
+      "encoder": 3.7936786750000806,
+      "embeddings": 0.028698135999945862,
+      "span_head": 1.3741919289996645,
+      "decode": 0.12425353800011862,
+      "format": 0.004868284000110634,
+      "other": 0.035882242999775826
+    },
+    "stages_ms_per_chunk": {
+      "collate": 2.5476931689669966,
+      "to_device": 0.04205552413740689,
+      "encoder": 13.081650603448553,
+      "embeddings": 0.09895908965498573,
+      "span_head": 4.7385928586195325,
+      "decode": 0.42846047586247804,
+      "format": 0.016787186207278048,
+      "other": 0.1237318724130201
+    }
+  },
+  "breakdown_exact": {
+    "total_seconds": 5.8407199910000145,
+    "stages_seconds": {
+      "collate": 0.6386488570000779,
+      "to_device": 0.011754771000312303,
+      "encoder": 3.913098025000295,
+      "embeddings": 0.029303966999918885,
+      "span_head": 1.0917244489997984,
+      "decode": 0.11617723699987437,
+      "format": 0.004450225999903523,
+      "other": 0.035562458999834234
+    },
+    "stages_ms_per_chunk": {
+      "collate": 2.202237437931303,
+      "to_device": 0.04053369310452518,
+      "encoder": 13.493441465518258,
+      "embeddings": 0.1010481620686858,
+      "span_head": 3.764567065516546,
+      "decode": 0.4006111620685323,
+      "format": 0.015345606896219045,
+      "other": 0.12262916896494563
+    }
+  },
+  "gpu_busy": {
+    "baseline": {
+      "wall_seconds": 6.267339279999987,
+      "kernel_seconds": 4.481855994000028,
+      "gpu_busy_fraction": 0.7151130318255305,
+      "top_kernels": [
+        [
+          "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, _",
+          1161.7346069999987
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn",
+          1157.189475000007
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn",
+          611.3061879999971
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_stages_32x1_tn",
+          242.1685949999965
+        ],
+        [
+          "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<a",
+          223.38261800000836
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::GeluCUDAKernelImpl",
+          186.09535100000892
+        ],
+        [
+          "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<c10::Half, ",
+          164.55120500000228
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c1",
+          160.63486999999913
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_t",
+          105.95275600001273
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespa",
+          83.8898500000002
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn",
+          63.34630200000144
+        ],
+        [
+          "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, f",
+          51.185813000007315
+        ]
+      ]
+    },
+    "exact_streams2": {
+      "wall_seconds": 5.5707548910000355,
+      "kernel_seconds": 5.4664443079999,
+      "gpu_busy_fraction": 0.9812753235349384,
+      "top_kernels": [
+        [
+          "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, _",
+          1495.1940739999932
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn",
+          1469.1979859999929
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn",
+          752.3552440000049
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_stages_32x1_tn",
+          298.98890899999935
+        ],
+        [
+          "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<a",
+          223.84293199999183
+        ],
+        [
+          "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<c10::Half, ",
+          216.8004779999936
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::GeluCUDAKernelImpl",
+          189.33731600000004
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c1",
+          160.24375600001108
+        ],
+        [
+          "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_t",
+          151.97287199999633
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespa",
+          90.52381700000048
+        ],
+        [
+          "turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn",
+          69.02713300000224
+        ],
+        [
+          "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, f",
+          46.453067000000125
+        ]
+      ]
+    }
+  },
+  "peak_allocated_mb": 2135.1171875
+}
+END_RESULT_JSON
+BEGIN_SUMMARY_MD
+| config | count0 | fmtcache | streams | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |
+|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|
+| baseline | False | False | 1 | 0 | 0 | 16 | 47.79 | 1.000x | True | 290/290 |
+| count0 | True | False | 1 | 0 | 0 | 16 | 49.64 | 1.039x | True | 290/290 |
+| fmtcache | False | True | 1 | 0 | 0 | 16 | 47.31 | 0.990x | True | 290/290 |
+| exact | True | True | 1 | 0 | 0 | 16 | 49.52 | 1.036x | True | 290/290 |
+| exact_prefetch1 | True | True | 1 | 1 | 0 | 16 | 49.62 | 1.038x | True | 290/290 |
+| streams2 | False | False | 2 | 0 | 0 | 16 | 49.74 | 1.041x | True | 290/290 |
+| exact_streams2 | True | True | 2 | 0 | 0 | 16 | 50.32 | 1.053x | True | 290/290 |
+
+END_SUMMARY_MD
+BASELINE_OUTPUTS_SHA256 4e357019a7387fd3d7899cfca3f60f7ae258cb7f0c1d1893a6dcc5710d5a0aad
+[colab] Stopping session 'run-b3e573'...
+[colab] Session terminated.

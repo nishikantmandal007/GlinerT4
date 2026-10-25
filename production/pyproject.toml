@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glinert4"
+version = "1.0.0"
+description = "GLiNER2 entity detection on NVIDIA T4: sm_75 disentangled-attention kernel and a single-pass pipelined detector"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.6",
+    "gliner2[local]==2.1.0",
+    "disentangled-flash==1.1.1",
+    "ninja",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools]
+packages = ["glinert4"]
+
+[tool.setuptools.package-data]
+glinert4 = ["csrc/*.cu", "csrc/*.cpp", "_glinert4.so"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

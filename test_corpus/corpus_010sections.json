@@ -1,0 +1,648 @@
+[
+  {
+    "file": "test_corpus/txt/address_book/address_book_010sections.txt",
+    "chunks": [
+      "Record 1\nNames: Aditya Joshi\nEmails: aditya.joshi+case.640000@example.invalid\nPhone: +91-97460-10905\nZip Code: 400088\nCity: Mumbai\nStreet: Flat 41D, Nisarga Heights, 38 Kaveri Road\nDates: 2031-05-05\nInsurance Number: HL-738180973-64\nDOB: 05/05/1981\nOrganization: Savera Learning Cooperative Private Limited\nIBAN: DE25 9999 9999 1658 4816 17\nSecret_Keys: sk-proj-045grTEGFhhZY8wPcsq0HQKNtGP9VGWhwdrUPnfpGCvYRgwM",
+      "Record 2\nNames: Lakshmi Thampi\nEmails: lakshmi.thampi+case.640041@example.invalid\nPhone: +91 94856 91548\nZip Code: 682011\nCity: Kochi\nStreet: Flat 36B, Nisarga Heights, 102 Malabar Lane\nDates: 18/10/2031\nInsurance Number: HL-346520886-06\nDOB: 18/10/1992\nOrganization: Aaranya Logistics Private Limited\nIBAN: DE03 9999 9999 9649 3147 56\nSecret_Keys: sk-proj-vuFcpWbu6PzVegxvcAjKC0stdHFCG2UkMBuQy5y6VZkDh4mw",
+      "Record 3\nNames: Nikhil Rao\nEmails: nikhil.rao+case.640082@example.invalid\nPhone: (+91) 7626033252\nZip Code: 560029\nCity: Bengaluru\nStreet: Flat 35B, Savera Heights, 47 Nisarga Cross Road\nDates: 03.03.2031\nInsurance Number: TR-889431932-47\nDOB: 03/03/1973\nOrganization: Kaveri Analytics Private Limited\nIBAN: DE71 9999 9999 8379 6843 15\nSecret_Keys: sk-proj-iUgOt6efWJhyFa8kwCmetWBfazHyBsbMbmuU0VEUqZFhaIni",
+      "Record 4\nNames: Aditi Sharma\nEmails: aditi.sharma+case.640123@example.invalid\nPhone: +91-73405-76596\nZip Code: 110005\nCity: New Delhi\nStreet: Flat 17A, Surya Heights, 78 Ashoka Marg\nDates: 2031-08-16\nInsurance Number: HL-365532690-88\nDOB: 16/08/1984\nOrganization: Nalanda Technical Services Private Limited\nIBAN: DE09 9999 9999 2427 9281 00\nSecret_Keys: sk-proj-63Q9RXol8mVoZLKA4OV7jOMen5GUCYfVBsJ4kiOb7H7tEFL6",
+      "Record 5\nNames: Anirban Mukherjee\nEmails: anirban.mukherjee+case.640164@example.invalid\nPhone: +91 96642 04721\nZip Code: 700073\nCity: Kolkata\nStreet: Flat 20A, Nisarga Heights, 164 Palash Avenue\nDates: 01/01/2031\nInsurance Number: HL-339902392-30\nDOB: 01/01/1995\nOrganization: Nalanda Technical Services Private Limited\nIBAN: DE16 9999 9999 9324 6085 74\nSecret_Keys: sk-proj-aQ4knzRiRnwpRGFguHlY7DViLFpwJaP9jHJ6k8TRDW7eZWVK",
+      "Record 6\nNames: Naveen Chowdary\nEmails: naveen.chowdary+case.640205@example.invalid\nPhone: (+91) 9539082687\nZip Code: 500043\nCity: Hyderabad\nStreet: Flat 32B, Nisarga Heights, 3 Vennela Nagar Road\nDates: 14.06.2031\nInsurance Number: MC-129962323-71\nDOB: 14/06/1976\nOrganization: Nalanda Technical Services Private Limited\nIBAN: DE51 9999 9999 8676 7207 91\nSecret_Keys: sk-proj-IlIeVZ76CxQfZ1NolL72I76xbg9nkgjfHzJmiVKZ2RrybaIX",
+      "Record 7\nNames: Anitha Srinivasan\nEmails: anitha.srinivasan+case.640246@example.invalid\nPhone: +91-84266-80485\nZip Code: 600028\nCity: Chennai\nStreet: Flat 22B, Savera Heights, 132 Marudham Street\nDates: 2031-11-27\nInsurance Number: TR-476874663-13\nDOB: 27/11/1987\nOrganization: Aaranya Logistics Private Limited\nIBAN: DE63 9999 9999 1472 4569 52\nSecret_Keys: sk-proj-jMyBOGioclwMaYIddZtHTzYXCd4Drwp1IKEOmkDMuLKjo8rw",
+      "Record 8\nNames: Hetal Pandya\nEmails: hetal.pandya+case.640287@example.invalid\nPhone: +91 84854 47074\nZip Code: 380067\nCity: Ahmedabad\nStreet: Flat 32C, Aaranya Heights, 40 Amaltas Society Road\nDates: 12/04/2031\nInsurance Number: HL-516055765-54\nDOB: 12/04/1998\nOrganization: Aaranya Logistics Private Limited\nIBAN: DE73 9999 9999 1100 7617 93\nSecret_Keys: sk-proj-ivYfMKPfgxXvsElguR9ft7fN7nOQ33QjHUlUKpG4WwN9H5kg",
+      "Record 9\nNames: Sneha More\nEmails: sneha.more+case.640328@example.invalid\nPhone: (+91) 8031973810\nZip Code: 400009\nCity: Mumbai\nStreet: Flat 16A, Savera Heights, 153 Kaveri Road\nDates: 25.09.2031\nInsurance Number: TR-297948199-95\nDOB: 25/09/1979\nOrganization: Savera Learning Cooperative Private Limited\nIBAN: DE51 9999 9999 9915 3434 73\nSecret_Keys: sk-proj-tKYStN8Pis6o1kXuxvv6lANOkmXvK9xOLPwMhf6oGEGWI6F0",
+      "Record 10\nNames: Devika Nair\nEmails: devika.nair+case.640369@example.invalid\nPhone: +91-84403-08534\nZip Code: 682008\nCity: Kochi\nStreet: Flat 46D, Nisarga Heights, 164 Malabar Lane\nDates: 2031-02-10\nInsurance Number: HL-198550698-37\nDOB: 10/02/1990\nOrganization: Kaveri Analytics Private Limited\nIBAN: DE64 9999 9999 6573 6576 40\nSecret_Keys: sk-proj-UJtkq6UNnagzkiiryzDp8HbtCzvXhYO6SusbBtXAgZZJ0t1b"
+    ],
+    "truth": {
+      "Person": [
+        "Aditi Sharma",
+        "Aditya Joshi",
+        "Anirban Mukherjee",
+        "Anitha Srinivasan",
+        "Devika Nair",
+        "Hetal Pandya",
+        "Lakshmi Thampi",
+        "Naveen Chowdary",
+        "Nikhil Rao",
+        "Sneha More"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 16A, Savera Heights, 153 Kaveri Road",
+        "Flat 17A, Surya Heights, 78 Ashoka Marg",
+        "Flat 20A, Nisarga Heights, 164 Palash Avenue",
+        "Flat 22B, Savera Heights, 132 Marudham Street",
+        "Flat 32B, Nisarga Heights, 3 Vennela Nagar Road",
+        "Flat 32C, Aaranya Heights, 40 Amaltas Society Road",
+        "Flat 35B, Savera Heights, 47 Nisarga Cross Road",
+        "Flat 36B, Nisarga Heights, 102 Malabar Lane",
+        "Flat 41D, Nisarga Heights, 38 Kaveri Road",
+        "Flat 46D, Nisarga Heights, 164 Malabar Lane"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/business_letters/business_letters_010sections.txt",
+    "chunks": [
+      "From: Neha Gokhale <neha.gokhale+case.600000@example.invalid>\nTo: Jonas Weber <jonas.weber+case.600014@example.invalid>\nDate: 17/01/2031\nSubject: Evidence review / REF-1\nDear Jonas Weber,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 15A, Surya Heights, 174 Kaveri Road, Mumbai 400033. Questions can be raised on +91 92179 37810.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Neha Gokhale",
+      "From: Anjana Menon <anjana.menon+case.600041@example.invalid>\nTo: Jules Petit <jules.petit+case.600055@example.invalid>\nDate: 02.06.2031\nSubject: Evidence review / REF-2\nDear Jules Petit,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 6B, Aaranya Heights, 6 Malabar Lane, Kochi 682035. Questions can be raised on (+91) 9006663070.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Anjana Menon",
+      "From: Shreya Naik <shreya.naik+case.600082@example.invalid>\nTo: Elena Mart\u00ednez <elena.martinez+case.600096@example.invalid>\nDate: 2031-11-15\nSubject: Evidence review / REF-3\nDear Elena Mart\u00ednez,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 32B, Surya Heights, 157 Nisarga Cross Road, Bengaluru 560066. Questions can be raised on +91-73735-95307.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Shreya Naik",
+      "From: Meera Bhatia <meera.bhatia+case.600123@example.invalid>\nTo: Yuto Watanabe <yuto.watanabe+case.600137@example.invalid>\nDate: 28/04/2031\nSubject: Evidence review / REF-4\nDear Yuto Watanabe,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 2B, Nisarga Heights, 70 Ashoka Marg, New Delhi 110021. Questions can be raised on +91 81497 21146.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Meera Bhatia",
+      "From: Sayan Dasgupta <sayan.dasgupta+case.600164@example.invalid>\nTo: Mariam Nasser <mariam.nasser+case.600178@example.invalid>\nDate: 13.09.2031\nSubject: Evidence review / REF-5\nDear Mariam Nasser,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 22D, Nisarga Heights, 20 Palash Avenue, Kolkata 700006. Questions can be raised on (+91) 9379070567.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Sayan Dasgupta",
+      "From: Sravani Yadav <sravani.yadav+case.600205@example.invalid>\nTo: Rafael Oliveira <rafael.oliveira+case.600219@example.invalid>\nDate: 2031-02-26\nSubject: Evidence review / REF-6\nDear Rafael Oliveira,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 32A, Nisarga Heights, 154 Vennela Nagar Road, Hyderabad 500025. Questions can be raised on +91-77892-74993.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Sravani Yadav",
+      "From: Anitha Srinivasan <anitha.srinivasan+case.600246@example.invalid>\nTo: Mansi Shah <mansi.shah+case.600260@example.invalid>\nDate: 11/07/2031\nSubject: Evidence review / REF-7\nDear Mansi Shah,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 20B, Nisarga Heights, 144 Marudham Street, Chennai 600019. Questions can be raised on +91 94593 85467.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Anitha Srinivasan",
+      "From: Jinal Mehta <jinal.mehta+case.600287@example.invalid>\nTo: Neha Shinde <neha.shinde+case.600301@example.invalid>\nDate: 24.12.2031\nSubject: Evidence review / REF-8\nDear Neha Shinde,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 11D, Aaranya Heights, 3 Amaltas Society Road, Ahmedabad 380043. Questions can be raised on (+91) 7240889967.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Jinal Mehta",
+      "From: Ishaan More <ishaan.more+case.600328@example.invalid>\nTo: Lakshmi Panicker <lakshmi.panicker+case.600342@example.invalid>\nDate: 2031-05-09\nSubject: Evidence review / REF-9\nDear Lakshmi Panicker,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 43C, Surya Heights, 175 Kaveri Road, Mumbai 400077. Questions can be raised on +91-96036-96336.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Ishaan More",
+      "From: Anand Kurup <anand.kurup+case.600369@example.invalid>\nTo: Deepa Acharya <deepa.acharya+case.600383@example.invalid>\nDate: 22/10/2031\nSubject: Evidence review / REF-10\nDear Deepa Acharya,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 9A, Savera Heights, 47 Malabar Lane, Kochi 682034. Questions can be raised on +91 89646 93932.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Anand Kurup"
+    ],
+    "truth": {
+      "Person": [
+        "Anand Kurup",
+        "Anitha Srinivasan",
+        "Anjana Menon",
+        "Deepa Acharya",
+        "Elena Mart\u00ednez",
+        "Ishaan More",
+        "Jinal Mehta",
+        "Jonas Weber",
+        "Jules Petit",
+        "Lakshmi Panicker",
+        "Mansi Shah",
+        "Mariam Nasser",
+        "Meera Bhatia",
+        "Neha Gokhale",
+        "Neha Shinde",
+        "Rafael Oliveira",
+        "Sayan Dasgupta",
+        "Shreya Naik",
+        "Sravani Yadav",
+        "Yuto Watanabe"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 11D, Aaranya Heights, 3 Amaltas Society Road",
+        "Flat 15A, Surya Heights, 174 Kaveri Road",
+        "Flat 20B, Nisarga Heights, 144 Marudham Street",
+        "Flat 22D, Nisarga Heights, 20 Palash Avenue",
+        "Flat 2B, Nisarga Heights, 70 Ashoka Marg",
+        "Flat 32A, Nisarga Heights, 154 Vennela Nagar Road",
+        "Flat 32B, Surya Heights, 157 Nisarga Cross Road",
+        "Flat 43C, Surya Heights, 175 Kaveri Road",
+        "Flat 6B, Aaranya Heights, 6 Malabar Lane",
+        "Flat 9A, Savera Heights, 47 Malabar Lane"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/cp1252_correspondence/cp1252_correspondence_010sections.txt",
+    "chunks": [
+      "From: Arindam Bose <arindam.bose+case.690000@example.invalid>\nTo: Felix Weber <felix.weber+case.690014@example.invalid>\nDate: 25/01/2031\nSubject: Evidence review / REF-1\nDear Felix Weber,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 45B, Aaranya Heights, 170 Palash Avenue, Kolkata 700026. Questions can be raised on +91 96310 55952.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Arindam Bose",
+      "From: Sai Reddy <sai.reddy+case.690041@example.invalid>\nTo: Elodie Dubois <elodie.dubois+case.690055@example.invalid>\nDate: 10.06.2031\nSubject: Evidence review / REF-2\nDear Elodie Dubois,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 37C, Surya Heights, 72 Vennela Nagar Road, Hyderabad 500014. Questions can be raised on (+91) 7297441809.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Sai Reddy",
+      "From: Priya Raman <priya.raman+case.690082@example.invalid>\nTo: Alvaro Garcia <alvaro.garcia+case.690096@example.invalid>\nDate: 2031-11-23\nSubject: Evidence review / REF-3\nDear Alvaro Garcia,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 22C, Savera Heights, 146 Marudham Street, Chennai 600008. Questions can be raised on +91-78458-79055.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Priya Raman",
+      "From: Harsh Vyas <harsh.vyas+case.690123@example.invalid>\nTo: Yui Sato <yui.sato+case.690137@example.invalid>\nDate: 08/04/2031\nSubject: Evidence review / REF-4\nDear Yui Sato,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 46D, Savera Heights, 140 Amaltas Society Road, Ahmedabad 380006. Questions can be raised on +91 86253 46346.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Harsh Vyas",
+      "From: Pooja Deshmukh <pooja.deshmukh+case.690164@example.invalid>\nTo: Noor Haddad <noor.haddad+case.690178@example.invalid>\nDate: 21.09.2031\nSubject: Evidence review / REF-5\nDear Noor Haddad,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 38B, Nisarga Heights, 145 Kaveri Road, Mumbai 400042. Questions can be raised on (+91) 9225801417.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Pooja Deshmukh",
+      "From: Ravi Nair <ravi.nair+case.690205@example.invalid>\nTo: Mariana Oliveira <mariana.oliveira+case.690219@example.invalid>\nDate: 2031-02-06\nSubject: Evidence review / REF-6\nDear Mariana Oliveira,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 38C, Surya Heights, 101 Malabar Lane, Kochi 682024. Questions can be raised on +91-71293-32161.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Ravi Nair",
+      "From: Ganesh Bhat <ganesh.bhat+case.690246@example.invalid>\nTo: Arjun Sharma <arjun.sharma+case.690260@example.invalid>\nDate: 19/07/2031\nSubject: Evidence review / REF-7\nDear Arjun Sharma,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 11B, Nisarga Heights, 91 Nisarga Cross Road, Bengaluru 560076. Questions can be raised on +91 91735 59908.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Ganesh Bhat",
+      "From: Nisha Kapoor <nisha.kapoor+case.690287@example.invalid>\nTo: Ishita Dasgupta <ishita.dasgupta+case.690301@example.invalid>\nDate: 04.12.2031\nSubject: Evidence review / REF-8\nDear Ishita Dasgupta,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 26B, Nisarga Heights, 99 Ashoka Marg, New Delhi 110058. Questions can be raised on (+91) 7583697541.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Nisha Kapoor",
+      "From: Tania Ghosh <tania.ghosh+case.690328@example.invalid>\nTo: Harika Varma <harika.varma+case.690342@example.invalid>\nDate: 2031-05-17\nSubject: Evidence review / REF-9\nDear Harika Varma,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 47D, Surya Heights, 45 Palash Avenue, Kolkata 700076. Questions can be raised on +91-94087-52395.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Tania Ghosh",
+      "From: Sai Yadav <sai.yadav+case.690369@example.invalid>\nTo: Kavya Balasubramanian <kavya.balasubramanian+case.690383@example.invalid>\nDate: 02/10/2031\nSubject: Evidence review / REF-10\nDear Kavya Balasubramanian,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 45C, Aaranya Heights, 160 Vennela Nagar Road, Hyderabad 500054. Questions can be raised on +91 73580 77552.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Sai Yadav"
+    ],
+    "truth": {
+      "Person": [
+        "Alvaro Garcia",
+        "Arindam Bose",
+        "Arjun Sharma",
+        "Elodie Dubois",
+        "Felix Weber",
+        "Ganesh Bhat",
+        "Harika Varma",
+        "Harsh Vyas",
+        "Ishita Dasgupta",
+        "Kavya Balasubramanian",
+        "Mariana Oliveira",
+        "Nisha Kapoor",
+        "Noor Haddad",
+        "Pooja Deshmukh",
+        "Priya Raman",
+        "Ravi Nair",
+        "Sai Reddy",
+        "Sai Yadav",
+        "Tania Ghosh",
+        "Yui Sato"
+      ],
+      "Organization": [
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 11B, Nisarga Heights, 91 Nisarga Cross Road",
+        "Flat 22C, Savera Heights, 146 Marudham Street",
+        "Flat 26B, Nisarga Heights, 99 Ashoka Marg",
+        "Flat 37C, Surya Heights, 72 Vennela Nagar Road",
+        "Flat 38B, Nisarga Heights, 145 Kaveri Road",
+        "Flat 38C, Surya Heights, 101 Malabar Lane",
+        "Flat 45B, Aaranya Heights, 170 Palash Avenue",
+        "Flat 45C, Aaranya Heights, 160 Vennela Nagar Road",
+        "Flat 46D, Savera Heights, 140 Amaltas Society Road",
+        "Flat 47D, Surya Heights, 45 Palash Avenue"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/email_archive/email_archive_010sections.txt",
+    "chunks": [
+      "From: Riya Bose <riya.bose+case.610000@example.invalid>\nTo: Jonas Schneider <jonas.schneider+case.610014@example.invalid>\nDate: 2031-05-21\nSubject: Evidence review / REF-1\nDear Jonas Schneider,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 16D, Surya Heights, 37 Palash Avenue, Kolkata 700076. Questions can be raised on +91-92630-02456.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Riya Bose",
+      "From: Varun Rao <varun.rao+case.610041@example.invalid>\nTo: Louis Dubois <louis.dubois+case.610055@example.invalid>\nDate: 06/10/2031\nSubject: Evidence review / REF-2\nDear Louis Dubois,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 6D, Nisarga Heights, 139 Vennela Nagar Road, Hyderabad 500018. Questions can be raised on +91 98296 65093.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Varun Rao",
+      "From: Arun Iyer <arun.iyer+case.610082@example.invalid>\nTo: Elena L\u00f3pez <elena.lopez+case.610096@example.invalid>\nDate: 19.03.2031\nSubject: Evidence review / REF-3\nDear Elena L\u00f3pez,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 5D, Nisarga Heights, 23 Marudham Street, Chennai 600055. Questions can be raised on (+91) 7113384493.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Arun Iyer",
+      "From: Parth Mehta <parth.mehta+case.610123@example.invalid>\nTo: Yui Nakamura <yui.nakamura+case.610137@example.invalid>\nDate: 2031-08-04\nSubject: Evidence review / REF-4\nDear Yui Nakamura,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 32C, Savera Heights, 37 Amaltas Society Road, Ahmedabad 380058. Questions can be raised on +91-93656-71187.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Parth Mehta",
+      "From: Ananya Patil <ananya.patil+case.610164@example.invalid>\nTo: Mariam Hamdan <mariam.hamdan+case.610178@example.invalid>\nDate: 17/01/2031\nSubject: Evidence review / REF-5\nDear Mariam Hamdan,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 23D, Savera Heights, 91 Kaveri Road, Mumbai 400053. Questions can be raised on +91 94214 69516.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Ananya Patil",
+      "From: Aparna Panicker <aparna.panicker+case.610205@example.invalid>\nTo: Lucas Ribeiro <lucas.ribeiro+case.610219@example.invalid>\nDate: 02.06.2031\nSubject: Evidence review / REF-6\nDear Lucas Ribeiro,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 4B, Surya Heights, 51 Malabar Lane, Kochi 682063. Questions can be raised on (+91) 7844787472.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Aparna Panicker",
+      "From: Ganesh Gowda <ganesh.gowda+case.610246@example.invalid>\nTo: Aditi Malhotra <aditi.malhotra+case.610260@example.invalid>\nDate: 2031-11-15\nSubject: Evidence review / REF-7\nDear Aditi Malhotra,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 47D, Savera Heights, 102 Nisarga Cross Road, Bengaluru 560074. Questions can be raised on +91-88661-69873.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Ganesh Gowda",
+      "From: Aditi Sethi <aditi.sethi+case.610287@example.invalid>\nTo: Soumik Ghosh <soumik.ghosh+case.610301@example.invalid>\nDate: 28/04/2031\nSubject: Evidence review / REF-8\nDear Soumik Ghosh,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 34D, Surya Heights, 75 Ashoka Marg, New Delhi 110076. Questions can be raised on +91 72744 97179.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Aditi Sethi",
+      "From: Tania Chatterjee <tania.chatterjee+case.610328@example.invalid>\nTo: Varun Goud <varun.goud+case.610342@example.invalid>\nDate: 13.09.2031\nSubject: Evidence review / REF-9\nDear Varun Goud,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 29A, Nisarga Heights, 118 Palash Avenue, Kolkata 700008. Questions can be raised on (+91) 9000800048.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Tania Chatterjee",
+      "From: Harika Rao <harika.rao+case.610369@example.invalid>\nTo: Arun Krishnan <arun.krishnan+case.610383@example.invalid>\nDate: 2031-02-26\nSubject: Evidence review / REF-10\nDear Arun Krishnan,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 43A, Aaranya Heights, 4 Vennela Nagar Road, Hyderabad 500054. Questions can be raised on +91-80078-87435.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Harika Rao"
+    ],
+    "truth": {
+      "Person": [
+        "Aditi Malhotra",
+        "Aditi Sethi",
+        "Ananya Patil",
+        "Aparna Panicker",
+        "Arun Iyer",
+        "Arun Krishnan",
+        "Elena L\u00f3pez",
+        "Ganesh Gowda",
+        "Harika Rao",
+        "Jonas Schneider",
+        "Louis Dubois",
+        "Lucas Ribeiro",
+        "Mariam Hamdan",
+        "Parth Mehta",
+        "Riya Bose",
+        "Soumik Ghosh",
+        "Tania Chatterjee",
+        "Varun Goud",
+        "Varun Rao",
+        "Yui Nakamura"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 16D, Surya Heights, 37 Palash Avenue",
+        "Flat 23D, Savera Heights, 91 Kaveri Road",
+        "Flat 29A, Nisarga Heights, 118 Palash Avenue",
+        "Flat 32C, Savera Heights, 37 Amaltas Society Road",
+        "Flat 34D, Surya Heights, 75 Ashoka Marg",
+        "Flat 43A, Aaranya Heights, 4 Vennela Nagar Road",
+        "Flat 47D, Savera Heights, 102 Nisarga Cross Road",
+        "Flat 4B, Surya Heights, 51 Malabar Lane",
+        "Flat 5D, Nisarga Heights, 23 Marudham Street",
+        "Flat 6D, Nisarga Heights, 139 Vennela Nagar Road"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/form_export/form_export_010sections.txt",
+    "chunks": [
+      "Record 1\nNames: Ishaan Patil\nEmails: ishaan.patil+case.620000@example.invalid\nPhone: (+91) 7590005963\nZip Code: 400058\nCity: Mumbai\nStreet: Flat 30A, Surya Heights, 52 Kaveri Road\nDates: 25.09.2031\nInsurance Number: LI-571798944-62\nDOB: 25/09/1991\nOrganization: Kaveri Analytics Private Limited\nIBAN: DE77 9999 9999 6842 5650 74\nSecret_Keys: sk-proj-d7AEJzLhid1QawXQb9F4ybVX8mViSnlWkEKQx5vp6kpFf9hk",
+      "Record 2\nNames: Deepak Thampi\nEmails: deepak.thampi+case.620041@example.invalid\nPhone: +91-97440-79590\nZip Code: 682063\nCity: Kochi\nStreet: Flat 38B, Aaranya Heights, 147 Malabar Lane\nDates: 2031-02-10\nInsurance Number: MC-908874921-04\nDOB: 10/02/1972\nOrganization: Savera Learning Cooperative Private Limited\nIBAN: DE98 9999 9999 6699 7361 73\nSecret_Keys: sk-proj-ufDhr5eYrGhjGoCGFR6ZwcHTnYBVF19JGljA5jIxSvRYHZ1v",
+      "Record 3\nNames: Manoj Bhat\nEmails: manoj.bhat+case.620082@example.invalid\nPhone: +91 87206 13106\nZip Code: 560045\nCity: Bengaluru\nStreet: Flat 16C, Aaranya Heights, 112 Nisarga Cross Road\nDates: 23/07/2031\nInsurance Number: MC-956678355-45\nDOB: 23/07/1983\nOrganization: Kaveri Analytics Private Limited\nIBAN: DE73 9999 9999 9248 8416 24\nSecret_Keys: sk-proj-B6jcMslugEAIruvz53UjXF5K13GjeNcfV29etIOlj3dUdjSV",
+      "Record 4\nNames: Aditi Tandon\nEmails: aditi.tandon+case.620123@example.invalid\nPhone: (+91) 9404874897\nZip Code: 110028\nCity: New Delhi\nStreet: Flat 4A, Nisarga Heights, 27 Ashoka Marg\nDates: 08.12.2031\nInsurance Number: LI-675181258-86\nDOB: 08/12/1994\nOrganization: Savera Learning Cooperative Private Limited\nIBAN: DE90 9999 9999 4746 5692 46\nSecret_Keys: sk-proj-QWBLypwHH3aQCajVu15OjohiWH4x7MhJ3ri5dXZXAwLTMVU3",
+      "Record 5\nNames: Anirban Roy\nEmails: anirban.roy+case.620164@example.invalid\nPhone: +91-72010-53508\nZip Code: 700040\nCity: Kolkata\nStreet: Flat 32A, Savera Heights, 62 Palash Avenue\nDates: 2031-05-21\nInsurance Number: LI-582290548-28\nDOB: 21/05/1975\nOrganization: Nalanda Technical Services Private Limited\nIBAN: DE86 9999 9999 1038 3861 94\nSecret_Keys: sk-proj-v3l8wGSd4Xet5ZGGe7G8wiZcJPBvrsKDZdJP17GDOoEXfyre",
+      "Record 6\nNames: Varun Naidu\nEmails: varun.naidu+case.620205@example.invalid\nPhone: +91 90989 22756\nZip Code: 500076\nCity: Hyderabad\nStreet: Flat 12D, Nisarga Heights, 144 Vennela Nagar Road\nDates: 06/10/2031\nInsurance Number: HL-177515129-69\nDOB: 06/10/1986\nOrganization: Aaranya Logistics Private Limited\nIBAN: DE12 9999 9999 9525 3854 54\nSecret_Keys: sk-proj-DPDM0bo5koUX5k7nKNzS7KonhGzKaR5JbIgINN8WJBcSh5NS",
+      "Record 7\nNames: Anitha Subramanian\nEmails: anitha.subramanian+case.620246@example.invalid\nPhone: (+91) 8408516641\nZip Code: 600061\nCity: Chennai\nStreet: Flat 9A, Savera Heights, 128 Marudham Street\nDates: 19.03.2031\nInsurance Number: LI-635818283-11\nDOB: 19/03/1997\nOrganization: Kaveri Analytics Private Limited\nIBAN: DE22 9999 9999 9129 7604 92\nSecret_Keys: sk-proj-Whj541rwm7y17le5FrgykUpqCREcDGLoLjGhv4pG4KYzee6q",
+      "Record 8\nNames: Yash Trivedi\nEmails: yash.trivedi+case.620287@example.invalid\nPhone: +91-72745-95899\nZip Code: 380064\nCity: Ahmedabad\nStreet: Flat 23A, Aaranya Heights, 84 Amaltas Society Road\nDates: 2031-08-04\nInsurance Number: MC-932023936-52\nDOB: 04/08/1978\nOrganization: Aaranya Logistics Private Limited\nIBAN: DE88 9999 9999 1288 5301 46\nSecret_Keys: sk-proj-BYaicDePQuBqR8FRRVE7GRB9W16uI3MNGnqlblTaeuVYST0l",
+      "Record 9\nNames: Ishaan More\nEmails: ishaan.more+case.620328@example.invalid\nPhone: +91 78463 73676\nZip Code: 400026\nCity: Mumbai\nStreet: Flat 25B, Savera Heights, 117 Kaveri Road\nDates: 17/01/2031\nInsurance Number: MC-813762561-93\nDOB: 17/01/1989\nOrganization: Aaranya Logistics Private Limited\nIBAN: DE51 9999 9999 3338 0128 69\nSecret_Keys: sk-proj-wsMlY8rgHrN7ypx0PZXjT5EBle1rg6nXX8g7L3TJJ82nDLCl",
+      "Record 10\nNames: Ravi Thampi\nEmails: ravi.thampi+case.620369@example.invalid\nPhone: (+91) 7476280087\nZip Code: 682032\nCity: Kochi\nStreet: Flat 31C, Aaranya Heights, 135 Malabar Lane\nDates: 02.06.2031\nInsurance Number: HL-869967944-35\nDOB: 02/06/2000\nOrganization: Kaveri Analytics Private Limited\nIBAN: DE50 9999 9999 4808 5311 41\nSecret_Keys: sk-proj-zhAdnZCCIcjNbr0eQnbtC4Lw3xIs9KorXfsSgYHWBZhYOeFk"
+    ],
+    "truth": {
+      "Person": [
+        "Aditi Tandon",
+        "Anirban Roy",
+        "Anitha Subramanian",
+        "Deepak Thampi",
+        "Ishaan More",
+        "Ishaan Patil",
+        "Manoj Bhat",
+        "Ravi Thampi",
+        "Varun Naidu",
+        "Yash Trivedi"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 12D, Nisarga Heights, 144 Vennela Nagar Road",
+        "Flat 16C, Aaranya Heights, 112 Nisarga Cross Road",
+        "Flat 23A, Aaranya Heights, 84 Amaltas Society Road",
+        "Flat 25B, Savera Heights, 117 Kaveri Road",
+        "Flat 30A, Surya Heights, 52 Kaveri Road",
+        "Flat 31C, Aaranya Heights, 135 Malabar Lane",
+        "Flat 32A, Savera Heights, 62 Palash Avenue",
+        "Flat 38B, Aaranya Heights, 147 Malabar Lane",
+        "Flat 4A, Nisarga Heights, 27 Ashoka Marg",
+        "Flat 9A, Savera Heights, 128 Marudham Street"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/meeting_notes/meeting_notes_010sections.txt",
+    "chunks": [
+      "From: Moumita Dasgupta <moumita.dasgupta+case.630000@example.invalid>\nTo: Anna Becker <anna.becker+case.630014@example.invalid>\nDate: 01/01/2031\nSubject: Evidence review / REF-1\nDear Anna Becker,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 17D, Nisarga Heights, 116 Palash Avenue, Kolkata 700038. Questions can be raised on +91 78882 33397.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Moumita Dasgupta",
+      "From: Sai Rao <sai.rao+case.630041@example.invalid>\nTo: \u00c9lodie Lef\u00e8vre <elodie.lefevre+case.630055@example.invalid>\nDate: 14.06.2031\nSubject: Evidence review / REF-2\nDear \u00c9lodie Lef\u00e8vre,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 33A, Nisarga Heights, 13 Vennela Nagar Road, Hyderabad 500062. Questions can be raised on (+91) 9501061499.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Sai Rao",
+      "From: Kavya Raman <kavya.raman+case.630082@example.invalid>\nTo: Elena Navarro <elena.navarro+case.630096@example.invalid>\nDate: 2031-11-27\nSubject: Evidence review / REF-3\nDear Elena Navarro,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 8D, Surya Heights, 158 Marudham Street, Chennai 600008. Questions can be raised on +91-77323-57268.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Kavya Raman",
+      "From: Dhruv Mehta <dhruv.mehta+case.630123@example.invalid>\nTo: Hina Ito <hina.ito+case.630137@example.invalid>\nDate: 12/04/2031\nSubject: Evidence review / REF-4\nDear Hina Ito,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 20A, Surya Heights, 44 Amaltas Society Road, Ahmedabad 380043. Questions can be raised on +91 95111 35285.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Dhruv Mehta",
+      "From: Sneha Shinde <sneha.shinde+case.630164@example.invalid>\nTo: Layla Haddad <layla.haddad+case.630178@example.invalid>\nDate: 25.09.2031\nSubject: Evidence review / REF-5\nDear Layla Haddad,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 40B, Surya Heights, 155 Kaveri Road, Mumbai 400069. Questions can be raised on (+91) 7739205008.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Sneha Shinde",
+      "From: Ravi Nambiar <ravi.nambiar+case.630205@example.invalid>\nTo: Lu\u00edsa Almeida <luisa.almeida+case.630219@example.invalid>\nDate: 2031-02-10\nSubject: Evidence review / REF-6\nDear Lu\u00edsa Almeida,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 36C, Savera Heights, 91 Malabar Lane, Kochi 682042. Questions can be raised on +91-98341-32942.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Ravi Nambiar",
+      "From: Shreya Acharya <shreya.acharya+case.630246@example.invalid>\nTo: Rahul Sethi <rahul.sethi+case.630260@example.invalid>\nDate: 23/07/2031\nSubject: Evidence review / REF-7\nDear Rahul Sethi,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 39B, Surya Heights, 170 Nisarga Cross Road, Bengaluru 560076. Questions can be raised on +91 86284 27386.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Shreya Acharya",
+      "From: Nisha Malhotra <nisha.malhotra+case.630287@example.invalid>\nTo: Soumik Chatterjee <soumik.chatterjee+case.630301@example.invalid>\nDate: 08.12.2031\nSubject: Evidence review / REF-8\nDear Soumik Chatterjee,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 22C, Aaranya Heights, 77 Ashoka Marg, New Delhi 110059. Questions can be raised on (+91) 8724891815.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Nisha Malhotra",
+      "From: Moumita Ghosh <moumita.ghosh+case.630328@example.invalid>\nTo: Rohith Goud <rohith.goud+case.630342@example.invalid>\nDate: 2031-05-21\nSubject: Evidence review / REF-9\nDear Rohith Goud,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 20A, Surya Heights, 18 Palash Avenue, Kolkata 700066. Questions can be raised on +91-92673-10639.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Moumita Ghosh",
+      "From: Naveen Rao <naveen.rao+case.630369@example.invalid>\nTo: Divya Iyer <divya.iyer+case.630383@example.invalid>\nDate: 06/10/2031\nSubject: Evidence review / REF-10\nDear Divya Iyer,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 21B, Aaranya Heights, 65 Vennela Nagar Road, Hyderabad 500037. Questions can be raised on +91 94945 78209.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Naveen Rao"
+    ],
+    "truth": {
+      "Person": [
+        "Anna Becker",
+        "Dhruv Mehta",
+        "Divya Iyer",
+        "Elena Navarro",
+        "Hina Ito",
+        "Kavya Raman",
+        "Layla Haddad",
+        "Lu\u00edsa Almeida",
+        "Moumita Dasgupta",
+        "Moumita Ghosh",
+        "Naveen Rao",
+        "Nisha Malhotra",
+        "Rahul Sethi",
+        "Ravi Nambiar",
+        "Rohith Goud",
+        "Sai Rao",
+        "Shreya Acharya",
+        "Sneha Shinde",
+        "Soumik Chatterjee",
+        "\u00c9lodie Lef\u00e8vre"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 17D, Nisarga Heights, 116 Palash Avenue",
+        "Flat 20A, Surya Heights, 18 Palash Avenue",
+        "Flat 20A, Surya Heights, 44 Amaltas Society Road",
+        "Flat 21B, Aaranya Heights, 65 Vennela Nagar Road",
+        "Flat 22C, Aaranya Heights, 77 Ashoka Marg",
+        "Flat 33A, Nisarga Heights, 13 Vennela Nagar Road",
+        "Flat 36C, Savera Heights, 91 Malabar Lane",
+        "Flat 39B, Surya Heights, 170 Nisarga Cross Road",
+        "Flat 40B, Surya Heights, 155 Kaveri Road",
+        "Flat 8D, Surya Heights, 158 Marudham Street"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/unicode_notes/unicode_notes_010sections.txt",
+    "chunks": [
+      "From: Riya Ghosh <riya.ghosh+case.650000@example.invalid>\nTo: J\u00fcrgen Becker <jurgen.becker+case.650014@example.invalid>\nDate: 09.09.2031\nSubject: Evidence review / REF-1\nDear J\u00fcrgen Becker,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 42B, Nisarga Heights, 13 Palash Avenue, Kolkata 700067. Questions can be raised on (+91) 7793149886.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Riya Ghosh",
+      "From: Naveen Rao <naveen.rao+case.650041@example.invalid>\nTo: Chlo\u00eb Petit <chloe.petit+case.650055@example.invalid>\nDate: 2031-02-22\nSubject: Evidence review / REF-2\nDear Chlo\u00eb Petit,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 34C, Savera Heights, 153 Vennela Nagar Road, Hyderabad 500005. Questions can be raised on +91-78951-22424.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Naveen Rao",
+      "From: Pranav Raman <pranav.raman+case.650082@example.invalid>\nTo: Elena Mart\u00ednez <elena.martinez+case.650096@example.invalid>\nDate: 07/07/2031\nSubject: Evidence review / REF-3\nDear Elena Mart\u00ednez,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 35C, Aaranya Heights, 73 Marudham Street, Chennai 600017. Questions can be raised on +91 81345 23403.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Pranav Raman",
+      "From: Parth Vyas <parth.vyas+case.650123@example.invalid>\nTo: Ren Yamamoto <ren.yamamoto+case.650137@example.invalid>\nDate: 20.12.2031\nSubject: Evidence review / REF-4\nDear Ren Yamamoto,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 47B, Savera Heights, 124 Amaltas Society Road, Ahmedabad 380030. Questions can be raised on (+91) 8994835252.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Parth Vyas",
+      "From: Ananya Deshmukh <ananya.deshmukh+case.650164@example.invalid>\nTo: Noor Hamdan <noor.hamdan+case.650178@example.invalid>\nDate: 2031-05-05\nSubject: Evidence review / REF-5\nDear Noor Hamdan,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 31D, Surya Heights, 25 Kaveri Road, Mumbai 400062. Questions can be raised on +91-70605-41440.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Ananya Deshmukh",
+      "From: Aparna Menon <aparna.menon+case.650205@example.invalid>\nTo: Lu\u00edsa Silva <luisa.silva+case.650219@example.invalid>\nDate: 18/10/2031\nSubject: Evidence review / REF-6\nDear Lu\u00edsa Silva,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 23B, Surya Heights, 170 Malabar Lane, Kochi 682066. Questions can be raised on +91 70901 52258.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Aparna Menon",
+      "From: Nikhil Kulkarni <nikhil.kulkarni+case.650246@example.invalid>\nTo: Vikram Sethi <vikram.sethi+case.650260@example.invalid>\nDate: 03.03.2031\nSubject: Evidence review / REF-7\nDear Vikram Sethi,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 38D, Savera Heights, 103 Nisarga Cross Road, Bengaluru 560002. Questions can be raised on (+91) 7357092565.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Nikhil Kulkarni",
+      "From: Meera Saxena <meera.saxena+case.650287@example.invalid>\nTo: Riya Mukherjee <riya.mukherjee+case.650301@example.invalid>\nDate: 2031-08-16\nSubject: Evidence review / REF-8\nDear Riya Mukherjee,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 46C, Savera Heights, 93 Ashoka Marg, New Delhi 110027. Questions can be raised on +91-92685-47327.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Meera Saxena",
+      "From: Arindam Sen <arindam.sen+case.650328@example.invalid>\nTo: Sai Rao <sai.rao+case.650342@example.invalid>\nDate: 01/01/2031\nSubject: Evidence review / REF-9\nDear Sai Rao,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 46A, Nisarga Heights, 77 Palash Avenue, Kolkata 700026. Questions can be raised on +91 92471 39970.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Arindam Sen",
+      "From: Keerthi Reddy <keerthi.reddy+case.650369@example.invalid>\nTo: Kavya Srinivasan <kavya.srinivasan+case.650383@example.invalid>\nDate: 14.06.2031\nSubject: Evidence review / REF-10\nDear Kavya Srinivasan,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 37D, Nisarga Heights, 129 Vennela Nagar Road, Hyderabad 500008. Questions can be raised on (+91) 8958412830.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Keerthi Reddy"
+    ],
+    "truth": {
+      "Person": [
+        "Ananya Deshmukh",
+        "Aparna Menon",
+        "Arindam Sen",
+        "Chlo\u00eb Petit",
+        "Elena Mart\u00ednez",
+        "J\u00fcrgen Becker",
+        "Kavya Srinivasan",
+        "Keerthi Reddy",
+        "Lu\u00edsa Silva",
+        "Meera Saxena",
+        "Naveen Rao",
+        "Nikhil Kulkarni",
+        "Noor Hamdan",
+        "Parth Vyas",
+        "Pranav Raman",
+        "Ren Yamamoto",
+        "Riya Ghosh",
+        "Riya Mukherjee",
+        "Sai Rao",
+        "Vikram Sethi"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 23B, Surya Heights, 170 Malabar Lane",
+        "Flat 31D, Surya Heights, 25 Kaveri Road",
+        "Flat 34C, Savera Heights, 153 Vennela Nagar Road",
+        "Flat 35C, Aaranya Heights, 73 Marudham Street",
+        "Flat 37D, Nisarga Heights, 129 Vennela Nagar Road",
+        "Flat 38D, Savera Heights, 103 Nisarga Cross Road",
+        "Flat 42B, Nisarga Heights, 13 Palash Avenue",
+        "Flat 46A, Nisarga Heights, 77 Palash Avenue",
+        "Flat 46C, Savera Heights, 93 Ashoka Marg",
+        "Flat 47B, Savera Heights, 124 Amaltas Society Road"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/utf16_archive/utf16_archive_010sections.txt",
+    "chunks": [
+      "From: Rohan Apte <rohan.apte+case.680000@example.invalid>\nTo: Lena Weber <lena.weber+case.680014@example.invalid>\nDate: 21.09.2031\nSubject: Evidence review / REF-1\nDear Lena Weber,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 3A, Savera Heights, 60 Kaveri Road, Mumbai 400025. Questions can be raised on (+91) 8262548907.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Rohan Apte",
+      "From: Lakshmi Pillai <lakshmi.pillai+case.680041@example.invalid>\nTo: Ana\u00efs Bernard <anais.bernard+case.680055@example.invalid>\nDate: 2031-02-06\nSubject: Evidence review / REF-2\nDear Ana\u00efs Bernard,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 2B, Aaranya Heights, 13 Malabar Lane, Kochi 682072. Questions can be raised on +91-74023-32734.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Lakshmi Pillai",
+      "From: Manoj Acharya <manoj.acharya+case.680082@example.invalid>\nTo: Daniel Navarro <daniel.navarro+case.680096@example.invalid>\nDate: 19/07/2031\nSubject: Evidence review / REF-3\nDear Daniel Navarro,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 19D, Aaranya Heights, 116 Nisarga Cross Road, Bengaluru 560017. Questions can be raised on +91 82502 90596.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Manoj Acharya",
+      "From: Nisha Tandon <nisha.tandon+case.680123@example.invalid>\nTo: Sota Sato <sota.sato+case.680137@example.invalid>\nDate: 04.12.2031\nSubject: Evidence review / REF-4\nDear Sota Sato,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 41D, Surya Heights, 86 Ashoka Marg, New Delhi 110086. Questions can be raised on (+91) 7070974857.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Nisha Tandon",
+      "From: Anirban Roy <anirban.roy+case.680164@example.invalid>\nTo: Hana Rahman <hana.rahman+case.680178@example.invalid>\nDate: 2031-05-17\nSubject: Evidence review / REF-5\nDear Hana Rahman,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 29A, Savera Heights, 134 Palash Avenue, Kolkata 700026. Questions can be raised on +91-94598-20541.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Anirban Roy",
+      "From: Sravani Chowdary <sravani.chowdary+case.680205@example.invalid>\nTo: Jo\u00e3o Oliveira <joao.oliveira+case.680219@example.invalid>\nDate: 02/10/2031\nSubject: Evidence review / REF-6\nDear Jo\u00e3o Oliveira,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 6B, Aaranya Heights, 50 Vennela Nagar Road, Hyderabad 500030. Questions can be raised on +91 73856 81334.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Sravani Chowdary",
+      "From: Pranav Krishnan <pranav.krishnan+case.680246@example.invalid>\nTo: Yash Dave <yash.dave+case.680260@example.invalid>\nDate: 15.03.2031\nSubject: Evidence review / REF-7\nDear Yash Dave,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 12D, Savera Heights, 30 Marudham Street, Chennai 600052. Questions can be raised on (+91) 7510773200.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Pranav Krishnan",
+      "From: Dhruv Dave <dhruv.dave+case.680287@example.invalid>\nTo: Ananya Shinde <ananya.shinde+case.680301@example.invalid>\nDate: 2031-08-28\nSubject: Evidence review / REF-8\nDear Ananya Shinde,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 18C, Surya Heights, 89 Amaltas Society Road, Ahmedabad 380027. Questions can be raised on +91-98840-58029.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Dhruv Dave",
+      "From: Aarav Deshmukh <aarav.deshmukh+case.680328@example.invalid>\nTo: Aparna Panicker <aparna.panicker+case.680342@example.invalid>\nDate: 13/01/2031\nSubject: Evidence review / REF-9\nDear Aparna Panicker,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 4C, Aaranya Heights, 150 Kaveri Road, Mumbai 400068. Questions can be raised on +91 94402 06055.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Aarav Deshmukh",
+      "From: Ravi Varma <ravi.varma+case.680369@example.invalid>\nTo: Ganesh Acharya <ganesh.acharya+case.680383@example.invalid>\nDate: 26.06.2031\nSubject: Evidence review / REF-10\nDear Ganesh Acharya,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 30A, Aaranya Heights, 71 Malabar Lane, Kochi 682025. Questions can be raised on (+91) 8789988350.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Ravi Varma"
+    ],
+    "truth": {
+      "Person": [
+        "Aarav Deshmukh",
+        "Ananya Shinde",
+        "Ana\u00efs Bernard",
+        "Anirban Roy",
+        "Aparna Panicker",
+        "Daniel Navarro",
+        "Dhruv Dave",
+        "Ganesh Acharya",
+        "Hana Rahman",
+        "Jo\u00e3o Oliveira",
+        "Lakshmi Pillai",
+        "Lena Weber",
+        "Manoj Acharya",
+        "Nisha Tandon",
+        "Pranav Krishnan",
+        "Ravi Varma",
+        "Rohan Apte",
+        "Sota Sato",
+        "Sravani Chowdary",
+        "Yash Dave"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 12D, Savera Heights, 30 Marudham Street",
+        "Flat 18C, Surya Heights, 89 Amaltas Society Road",
+        "Flat 19D, Aaranya Heights, 116 Nisarga Cross Road",
+        "Flat 29A, Savera Heights, 134 Palash Avenue",
+        "Flat 2B, Aaranya Heights, 13 Malabar Lane",
+        "Flat 30A, Aaranya Heights, 71 Malabar Lane",
+        "Flat 3A, Savera Heights, 60 Kaveri Road",
+        "Flat 41D, Surya Heights, 86 Ashoka Marg",
+        "Flat 4C, Aaranya Heights, 150 Kaveri Road",
+        "Flat 6B, Aaranya Heights, 50 Vennela Nagar Road"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/utf8_bom/utf8_bom_010sections.txt",
+    "chunks": [
+      "\ufeffFrom: Moumita Ghosh <moumita.ghosh+case.670000@example.invalid>\nTo: Laura Schneider <laura.schneider+case.670014@example.invalid>\nDate: 2031-05-17\nSubject: Evidence review / REF-1\nDear Laura Schneider,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 24D, Savera Heights, 134 Palash Avenue, Kolkata 700048. Questions can be raised on +91-83664-82687.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Moumita Ghosh",
+      "From: Harika Chowdary <harika.chowdary+case.670041@example.invalid>\nTo: Ana\u00efs Lef\u00e8vre <anais.lefevre+case.670055@example.invalid>\nDate: 02/10/2031\nSubject: Evidence review / REF-2\nDear Ana\u00efs Lef\u00e8vre,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 30D, Savera Heights, 34 Vennela Nagar Road, Hyderabad 500021. Questions can be raised on +91 94620 59786.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Harika Chowdary",
+      "From: Anitha Rajendran <anitha.rajendran+case.670082@example.invalid>\nTo: Mateo L\u00f3pez <mateo.lopez+case.670096@example.invalid>\nDate: 15.03.2031\nSubject: Evidence review / REF-3\nDear Mateo L\u00f3pez,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 19D, Nisarga Heights, 164 Marudham Street, Chennai 600066. Questions can be raised on (+91) 8863991274.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Anitha Rajendran",
+      "From: Yash Shah <yash.shah+case.670123@example.invalid>\nTo: Ren Nakamura <ren.nakamura+case.670137@example.invalid>\nDate: 2031-08-28\nSubject: Evidence review / REF-4\nDear Ren Nakamura,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 38D, Savera Heights, 58 Amaltas Society Road, Ahmedabad 380030. Questions can be raised on +91-83550-08623.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Yash Shah",
+      "From: Rohan Joshi <rohan.joshi+case.670164@example.invalid>\nTo: Mariam Saleh <mariam.saleh+case.670178@example.invalid>\nDate: 13/01/2031\nSubject: Evidence review / REF-5\nDear Mariam Saleh,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 21B, Aaranya Heights, 108 Kaveri Road, Mumbai 400026. Questions can be raised on +91 74544 91121.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Rohan Joshi",
+      "From: Deepak Nambiar <deepak.nambiar+case.670205@example.invalid>\nTo: Beatriz Ribeiro <beatriz.ribeiro+case.670219@example.invalid>\nDate: 26.06.2031\nSubject: Evidence review / REF-6\nDear Beatriz Ribeiro,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 19A, Savera Heights, 130 Malabar Lane, Kochi 682012. Questions can be raised on (+91) 7243301576.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Deepak Nambiar",
+      "From: Rakesh Gowda <rakesh.gowda+case.670246@example.invalid>\nTo: Vikram Saxena <vikram.saxena+case.670260@example.invalid>\nDate: 2031-11-11\nSubject: Evidence review / REF-7\nDear Vikram Saxena,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 1C, Surya Heights, 154 Nisarga Cross Road, Bengaluru 560036. Questions can be raised on +91-77880-46132.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Rakesh Gowda",
+      "From: Vikram Sethi <vikram.sethi+case.670287@example.invalid>\nTo: Ishita Banerjee <ishita.banerjee+case.670301@example.invalid>\nDate: 24/04/2031\nSubject: Evidence review / REF-8\nDear Ishita Banerjee,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 24A, Aaranya Heights, 150 Ashoka Marg, New Delhi 110058. Questions can be raised on +91 99294 51646.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Vikram Sethi",
+      "From: Sayan Sen <sayan.sen+case.670328@example.invalid>\nTo: Naveen Varma <naveen.varma+case.670342@example.invalid>\nDate: 09.09.2031\nSubject: Evidence review / REF-9\nDear Naveen Varma,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 8D, Aaranya Heights, 135 Palash Avenue, Kolkata 700049. Questions can be raised on (+91) 7742713905.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Sayan Sen",
+      "From: Harika Varma <harika.varma+case.670369@example.invalid>\nTo: Divya Subramanian <divya.subramanian+case.670383@example.invalid>\nDate: 2031-02-22\nSubject: Evidence review / REF-10\nDear Divya Subramanian,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 32A, Surya Heights, 172 Vennela Nagar Road, Hyderabad 500029. Questions can be raised on +91-93294-30088.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Harika Varma"
+    ],
+    "truth": {
+      "Person": [
+        "Ana\u00efs Lef\u00e8vre",
+        "Anitha Rajendran",
+        "Beatriz Ribeiro",
+        "Deepak Nambiar",
+        "Divya Subramanian",
+        "Harika Chowdary",
+        "Harika Varma",
+        "Ishita Banerjee",
+        "Laura Schneider",
+        "Mariam Saleh",
+        "Mateo L\u00f3pez",
+        "Moumita Ghosh",
+        "Naveen Varma",
+        "Rakesh Gowda",
+        "Ren Nakamura",
+        "Rohan Joshi",
+        "Sayan Sen",
+        "Vikram Saxena",
+        "Vikram Sethi",
+        "Yash Shah"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited"
+      ],
+      "Street": [
+        "Flat 19A, Savera Heights, 130 Malabar Lane",
+        "Flat 19D, Nisarga Heights, 164 Marudham Street",
+        "Flat 1C, Surya Heights, 154 Nisarga Cross Road",
+        "Flat 21B, Aaranya Heights, 108 Kaveri Road",
+        "Flat 24A, Aaranya Heights, 150 Ashoka Marg",
+        "Flat 24D, Savera Heights, 134 Palash Avenue",
+        "Flat 30D, Savera Heights, 34 Vennela Nagar Road",
+        "Flat 32A, Surya Heights, 172 Vennela Nagar Road",
+        "Flat 38D, Savera Heights, 58 Amaltas Society Road",
+        "Flat 8D, Aaranya Heights, 135 Palash Avenue"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  },
+  {
+    "file": "test_corpus/txt/windows_crlf/windows_crlf_010sections.txt",
+    "chunks": [
+      "From: Pooja Deshmukh <pooja.deshmukh+case.660000@example.invalid>\nTo: Anna Sch\u00e4fer <anna.schafer+case.660014@example.invalid>\nDate: 13/01/2031\nSubject: Evidence review / REF-1\nDear Anna Sch\u00e4fer,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 6C, Savera Heights, 169 Kaveri Road, Mumbai 400083. Questions can be raised on +91 91209 83571.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Pooja Deshmukh",
+      "From: Deepak Nambiar <deepak.nambiar+case.660041@example.invalid>\nTo: \u00c9lodie Garnier <elodie.garnier+case.660055@example.invalid>\nDate: 26.06.2031\nSubject: Evidence review / REF-2\nDear \u00c9lodie Garnier,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 31A, Nisarga Heights, 159 Malabar Lane, Kochi 682024. Questions can be raised on (+91) 9442827406.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Deepak Nambiar",
+      "From: Manoj Hegde <manoj.hegde+case.660082@example.invalid>\nTo: Sof\u00eda S\u00e1nchez <sofia.sanchez+case.660096@example.invalid>\nDate: 2031-11-11\nSubject: Evidence review / REF-3\nDear Sof\u00eda S\u00e1nchez,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 26A, Aaranya Heights, 80 Nisarga Cross Road, Bengaluru 560002. Questions can be raised on +91-95372-95296.\nThe training programme focused on practical handover and evidence review rather than another presentation of the written procedure. Participants worked through representative cases and compared their decisions with the recorded acceptance criteria. The coordinators will retain attendance and assessment evidence with the competency register. Additional sessions are planned for teams taking on a new workstream.\nRegards, Manoj Hegde",
+      "From: Vikram Sharma <vikram.sharma+case.660123@example.invalid>\nTo: Aoi Yamamoto <aoi.yamamoto+case.660137@example.invalid>\nDate: 24/04/2031\nSubject: Evidence review / REF-4\nDear Aoi Yamamoto,\nPlease confirm the working record for Kaveri Analytics Private Limited. The correspondence address is Flat 7C, Nisarga Heights, 157 Ashoka Marg, New Delhi 110086. Questions can be raised on +91 96230 97896.\nThe forecast combines the confirmed workload with the current staffing and receiving windows. It excludes unapproved requests from the committed plan. The management team reviewed the sensitivity to a late evidence submission and a reduced receiving window. The resulting contingency preserves the priority work while leaving a clear record of the changes made to the ordinary sequence.\nRegards, Vikram Sharma",
+      "From: Riya Dasgupta <riya.dasgupta+case.660164@example.invalid>\nTo: Noor Karim <noor.karim+case.660178@example.invalid>\nDate: 09.09.2031\nSubject: Evidence review / REF-5\nDear Noor Karim,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 14C, Surya Heights, 120 Palash Avenue, Kolkata 700041. Questions can be raised on (+91) 8066336699.\nThe regional review identified several cases that needed confirmation from another office. Those cases remain visible in the working register and are assigned to a named coordinator. The receiving team must state what evidence is missing before asking for a further response. The next review will distinguish an unresolved external dependency from a processing delay within the team.\nRegards, Riya Dasgupta",
+      "From: Sai Yadav <sai.yadav+case.660205@example.invalid>\nTo: Camila Ferreira <camila.ferreira+case.660219@example.invalid>\nDate: 2031-02-22\nSubject: Evidence review / REF-6\nDear Camila Ferreira,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 42C, Savera Heights, 161 Vennela Nagar Road, Hyderabad 500054. Questions can be raised on +91-88950-64824.\nResource use was compared with the approved working plan and the completed service record. The analysis separates recurring activity from one-off preparation work. The finance reviewer reconciled the larger differences with the cost owner before including them in the forecast. The following cycle will use the revised allocation while retaining the original assumption for comparison.\nRegards, Sai Yadav",
+      "From: Anitha Srinivasan <anitha.srinivasan+case.660246@example.invalid>\nTo: Jinal Pandya <jinal.pandya+case.660260@example.invalid>\nDate: 07/07/2031\nSubject: Evidence review / REF-7\nDear Jinal Pandya,\nPlease confirm the working record for Aaranya Logistics Private Limited. The correspondence address is Flat 6A, Nisarga Heights, 85 Marudham Street, Chennai 600080. Questions can be raised on +91 92658 48793.\nThe assurance review checked whether changes to the working record were supported by an approval and whether the final record retained the reason for the change. The sample included records with a handover between offices. The team agreed to improve the receiving checklist and to repeat the test after the revised process has been used for a complete working cycle.\nRegards, Anitha Srinivasan",
+      "From: Harsh Mehta <harsh.mehta+case.660287@example.invalid>\nTo: Ananya Apte <ananya.apte+case.660301@example.invalid>\nDate: 20.12.2031\nSubject: Evidence review / REF-8\nDear Ananya Apte,\nPlease confirm the working record for Savera Learning Cooperative Private Limited. The correspondence address is Flat 19D, Savera Heights, 153 Amaltas Society Road, Ahmedabad 380041. Questions can be raised on (+91) 9519048136.\nThe management discussion prioritised the actions that remove repeat requests and make handover easier to verify. Each action has an owner, an evidence requirement and a target review window. Completion will be assessed against the practical result in the working record. Actions that depend on another team remain separate from changes the service team can complete directly.\nRegards, Harsh Mehta",
+      "From: Sneha Shinde <sneha.shinde+case.660328@example.invalid>\nTo: Devika Kurup <devika.kurup+case.660342@example.invalid>\nDate: 2031-05-05\nSubject: Evidence review / REF-9\nDear Devika Kurup,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 15B, Nisarga Heights, 121 Kaveri Road, Mumbai 400073. Questions can be raised on +91-70682-32795.\nThe service desks received a higher proportion of follow-up requests than in the previous quarter. The intake team separated new cases from requests already under review, which made the backlog easier to reconcile. The operating plan reserves additional review capacity for the next release window and retains a separate queue for cases awaiting external evidence.\nRegards, Sneha Shinde",
+      "From: Deepak Kurup <deepak.kurup+case.660369@example.invalid>\nTo: Ganesh Bhat <ganesh.bhat+case.660383@example.invalid>\nDate: 18/10/2031\nSubject: Evidence review / REF-10\nDear Ganesh Bhat,\nPlease confirm the working record for Nalanda Technical Services Private Limited. The correspondence address is Flat 26D, Savera Heights, 67 Malabar Lane, Kochi 682018. Questions can be raised on +91 93549 82820.\nThe quality review sampled completed records from each region and checked whether another reviewer could reconstruct the decision. The strongest records kept the correspondence, approval and completion evidence together. The remaining exceptions concerned missing receiving references and changes entered after approval. Regional teams will repeat the sample check after the next working cycle.\nRegards, Deepak Kurup"
+    ],
+    "truth": {
+      "Person": [
+        "Ananya Apte",
+        "Anitha Srinivasan",
+        "Anna Sch\u00e4fer",
+        "Aoi Yamamoto",
+        "Camila Ferreira",
+        "Deepak Kurup",
+        "Deepak Nambiar",
+        "Devika Kurup",
+        "Ganesh Bhat",
+        "Harsh Mehta",
+        "Jinal Pandya",
+        "Manoj Hegde",
+        "Noor Karim",
+        "Pooja Deshmukh",
+        "Riya Dasgupta",
+        "Sai Yadav",
+        "Sneha Shinde",
+        "Sof\u00eda S\u00e1nchez",
+        "Vikram Sharma",
+        "\u00c9lodie Garnier"
+      ],
+      "Organization": [
+        "Aaranya Logistics Private Limited",
+        "Kaveri Analytics Private Limited",
+        "Nalanda Technical Services Private Limited",
+        "Savera Learning Cooperative Private Limited"
+      ],
+      "Street": [
+        "Flat 14C, Surya Heights, 120 Palash Avenue",
+        "Flat 15B, Nisarga Heights, 121 Kaveri Road",
+        "Flat 19D, Savera Heights, 153 Amaltas Society Road",
+        "Flat 26A, Aaranya Heights, 80 Nisarga Cross Road",
+        "Flat 26D, Savera Heights, 67 Malabar Lane",
+        "Flat 31A, Nisarga Heights, 159 Malabar Lane",
+        "Flat 42C, Savera Heights, 161 Vennela Nagar Road",
+        "Flat 6A, Nisarga Heights, 85 Marudham Street",
+        "Flat 6C, Savera Heights, 169 Kaveri Road",
+        "Flat 7C, Nisarga Heights, 157 Ashoka Marg"
+      ],
+      "City": [
+        "Ahmedabad",
+        "Bengaluru",
+        "Chennai",
+        "Hyderabad",
+        "Kochi",
+        "Kolkata",
+        "Mumbai",
+        "New Delhi"
+      ]
+    }
+  }
+]
