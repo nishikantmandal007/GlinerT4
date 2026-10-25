@@ -1059,3 +1059,14 @@ Datasets that could not be loaded:
        - *Missed:* `'ஏலங்குளம் மனக்கல் சங்கரன் நம்பூதிரிப்பாடு'` in `வழிமாற்று ஏலங்குளம் மனக்கல் சங்கரன் நம்பூதிரிப்பாடு`
        - *False detection:* `'சோழ மன்னர்களின்'` in `இது சோழ மன்னர்களின் ஆட்சிக்கு உட்பட்டிருந்த பகுதி .`
 
+
+### Naamapadam rerun (pending) and PR #186
+
+`fastino-ai/GLiNER2#186` (Indic word splitting: combining marks and ZWJ/ZWNJ kept inside words; merged 2026-10-08) is
+already in `gliner2==2.1.0`: its `_COMBINING_MARKS` / `_WORD` pattern is the installed splitter. So every result here
+includes the fix. The PR reports Naamapadam F1 rising from 10.0 to 70.5 for gliner2, averaged over 9 languages.
+
+Naamapadam did not load in the run above. `ai4bharat/naamapadam` ships a loading script that `datasets` no longer
+runs, and its parquet branch only has a `default` config. `public_bench.py` now reads the per-language files
+straight from the dataset repo and logs which file it used. The Colab runner can be built for this dataset alone:
+`python bench/make_colab_public_bench.py --datasets naamapadam --checkpoints fastino/gliner2-multi-v1 --setups stock_fp16,glinert4`.

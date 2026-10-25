@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--limit", type=int, default=1000)
 parser.add_argument("--datasets", default="crossner,naamapadam,wikiann")
 parser.add_argument("--checkpoints", default="fastino/gliner2-base-v1,fastino/gliner2-multi-v1")
+parser.add_argument("--setups", default="stock_fp32,stock_fp16,glinert4")
 args = parser.parse_args()
 files = {str(path.relative_to(root)): path.read_text() for path in sorted((root / "production").rglob("*"))
          if path.is_file() and "__pycache__" not in path.parts}
@@ -34,10 +35,11 @@ for domain in ("ai", "literature", "music", "politics", "science"):
     (crossner / f"{{domain}}.txt").write_bytes(urllib.request.urlopen(url).read())
 subprocess.run(["nvidia-smi"])
 subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "gliner2[local]==2.1.0", "disentangled-flash==1.1.1",
-                       "ninja", "datasets"])
+                       "ninja", "datasets", "huggingface_hub"])
 print("PACKAGES_READY", flush=True)
 subprocess.run([sys.executable, "bench/public_bench.py", "--crossner-dir", str(crossner), "--out", "results",
-                "--limit", "{args.limit}", "--datasets", "{args.datasets}", "--checkpoints", "{args.checkpoints}"],
+                "--limit", "{args.limit}", "--datasets", "{args.datasets}", "--checkpoints", "{args.checkpoints}",
+                "--setups", "{args.setups}"],
                cwd=root, check=True)
 print("BEGIN_PUBLIC_JSON"); print((root / "results/public_result.json").read_text()); print("END_PUBLIC_JSON")
 print("BEGIN_PUBLIC_MD"); print((root / "results/public_summary.md").read_text()); print("END_PUBLIC_MD", flush=True)

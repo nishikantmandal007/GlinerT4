@@ -88,6 +88,61 @@ def load_hf(name, config, limit):
                            PER_ORG_LOC) for row in rows]
 
 
+def read_records(name, raw):
+    """Rows of (tokens, tags) from a JSON-lines, JSON or parquet file of a NER dataset."""
+    import io
+
+    if name.endswith(".parquet"):
+        import pandas
+
+        records = pandas.read_parquet(io.BytesIO(raw)).to_dict("records")
+    else:
+        text = raw.decode("utf-8")
+        try:
+            loaded = json.loads(text)
+            records = loaded if isinstance(loaded, list) else loaded.get("data", [loaded])
+        except json.JSONDecodeError:
+            records = [json.loads(line) for line in text.splitlines() if line.strip()]
+    rows = []
+    for record in records:
+        tokens = next((record[k] for k in ("tokens", "words") if k in record), None)
+        tags = next((record[k] for k in ("ner_tags", "ner", "tags", "labels") if k in record), None)
+        if tokens is not None and tags is not None:
+            rows.append((list(tokens), [BIO_TAGS[t] if not isinstance(t, str) else t for t in tags]))
+    return rows
+
+
+def load_naamapadam(lang, limit):
+    import tarfile
+    import zipfile
+
+    from huggingface_hub import hf_hub_download, list_repo_files
+
+    repo = "ai4bharat/naamapadam"
+    files = list_repo_files(repo, repo_type="dataset")
+    mine = [f for f in files if f.split("/")[-1].startswith(f"{lang}_") or f"/{lang}/" in f"/{f}"]
+    if not mine:
+        raise RuntimeError(f"no {lang} files in {repo}: {files[:40]}")
+    for name in sorted(mine, key=lambda f: ("test" not in f, f)):
+        path = hf_hub_download(repo, name, repo_type="dataset")
+        members = []
+        if tarfile.is_tarfile(path):
+            with tarfile.open(path) as archive:
+                members = [(m.name, archive.extractfile(m).read()) for m in archive.getmembers()
+                           if m.isfile() and "test" in m.name.lower()]
+        elif zipfile.is_zipfile(path):
+            with zipfile.ZipFile(path) as archive:
+                members = [(n, archive.read(n)) for n in archive.namelist() if "test" in n.lower()]
+        elif "test" in name.lower():
+            members = [(name, Path(path).read_bytes())]
+        for member, raw in members:
+            rows = read_records(member, raw)
+            if rows:
+                print(f"NAAMAPADAM {lang}: {name} :: {member} ({len(rows)} sentences)", flush=True)
+                return [spans_from_bio(tokens, tags, PER_ORG_LOC) for tokens, tags in rows[:limit]]
+    raise RuntimeError(f"no {lang} test split found in {mine}")
+
+
 def load_public(limit, which):
     datasets, failures = {}, {}
     sources = [("naamapadam", "ai4bharat/naamapadam", NAAMAPADAM_LANGS), ("wikiann", "unimelb-nlp/wikiann", WIKIANN_LANGS)]
@@ -96,7 +151,8 @@ def load_public(limit, which):
             continue
         for lang in langs:
             try:
-                examples = [e for e in load_hf(name, lang, limit) if e[0].strip()]
+                loaded = load_naamapadam(lang, limit) if prefix == "naamapadam" else load_hf(name, lang, limit)
+                examples = [e for e in loaded if e[0].strip()]
                 datasets[f"{prefix}_{lang}"] = {"labels": list(PER_ORG_LOC.values()), "examples": examples}
             except Exception as error:
                 failures[f"{prefix}_{lang}"] = str(error)
@@ -282,6 +338,13 @@ def write_summary(report, path):
             lines.append("")
             lines.append("CrossNER average micro F1 (the paper reports 0.590 for GLiNER2): " + ", ".join(
                 f"{s} {sum(r['micro']['f1'] for r in crossner if r['setup'] == s) / max(1, sum(r['setup'] == s for r in crossner)):.4f}"
+                for s in setups))
+        naamapadam = [r for r in mine if r["dataset"].startswith("naamapadam")]
+        if naamapadam:
+            lines.append("")
+            lines.append(f"Naamapadam average micro F1 over {len({r['dataset'] for r in naamapadam})} languages "
+                         "(PR #186 reports 70.5 for gliner2 over 9 languages): " + ", ".join(
+                f"{s} {100 * sum(r['micro']['f1'] for r in naamapadam if r['setup'] == s) / max(1, sum(r['setup'] == s for r in naamapadam)):.1f}"
                 for s in setups))
         person = [r for r in mine if r["setup"] == "glinert4" and "person" in r["per_label"]]
         if person:
