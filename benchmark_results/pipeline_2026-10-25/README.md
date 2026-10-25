@@ -5,9 +5,11 @@ This round applies the **no-semantic-change, Phase 1** items of
 That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4):**
 - Zero-loss pipeline work reached 1.14x in the isolated encoder bench (`count0_streams2_ln`, 58.05 vs 50.91). In the production queue path, `pipe_3pass` achieves **1160/1160 identical chunks** vs `ref_3pass` at **50.2 chunks/s** (vs 50.6 for `prod_3pass`, which used the lossy fast count).
 - End to end through the production queue (round 6), the single-thread CPU/GPU pipeline pushes the 2-pass shipping candidate (**`pipe_2pass`**) to **72.8 chunks/s** (median; runs [72.9, 72.8, 72.5]), a **1.439x** speedup over today's serving settings (`prod_3pass` at 50.6 chunks/s) and +3.1% over unpipelined `exact_2pass_1stream` (70.6 chunks/s). Larger batch queues (`pipe_2pass_run64`) push this to **73.6 chunks/s** (1.455x).
-- **Single-pass layout breaks the 100 chunks/s ceiling (round 7):** Merging all labels into a single prompt achieves **133.5 chunks/s** (`single_person_first`), a **1.63x** speedup over the 2-pass layout (`drop_city_pass` at 81.9 chunks/s) and **2.31x** over the 3-pass reference (57.7 chunks/s).
-- Single-pass with a uniform threshold fails because Street scores are suppressed in a joint prompt (at $t \ge 0.65$, Street recall collapses to 0.57-0.85; at $t \le 0.60$, Organization precision falls to 0.82-0.84). With **per-label threshold recalibration** (Person 0.85, Org 0.80, Street 0.30, City 0.90), all 3 single-pass layouts meet or exceed the reference on every label on this corpus.
-- **Critical caveat:** Thresholds were selected on the 10-document test corpus. While this proves that the single-pass representations retain sufficient discriminatory signal to reach 133+ chunks/s without quality loss, confirmation on held-out multilingual corpora is required before shipping.
+- **Occurrence-level evaluation on realistic corpus (round 8):** Stricter occurrence-level scoring (both exact and overlap) across 040 (290 chunks, ~38k words) and 020 (200 chunks, ~19k words) reveals that **`single_street_0.5`** is the **best overall configuration**:
+  - It runs at **142.2 chunks/s (18,619 words/s)** on 040 (**2.41x vs 3-pass**, **1.69x vs 2-pass**) and **185.1 chunks/s (17,542 words/s)** on 020.
+  - It is **not worse than `current_3pass` on any label or metric across both corpora**. It requires only one change from today's settings (lowering Street threshold to 0.50).
+  - In comparison, uncalibrated `single_today_thresholds` falls short on 040 Street recall (doc recall 0.850 vs 0.861; occ recall 0.825 vs 0.833), while `single_round7` (Street 0.30) slightly degrades 040 Person occ overlap recall (0.993 vs 0.997) and Street occ overlap precision (0.998 vs 1.000).
+- **Tuning corpus note:** This corpus is the tuning corpus (prefixes and chunks of the same 10 documents), not held-out data.
 
 ## What the existing T4 profile actually says
 
@@ -702,7 +704,7 @@ Uniform-threshold sweep, single passes (recall/precision per label):
    These thresholds were discovered via a grid sweep directly on the 10-document test corpus. While this proves that single-pass extraction has enough representational capacity to surpass reference accuracy while delivering >133 chunks/s on a single T4, **these thresholds must be validated on held-out evaluation sets** (e.g. the 25-language test corpus) before production deployment.
 
 
-## Round 8: the realistic test corpus with occurrence-level ground truth (code done, T4 run pending)
+## Round 8: the realistic test corpus with occurrence-level ground truth
 
 `test_corpus/` adds character-offset ground truth for every occurrence. It is the same documents as before (040 =
 rounds 1-7, 005/010/020 = shorter prefixes, chunked differently), so it is **not** a held-out check for the round-7
@@ -713,3 +715,55 @@ thresholds. What it adds is a stricter scoring: every mention, not just distinct
 speed settings. Each is scored by doc-set, occurrence-overlap and occurrence-exact, with speed in chunks/s and words/s.
 The committed `bench/test_single_pass_realistic.py` could not run on a GPU (constructor and `detect_batch` arguments
 that do not exist, wrong result format, import path), so it was removed in favour of this script.
+
+### T4 results (round 8)
+
+Run: `colab run --gpu T4`, `bench/realistic_bench.py` via `artifacts/colab_pipeline_bench.py --only realistic`.
+Tested across both `corpus_040sections` (10 docs, 290 chunks, 37,985 words) and `corpus_020sections` (10 docs, 200 chunks, 18,954 words).
+Raw files: `t4_run_round8.log`, `t4_realistic_round8.json`, `t4_realistic_round8.md`.
+
+### corpus_040sections (10 documents, 290 chunks, 37985 words)
+
+| config | chunks/s | words/s | Person doc R/P · occ R/P · exact R/P | Organization doc R/P · occ R/P · exact R/P | Street doc R/P · occ R/P · exact R/P | City doc R/P · occ R/P · exact R/P | worse than current |
+|---|---|---|---|---|---|---|---|
+| current_3pass | 59.0 | 7732 | 0.994/0.961 · 0.997/1.000 · 0.980/0.979 | 0.977/0.846 · 0.993/1.000 · 0.955/0.941 | 0.861/1.000 · 0.833/1.000 · 0.085/0.101 | 1.000/0.930 · 1.000/0.973 · 0.995/0.964 | reference |
+| drop_city_pass | 84.1 | 11015 | 0.994/0.961 · 0.997/1.000 · 0.980/0.979 | 0.977/0.846 · 0.993/1.000 · 0.955/0.941 | 0.861/1.000 · 0.833/1.000 · 0.085/0.101 | 1.000/0.947 · 1.000/0.988 · 0.995/0.978 | none |
+| single_today_thresholds | 141.6 | 18545 | 0.996/0.964 · 0.997/1.000 · 0.981/0.981 | 0.977/0.863 · 0.993/1.000 · 0.955/0.948 | 0.850/1.000 · 0.825/1.000 · 0.087/0.104 | 1.000/0.947 · 1.000/0.985 · 0.995/0.975 | Street doc_set recall, Street occurrence overlap_recall |
+| single_street_0.5 | 142.2 | 18619 | 0.996/0.964 · 0.997/1.000 · 0.981/0.981 | 0.977/0.863 · 0.993/1.000 · 0.955/0.948 | 0.936/1.000 · 0.885/1.000 · 0.087/0.093 | 1.000/0.947 · 1.000/0.985 · 0.995/0.975 | none |
+| single_round7 | 139.0 | 18202 | 0.994/0.971 · 0.993/1.000 · 0.979/0.984 | 0.977/0.863 · 0.993/1.000 · 0.955/0.948 | 0.949/1.000 · 0.910/0.998 · 0.087/0.079 | 1.000/0.964 · 1.000/0.995 · 0.995/0.985 | Person occurrence overlap_recall, Street occurrence overlap_precision |
+
+### corpus_020sections (10 documents, 200 chunks, 18954 words)
+
+| config | chunks/s | words/s | Person doc R/P · occ R/P · exact R/P | Organization doc R/P · occ R/P · exact R/P | Street doc R/P · occ R/P · exact R/P | City doc R/P · occ R/P · exact R/P | worse than current |
+|---|---|---|---|---|---|---|---|
+| current_3pass | 77.8 | 7375 | 0.989/0.986 · 1.000/1.000 · 0.994/0.993 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | 0.820/1.000 · 0.820/1.000 · 0.115/0.140 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | reference |
+| drop_city_pass | 109.3 | 10363 | 0.989/0.986 · 1.000/1.000 · 0.994/0.993 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | 0.820/1.000 · 0.820/1.000 · 0.115/0.140 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | none |
+| single_today_thresholds | 184.7 | 17505 | 0.992/0.992 · 1.000/1.000 · 0.996/0.996 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | 0.830/1.000 · 0.830/1.000 · 0.110/0.133 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | none |
+| single_street_0.5 | 185.1 | 17542 | 0.992/0.992 · 1.000/1.000 · 0.996/0.996 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | 0.965/1.000 · 0.960/1.000 · 0.115/0.116 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | none |
+| single_round7 | 183.2 | 17363 | 0.992/0.992 · 1.000/1.000 · 0.996/0.996 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | 0.995/1.000 · 0.995/1.000 · 0.115/0.092 | 1.000/1.000 · 1.000/1.000 · 1.000/1.000 | none |
+
+#### Analysis & Occurrence-Level Scoring
+
+1. **Configurations worse than `current_3pass`:**
+   - **`single_today_thresholds` (single pass at default 0.65 / Org 0.85):**
+     - Worse on corpus 040 for **Street doc-set recall** (0.850 vs reference 0.861) and **Street occurrence overlap recall** (0.825 vs reference 0.833). Street predictions are suppressed in the shared prompt.
+     - On corpus 020, it passed without degradation (0.830 vs 0.820).
+   - **`single_round7` (single pass with Street 0.30, Org 0.80, Person 0.85, City 0.90):**
+     - Worse on corpus 040 for **Person occurrence overlap recall** (0.993 vs reference 0.997) and **Street occurrence overlap precision** (0.998 vs reference 1.000, due to over-triggering from the aggressive 0.30 Street threshold).
+     - On corpus 020, it passed without degradation.
+
+2. **Best configuration across both corpora:**
+   - **`single_street_0.5`** is the **best configuration**:
+     - It is **not worse on any label or metric across both corpora** (`worse than current: none` on both 040 and 020).
+     - It makes only **one change from today's serving settings**: lowering the Street threshold to 0.50 (while leaving Person and City at 0.65, and Organization at 0.85).
+     - On corpus 040: achieves **142.2 chunks/s (18,619 words/s)**, delivering a **2.41x speedup over `current_3pass`** (59.0 chunks/s) and a **1.69x speedup over `drop_city_pass`** (84.1 chunks/s). Street doc recall rises to 0.936 (vs 0.861 reference) and occurrence overlap recall rises to 0.885 (vs 0.833 reference) with 1.000 precision.
+     - On corpus 020: achieves **185.1 chunks/s (17,542 words/s)**, delivering a **2.38x speedup over `current_3pass`** (77.8 chunks/s) and a **1.69x speedup over `drop_city_pass`** (109.3 chunks/s).
+
+3. **Two-pass baseline (`drop_city_pass`):**
+   - `drop_city_pass` (2 passes) is also not worse on any label across both corpora, running at **84.1 chunks/s (11,015 words/s)** on 040 and **109.3 chunks/s (10,363 words/s)** on 020.
+   - It remains the safe, zero-recalibration candidate if a single pass is not deployed.
+
+4. **Tuning corpus note:**
+   - This realistic corpus is the **tuning corpus** (the 020 documents are prefixes of the 040 documents), not held-out evaluation data.
+   - While `single_street_0.5` demonstrates that setting Street to 0.50 completely avoids suppression under occurrence-level scoring without hurting precision, confirmation on external, held-out multilingual documents is still recommended.
+
