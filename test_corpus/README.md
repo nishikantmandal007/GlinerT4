@@ -33,22 +33,38 @@ This folder contains realistic benchmark documents and ground truth annotations 
   - `corpus_010sections.json`: 10 documents, 100 chunks.
   - `corpus_005sections.json`: 10 documents, 50 chunks.
 
-## Testing Single-Pass Speed and Precision
+## Benchmarking on this corpus
 
-Use `bench/test_single_pass_realistic.py` to evaluate the recalibrated single-pass pipeline:
+`bench/realistic_bench.py` runs the production `detect_batch`, with the shipping speed settings (exact count head, fused
+add + LayerNorm, one-thread pipeline), in five configurations: today's 3 passes, 2 passes, single pass at today's
+thresholds, single pass with only Street lowered to 0.5, and single pass with the round-7 thresholds. It scores each
+three ways:
+
+- **doc-set:** `bench_detection.py`'s scoring, by distinct values per document.
+- **occ-overlap:** every annotated occurrence from `ground_truth/`, by character offsets. An occurrence counts as found
+  if a detected span of the same label overlaps it.
+- **occ-exact:** identical spans only.
 
 ```bash
-# Verify dataset structure and entity counts locally (CPU / stand-in mode):
-python bench/test_single_pass_realistic.py --corpus test_corpus/corpus_040sections.json --standin
-
-# Quick smoke test on short documents:
-python bench/test_single_pass_realistic.py --corpus test_corpus/corpus_005sections.json --standin
-
-# Full single-pass benchmark on a GPU runtime (Colab T4 or VM):
-python bench/test_single_pass_realistic.py --corpus test_corpus/corpus_040sections.json \
-                                           --layout single_person_first \
-                                           --device cuda
+python bench/realistic_bench.py --out results --sizes 040,020      # on a GPU (Colab T4 or VM)
+python bench/realistic_bench.py --out /tmp/smoke --standin         # CPU smoke test of the script, stand-in model
+python bench/make_colab_pipeline_bench.py --only realistic         # single-file Colab runner with the prepared corpus
 ```
+
+Things to know about this corpus:
+
+- **It is not held-out data for the round-7 thresholds.** `corpus_040sections.json` is the rounds 1-7 corpus. The
+  005/010/020 files are prefixes of the same documents: their truth values are subsets of the 040 truth, though they
+  are chunked at different boundaries.
+- **The 040 chunker splits some mentions across chunks:** 51 of the 2,560 annotated Person/Organization/Street/City
+  occurrences lie in no single chunk, so their exact recall cannot reach 1. The 005/010/020 chunks contain every
+  occurrence whole.
+- **The 005/010/020 chunkers differ from the 040 one in two ways:**
+  - the UTF-8 BOM is kept at the start of the first `utf8_bom` chunk;
+  - `windows_crlf` line ends are turned into LF.
+
+  The ground-truth offsets refer to the decoded text without the BOM and with CRLF, and `realistic_bench.py` maps
+  positions accordingly. With perfect predictions it scores exactly 1.000.
 
 ### Recalibrated Single-Pass Thresholds (from Round 7)
 

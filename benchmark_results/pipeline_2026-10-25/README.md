@@ -701,3 +701,15 @@ Uniform-threshold sweep, single passes (recall/precision per label):
 4. **Overfitting caveat:**
    These thresholds were discovered via a grid sweep directly on the 10-document test corpus. While this proves that single-pass extraction has enough representational capacity to surpass reference accuracy while delivering >133 chunks/s on a single T4, **these thresholds must be validated on held-out evaluation sets** (e.g. the 25-language test corpus) before production deployment.
 
+
+## Round 8: the realistic test corpus with occurrence-level ground truth (code done, T4 run pending)
+
+`test_corpus/` adds character-offset ground truth for every occurrence. It is the same documents as before (040 =
+rounds 1-7, 005/010/020 = shorter prefixes, chunked differently), so it is **not** a held-out check for the round-7
+thresholds. What it adds is a stricter scoring: every mention, not just distinct values per document.
+
+`bench/realistic_bench.py` runs five configurations (3-pass, 2-pass, single at today's thresholds, single with Street
+0.5, single with the round-7 thresholds) on corpus 040 and 020, through production `detect_batch` with the shipping
+speed settings. Each is scored by doc-set, occurrence-overlap and occurrence-exact, with speed in chunks/s and words/s.
+The committed `bench/test_single_pass_realistic.py` could not run on a GPU (constructor and `detect_batch` arguments
+that do not exist, wrong result format, import path), so it was removed in favour of this script.
