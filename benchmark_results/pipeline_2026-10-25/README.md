@@ -601,3 +601,25 @@ Per-run chunks/s:
      has reached its ceiling on a single T4. Reaching 100 chunks/s on a single T4 requires reducing the raw GPU kernel time
      (e.g., fusing LayerNorm/GELU/residual or faster attention kernels).
 
+
+## Round 7: can one label pass match today's accuracy? (code done, T4 run pending)
+
+After round 6 the shipping path is GPU-bound at about 73 chunks/s on a Colab T4. One pass instead of two halves the
+encoder work, which is the only lever large enough for 100+ on a T4. The problem: labels sharing a prompt shift each
+other's confidences. The repo measured Organization recall falling to .62 next to Person/City/Street, on an older
+pipeline.
+
+Step 1, this round, needs no retraining: `bench/single_pass_bench.py` runs through the production `detect_batch`, with
+the exact speedups and the pipeline on.
+1. Reference: today's 3-pass layout at today's thresholds, and the 2-pass layout.
+2. Three single-pass layouts (Person first; Organization first; Organization first with the City-alone description),
+   each swept over uniform thresholds 0.30-0.90, with per-label recall/precision against ground truth.
+3. Per layout and label, a threshold meeting today's recall and precision, if one exists. That exact setting is then
+   run end to end and timed.
+
+Caveat: thresholds picked on these 10 documents are tuned to them. A single-pass layout that passes here still needs
+the 25-language held-out check.
+
+Step 2, if a gap remains: self-distillation. Fine-tune (LoRA) the model so that one merged pass reproduces the current
+2-pass outputs on a large unlabeled multilingual corpus. No human labels are needed, since the target is today's
+behaviour; ground truth plus held-out sets gate the result.

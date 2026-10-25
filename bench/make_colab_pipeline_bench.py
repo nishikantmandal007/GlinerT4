@@ -13,13 +13,14 @@ root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--trials", type=int, default=5)
 parser.add_argument("--pass-trials", type=int, default=2)
-parser.add_argument("--only", choices=["pipeline", "pass"], default=None)
+parser.add_argument("--only", choices=["pipeline", "pass", "single"], default=None)
 args = parser.parse_args()
 
 names = ["csrc/torch_binding.cpp", "csrc/disentangled_attention.cu", "csrc/disentangled_attention_v2.cu",
          "csrc/disentangled_attention_v3.cu", "csrc/disentangled_attention_v4.cu", "csrc/add_layernorm.cu",
          "torch-ext/gliner_t4/__init__.py", "torch-ext/gliner_t4/_build.py", "serving/gliner2_pipeline.py",
-         "serving/gliner2_exact.py", "bench/pass_bench.py", "artifacts/colab_pipeline/gliner2_ner.py",
+         "serving/gliner2_exact.py", "serving/gliner2_pipelined.py", "bench/pass_bench.py",
+         "bench/single_pass_bench.py", "artifacts/colab_pipeline/gliner2_ner.py",
          "artifacts/colab_pipeline/detection_queue.py", "artifacts/colab_pipeline/bench_detection.py",
          "bench/pipeline_bench.py", "benchmark_results/colab_2026-10-24/exact_optimization/exact_prep.py"]
 files = {name: (root / name).read_text() for name in names}
@@ -45,6 +46,11 @@ if {args.only!r} in (None, "pipeline"):
     print("BEGIN_RESULT_JSON"); print((out / "result.json").read_text()); print("END_RESULT_JSON")
     print("BEGIN_SUMMARY_MD"); print((out / "summary.md").read_text()); print("END_SUMMARY_MD")
     print("BASELINE_OUTPUTS_SHA256", hashlib.sha256((out / "baseline_outputs.json").read_bytes()).hexdigest(), flush=True)
+if {args.only!r} == "single":
+    subprocess.run([sys.executable, str(root / "bench/single_pass_bench.py"), "--corpus", str(root / "corpus.json"),
+                    "--out", str(out)], check=True)
+    print("BEGIN_SINGLE_JSON"); print((out / "single_result.json").read_text()); print("END_SINGLE_JSON")
+    print("BEGIN_SINGLE_MD"); print((out / "single_summary.md").read_text()); print("END_SINGLE_MD", flush=True)
 if {args.only!r} in (None, "pass"):
     subprocess.run([sys.executable, str(root / "bench/pass_bench.py"), "--corpus", str(root / "corpus.json"),
                     "--out", str(out), "--trials", "{args.pass_trials}"], check=True)
