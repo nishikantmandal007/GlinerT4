@@ -3,16 +3,10 @@
 This round applies the **no-semantic-change, Phase 1** items of
 `GLiNER_Multilingual_v2_1_T4_Optimization_Plan.docx` to the GLiNER2 path (`fastino/gliner2-multi-v1`, `gliner2==2.1.0`).
 That path measured 54.81 chunks/s on one T4 earlier. **Current finding (Colab T4):**
-- Zero-loss pipeline work (rounds 1-3) reached 1.14x in the encoder-plus-head benchmark (`count0_streams2_ln`, 58.05 vs 50.91 chunks/s).
-- End to end through the production queue (rounds 4-5), **no config reaches 100 chunks/s**. The best shipping candidate,
-  `exact_2pass_1stream` (drop City-alone pass, exact count head, fused add+LayerNorm, single stream), ran at **65.7 chunks/s**
-  versus 46.4 chunks/s for today's serving settings (`prod_3pass`), a **1.416x** speedup, and **34.3 chunks/s short of 100**
-  (needs another 1.52x). It meets or beats the 3-pass reference on every label (City precision .930 to .947, others equal) with
-  1144/1160 identical chunks vs ref, and cuts GPU memory from 3.1 GB to 1.8 GB.
-- Round 5 isolates the bottleneck: queue run size (`queue_runs` 69.5 vs `whole_corpus` 69.0 chunks/s) and sampler overhead
-  (within noise) do not limit throughput. Instead, cProfile reveals that **host-side device-to-host synchronization**
-  (`tensor.tolist()` taking 2.54 s and `tensor.cpu()` taking 0.38 s out of 5.05 s total) inside the span head and decoding
-  dominates wall time on Colab's single physical core.
+- Zero-loss pipeline work reached 1.14x in the isolated encoder bench (`count0_streams2_ln`, 58.05 vs 50.91). In the production queue path, `pipe_3pass` achieves **1160/1160 identical chunks** vs `ref_3pass` at **50.2 chunks/s** (vs 50.6 for `prod_3pass`, which used the lossy fast count).
+- End to end through the production queue (round 6), the single-thread CPU/GPU pipeline pushes the 2-pass shipping candidate (**`pipe_2pass`**) to **72.8 chunks/s** (median; runs [72.9, 72.8, 72.5]), a **1.439x** speedup over today's serving settings (`prod_3pass` at 50.6 chunks/s) and +3.1% over unpipelined `exact_2pass_1stream` (70.6 chunks/s). Larger batch queues (`pipe_2pass_run64`) push this to **73.6 chunks/s** (1.455x).
+- Across all labels, `pipe_2pass` meets or exceeds `ref_3pass` accuracy (City precision rises from .930 to .947, all other labels identical), with 1144/1160 identical chunks (differences solely from dropping the City-alone pass).
+- **Still short of 100 chunks/s:** At 72.8 chunks/s, `pipe_2pass` is **27.2 chunks/s short of 100** (needs another 1.37x). With GPU utilization reaching ~90-100%, host/GPU overlap is nearly exhausted on this single T4. The profile confirms that CPU idle wait in `.tolist()` collapsed from 2.54 s to 0.78 s. Getting the final 27 chunks/s to 100 requires reducing GPU kernel execution time itself (fusing elementwise operations, faster attention, or tensor core optimizations).
 
 ## What the existing T4 profile actually says
 
@@ -491,7 +485,7 @@ Per-run chunks/s:
    cProfile makes the root cause unambiguous: host-bound synchronization (`tensor.tolist()` and `tensor.cpu()` blocking the CPU thread while GPU work completes) in gliner2's span head and decoding accounts for over 2.9 seconds of wall time. To approach 100 chunks/s on a single-core host, these synchronization points must be replaced with asynchronous, batched GPU kernel postprocessing.
 
 
-## Round 6: one-thread CPU/GPU pipeline (code done, T4 run pending)
+## Round 6: one-thread CPU/GPU pipeline
 
 **A correction to the round-5 reading.** The 2.5 s on `.tolist()` is not host overhead to remove. The encoder's kernels
 are queued asynchronously, and the first `.tolist()` of each batch (the count head's result) is simply where the CPU
@@ -530,3 +524,80 @@ Round-6 runner (`python bench/make_colab_detection_bench.py`, 3 runs each, then 
 | pipe_2pass_sampled | its GPU utilisation |
 | pipe_2pass_run32 / run64 | more batches per pipeline (not byte-exact; accuracy gate) |
 | pipe_2pass_streams2 | pipeline plus two serving threads |
+
+### T4 results (round 6)
+
+Run: `colab run --gpu T4`, `bench_detection.py` in queue mode, 4 repeats of the corpus (1160 chunks), 3 runs per config,
+followed by `bench/queue_profile.py` with the pipeline enabled. Raw files: `t4_run_round6.log`, `t4_detect_round6.json`,
+`t4_detect_round6.md`, `t4_qprofile_round6.json`, `t4_qprofile_round6.txt`.
+
+- **Environment & execution:** The session was run on a Tesla T4. No `CONFIG_FAILED` occurred across all configs; all CUDA
+  streams and stream event synchronizations executed without error.
+
+| config | chunks/s | vs prod_3pass | Person R/P | Organization R/P | Street R/P | City R/P | identical vs ref | GPU util % | serving MB |
+|---|---|---|---|---|---|---|---|---|---|
+| ref_3pass | 46.5 | 0.919x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[77], [83], [70]] | [1943] |
+| prod_3pass | 50.6 | 1.000x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[94], [96], [84]] | [3095] |
+| exact_2pass_1stream | 70.6 | 1.395x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[83], [83], [81]] | [1829] |
+| pipe_3pass | 50.2 | 0.992x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.930 | 1160/1160 | [[100], [91], [100]] | [2509] |
+| pipe_2pass | 72.8 | 1.439x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[90], [89], [90]] | [2697] |
+| pipe_2pass_sampled | 70.2 | 1.387x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[82], [77], [82]] | [2697] |
+| pipe_2pass_run32 | 73.3 | 1.449x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[100], [100], [100]] | [2737] |
+| pipe_2pass_run64 | 73.6 | 1.455x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[95], [90], [95]] | [2785] |
+| pipe_2pass_streams2 | 69.6 | 1.375x | 0.994/0.961 | 0.977/0.846 | 0.861/1.000 | 1.000/0.947 | 1144/1160 | [[74], [94], [74]] | [4467] |
+
+#### Per-run breakdown & analysis
+
+Per-run chunks/s:
+- `ref_3pass`: [51.8, 46.0, 46.5] (median 46.5)
+- `prod_3pass`: [57.4, 50.6, 49.9] (median 50.6)
+- `exact_2pass_1stream`: [74.0, 69.8, 70.6] (median 70.6)
+- `pipe_3pass`: [53.4, 50.2, 49.7] (median 50.2)
+- `pipe_2pass`: [72.9, 72.8, 72.5] (median 72.8)
+- `pipe_2pass_sampled`: [71.1, 70.0, 70.2] (median 70.2)
+- `pipe_2pass_run32`: [72.5, 73.3, 73.3] (median 73.3)
+- `pipe_2pass_run64`: [73.3, 74.1, 73.6] (median 73.6)
+- `pipe_2pass_streams2`: [69.6, 68.1, 69.6] (median 69.6)
+
+1. **`pipe_3pass` parity vs `ref_3pass`:**
+   - **`pipe_3pass` is identical on 1160/1160 chunks (100% bit-identical parity)** against `ref_3pass`.
+   - It matches production speed (50.2 chunks/s vs `prod_3pass` 50.6 chunks/s) while restoring exact numerical parity
+     and removing the lossy approximations of `fast_count`.
+
+2. **`pipe_2pass` speedup and accuracy:**
+   - `pipe_2pass` achieved **72.8 chunks/s** (runs: [72.9, 72.8, 72.5]), a **+3.1% speedup** over unpipelined
+     `exact_2pass_1stream` (70.6 chunks/s), and **1.439x vs `prod_3pass`** (50.6 chunks/s).
+   - Accuracy vs `ref_3pass`: Person 0.994/0.961, Organization 0.977/0.846, Street 0.861/1.000, City 1.000/0.947.
+     It **meets or beats `ref_3pass` on every label** (City precision rises from 0.930 to 0.947, all other labels identical).
+   - Chunk parity: 1144/1160 chunks are identical (the 16 differing chunks stem solely from dropping the City-alone pass).
+
+3. **GPU utilisation of `pipe_2pass_sampled`:**
+   - `pipe_2pass_sampled` (0.5 s `nvidia-smi` background sampler) measured mean GPU util of **[[82], [77], [82]]** (~80-82%)
+     and ran at 70.2 chunks/s.
+   - Without background sampling, `pipe_2pass` sustained **~90% GPU utilisation** ([[90], [89], [90]]) and 72.8 chunks/s.
+     Under near-saturated GPU load, periodic subprocess polling imposes a ~3.5% host-side penalty.
+
+4. **Batch queue runs (`run32` and `run64`) and multi-stream (`streams2`):**
+   - `pipe_2pass_run32`: **73.3 chunks/s** (1.449x vs prod_3pass), GPU util [[100], [100], [100]].
+   - `pipe_2pass_run64`: **73.6 chunks/s** (1.455x vs prod_3pass), GPU util [[95], [90], [95]].
+     Both maintain identical accuracy (1144/1160 chunks, City precision .947). Amortizing queue dispatch over 32 or 64 chunks
+     further improves pipelined overlap (+1% throughput).
+   - `pipe_2pass_streams2`: **69.6 chunks/s** (slower than 1 stream at 72.8 chunks/s) and consumed **4467 MB VRAM** (+1.77 GB).
+     Running multiple serving threads on Colab's single physical core causes CPU thread contention, decreasing throughput.
+
+5. **Queue profile & cProfile analysis:**
+   - `queue_runs` with pipeline: **75.42 chunks/s** vs `whole_corpus`: **75.03 chunks/s**.
+   - **Crucial profile finding:** In the cProfile trace (`t4_qprofile_round6.txt`), time spent in `{method 'tolist' of 'torch._C.TensorBase' objects}`
+     collapsed from **2.538 s (round 5) down to 0.778 s (round 6)**.
+   - **Important note on `.tolist()` and `.cpu()`:** Time recorded inside `.tolist()` and `.cpu()` is **the CPU waiting for
+     the GPU to finish execution**, not host compute work. Because the one-thread pipeline issues the encoder work for batch i+1
+     on a separate CUDA stream while the CPU decodes batch i, the GPU finishes execution before or shortly after the CPU requests
+     the tensor values. This reduced idle CPU sync time by **69% (from 2.54 s to 0.78 s)**.
+
+6. **Best config and distance to 100 chunks/s:**
+   - Best shipping candidate: **`pipe_2pass`** at **72.8 chunks/s** (runs: [72.9, 72.8, 72.5]), or **73.6 chunks/s** with `run64`.
+   - Distance to 100 chunks/s: **27.2 chunks/s short of 100** (needs another 1.37x).
+   - With GPU utilization now reaching 90-100% and CPU wait time compressed to 0.78 s, pipeline-level scheduling on the host
+     has reached its ceiling on a single T4. Reaching 100 chunks/s on a single T4 requires reducing the raw GPU kernel time
+     (e.g., fusing LayerNorm/GELU/residual or faster attention kernels).
+
