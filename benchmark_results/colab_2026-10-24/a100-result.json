@@ -1,0 +1,590 @@
+{
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "capability": [
+    8,
+    0
+  ],
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "gliner2": "2.1.0",
+    "disentangled-flash": "1.1.1",
+    "transformers": "5.20.2"
+  },
+  "cuda": "13.0",
+  "cpu_threads": 4,
+  "scope": "Single GPU, single serving thread, batch 16, FP16, grouped three passes. Same model instance for Triton/custom. Compilation and warmup excluded.",
+  "kernel": "Original T4 v4 source recompiled for actual GPU; no tile or algorithm tuning.",
+  "unique_corpus_chunks": 290,
+  "corpus_sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40",
+  "attention_backends": [
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton"
+  ],
+  "model_commit": null,
+  "input_tokens": 77027,
+  "encoder": [
+    {
+      "length": 256,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 9.520947265625,
+      "custom_ms": 7.584153747558593,
+      "timing_samples": {
+        "triton": [
+          10.60311050415039,
+          10.689126586914062,
+          9.435340881347656,
+          9.520947265625,
+          9.407078552246094,
+          9.54593276977539,
+          9.401139068603516
+        ],
+        "custom": [
+          9.61413116455078,
+          9.557196807861327,
+          7.574732971191406,
+          7.569203186035156,
+          7.529062652587891,
+          7.594598388671875,
+          7.584153747558593
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0014689797535538673,
+        "max_abs": 0.1367393136024475
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0014978781109675765,
+        "max_abs": 0.1635947823524475
+      },
+      "speedup": 1.2553737150555364
+    },
+    {
+      "length": 256,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 9.572557067871093,
+      "custom_ms": 6.6334716796875,
+      "timing_samples": {
+        "triton": [
+          9.442304229736328,
+          9.676185607910156,
+          9.499648284912109,
+          9.64505615234375,
+          9.495346832275391,
+          9.579724884033203,
+          9.572557067871093
+        ],
+        "custom": [
+          6.626303863525391,
+          6.601522827148438,
+          6.667059326171875,
+          6.6334716796875,
+          6.638591766357422,
+          6.834381103515625,
+          6.626099395751953
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0013829724630340934,
+        "max_abs": 0.17885637283325195
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.00138272310141474,
+        "max_abs": 0.19155168533325195
+      },
+      "speedup": 1.4430689584736498
+    },
+    {
+      "length": 384,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 13.59605712890625,
+      "custom_ms": 12.773375701904296,
+      "timing_samples": {
+        "triton": [
+          13.574143981933593,
+          13.59237060546875,
+          13.596467590332031,
+          13.616128540039062,
+          13.59605712890625,
+          13.739826965332032,
+          13.586842346191407
+        ],
+        "custom": [
+          12.793856048583985,
+          12.773375701904296,
+          12.754329681396484,
+          12.759449768066407,
+          12.806349182128907,
+          12.786278533935548,
+          12.764979553222656
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0017749493708834052,
+        "max_abs": 0.16823720932006836
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.001790061593055725,
+        "max_abs": 0.2283465564250946
+      },
+      "speedup": 1.0644059523653802
+    },
+    {
+      "length": 384,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 10.820403289794921,
+      "custom_ms": 7.895449829101563,
+      "timing_samples": {
+        "triton": [
+          10.786406707763671,
+          10.820403289794921,
+          10.744217681884766,
+          10.906009674072266,
+          10.832691192626953,
+          10.817740631103515,
+          10.917068481445312
+        ],
+        "custom": [
+          7.895449829101563,
+          7.894425964355468,
+          7.890739440917969,
+          7.891558074951172,
+          7.902413177490234,
+          7.9312896728515625,
+          7.909990692138672
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0016349066281691194,
+        "max_abs": 0.17504191398620605
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0016293722437694669,
+        "max_abs": 0.18986892700195312
+      },
+      "speedup": 1.3704606480953592
+    },
+    {
+      "length": 512,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 19.243008422851563,
+      "custom_ms": 18.7725830078125,
+      "timing_samples": {
+        "triton": [
+          19.2395263671875,
+          19.294003295898438,
+          19.20020446777344,
+          19.301785278320313,
+          19.221913146972657,
+          19.243008422851563,
+          19.256320190429687
+        ],
+        "custom": [
+          18.84610595703125,
+          18.781797790527342,
+          18.766848754882812,
+          18.7725830078125,
+          18.760295104980468,
+          18.73203125,
+          18.855526733398438
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0020365894306451082,
+        "max_abs": 0.41408705711364746
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0020279614254832268,
+        "max_abs": 0.37889617681503296
+      },
+      "speedup": 1.025059173521475
+    },
+    {
+      "length": 512,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 12.814131164550782,
+      "custom_ms": 10.615398406982422,
+      "timing_samples": {
+        "triton": [
+          12.889701843261719,
+          12.917759704589844,
+          12.8110595703125,
+          12.799590301513671,
+          12.794060516357423,
+          12.814131164550782,
+          12.81925048828125
+        ],
+        "custom": [
+          10.61928939819336,
+          10.596351623535156,
+          10.68584976196289,
+          10.720665740966798,
+          10.615398406982422,
+          10.57751007080078,
+          10.605977630615234
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0017380614299327135,
+        "max_abs": 0.20423436164855957
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0017636192496865988,
+        "max_abs": 0.21014142036437988
+      },
+      "speedup": 1.2071267298005615
+    },
+    {
+      "length": 1024,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 50.48934326171875,
+      "custom_ms": 51.0455810546875,
+      "timing_samples": {
+        "triton": [
+          50.59727478027344,
+          50.4764404296875,
+          50.454324340820314,
+          50.53501586914062,
+          50.49036865234375,
+          50.457394409179685,
+          50.48934326171875
+        ],
+        "custom": [
+          51.03063049316406,
+          51.11275634765625,
+          51.00789794921875,
+          51.07752990722656,
+          51.03288269042969,
+          51.10231018066406,
+          51.0455810546875
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0025018739979714155,
+        "max_abs": 0.3881021738052368
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0025434019044041634,
+        "max_abs": 0.36343809962272644
+      },
+      "speedup": 0.989103115657106
+    },
+    {
+      "length": 1024,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 30.537112426757812,
+      "custom_ms": 25.741925048828126,
+      "timing_samples": {
+        "triton": [
+          30.748263549804687,
+          30.59056701660156,
+          30.533425903320314,
+          30.395187377929688,
+          30.467684936523437,
+          30.537112426757812,
+          30.55677490234375
+        ],
+        "custom": [
+          25.946112060546874,
+          25.741925048828126,
+          25.756671142578124,
+          25.654681396484374,
+          25.69564208984375,
+          25.714892578125,
+          25.779815673828125
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0022612600587308407,
+        "max_abs": 0.2708287239074707
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0022949129343032837,
+        "max_abs": 0.3360118865966797
+      },
+      "speedup": 1.1862792844293508
+    }
+  ],
+  "extraction": {
+    "triton": {
+      "seconds": [
+        3.413787657999933,
+        3.4267180919999873,
+        3.579052993999994
+      ],
+      "median_seconds": 3.4267180919999873,
+      "chunks_per_s": 84.62908013268839,
+      "input_tokens_per_s": 22478.35915648479
+    },
+    "custom": {
+      "seconds": [
+        3.269447282000101,
+        3.2697026050000204,
+        3.4257685350000884
+      ],
+      "median_seconds": 3.2697026050000204,
+      "chunks_per_s": 88.69308161437459,
+      "input_tokens_per_s": 23557.79999141528
+    },
+    "speedup": 1.0480213358731338
+  },
+  "parity": {
+    "identical_chunks": 286,
+    "total_chunks": 290,
+    "differences": [
+      {
+        "chunk": 8,
+        "triton": {
+          "Organization": [
+            "Cedarline Services Ltd."
+          ],
+          "Person": [
+            "George Turner",
+            "Layla Nasser",
+            "Lucas Silva"
+          ],
+          "City": [
+            "S\u00e3o Paulo"
+          ]
+        },
+        "custom": {
+          "Organization": [
+            "Cedarline Services Ltd."
+          ],
+          "Person": [
+            "George Turner",
+            "Layla Nasser",
+            "Lucas Silva"
+          ],
+          "Street": [
+            "Rua das Ac\u00e1cias"
+          ],
+          "City": [
+            "S\u00e3o Paulo"
+          ]
+        }
+      },
+      {
+        "chunk": 78,
+        "triton": {
+          "Organization": [
+            "Cedarline Services GmbH"
+          ],
+          "Person": [
+            "Mariam Saleh",
+            "Olivia Carter",
+            "Yui Sato"
+          ],
+          "Street": [
+            "Al Noor Crescent"
+          ],
+          "City": [
+            "Dubai"
+          ]
+        },
+        "custom": {
+          "Organization": [
+            "Cedarline Services GmbH"
+          ],
+          "Person": [
+            "Mariam Saleh",
+            "Olivia Carter",
+            "Yui Sato"
+          ],
+          "Street": [
+            "178 Al Noor Crescent"
+          ],
+          "City": [
+            "Dubai"
+          ]
+        }
+      },
+      {
+        "chunk": 124,
+        "triton": {
+          "Organization": [
+            "Savera Learning Cooperative Private Limited"
+          ],
+          "Person": [
+            "Anusha Kumar",
+            "Lucas Walker",
+            "Parth Vyas",
+            "Pooja",
+            "Priya Balasubramanian"
+          ],
+          "Street": [
+            "75 Marudham Street"
+          ],
+          "City": [
+            "Chennai"
+          ]
+        },
+        "custom": {
+          "Organization": [
+            "Savera Learning Cooperative Private Limited"
+          ],
+          "Person": [
+            "Anusha Kumar",
+            "Lucas Walker",
+            "Parth Vyas",
+            "Pooja",
+            "Priya Balasubramanian"
+          ],
+          "Street": [
+            "Marudham Street"
+          ],
+          "City": [
+            "Chennai"
+          ]
+        }
+      },
+      {
+        "chunk": 175,
+        "triton": {
+          "Organization": [
+            "Willowcrest Systems Ltd."
+          ],
+          "Person": [
+            "Deepak Varma",
+            "Elena L\u00f3pez",
+            "Haruto Tanaka"
+          ],
+          "Street": [
+            "220 Midori Terrace, Apartment 18",
+            "76"
+          ],
+          "City": [
+            "Madrid",
+            "Tokyo"
+          ]
+        },
+        "custom": {
+          "Organization": [
+            "Willowcrest Systems Ltd."
+          ],
+          "Person": [
+            "Deepak Varma",
+            "Elena L\u00f3pez",
+            "Haruto Tanaka"
+          ],
+          "Street": [
+            "76"
+          ],
+          "City": [
+            "Madrid",
+            "Tokyo"
+          ]
+        }
+      }
+    ]
+  },
+  "peak_allocated_mb": 6783.0322265625,
+  "ground_truth_method": "Per-document unique values; Unicode/case/space normalization; Street ignores house numbers and permits containment. Raw grouped GLiNER2 outputs, without ai-utils span resolver.",
+  "ground_truth": {
+    "triton": {
+      "Person": {
+        "truth": 696,
+        "recognized_truth": 691,
+        "returned": 720,
+        "correct_returned": 691,
+        "recall": 0.992816091954023,
+        "precision": 0.9597222222222223
+      },
+      "Organization": {
+        "truth": 129,
+        "recognized_truth": 126,
+        "returned": 149,
+        "correct_returned": 126,
+        "recall": 0.9767441860465116,
+        "precision": 0.8456375838926175
+      },
+      "Street": {
+        "truth": 400,
+        "recognized_truth": 348,
+        "returned": 299,
+        "correct_returned": 297,
+        "recall": 0.87,
+        "precision": 0.9933110367892977
+      },
+      "City": {
+        "truth": 160,
+        "recognized_truth": 160,
+        "returned": 177,
+        "correct_returned": 160,
+        "recall": 1.0,
+        "precision": 0.903954802259887
+      }
+    },
+    "custom": {
+      "Person": {
+        "truth": 696,
+        "recognized_truth": 691,
+        "returned": 720,
+        "correct_returned": 691,
+        "recall": 0.992816091954023,
+        "precision": 0.9597222222222223
+      },
+      "Organization": {
+        "truth": 129,
+        "recognized_truth": 126,
+        "returned": 149,
+        "correct_returned": 126,
+        "recall": 0.9767441860465116,
+        "precision": 0.8456375838926175
+      },
+      "Street": {
+        "truth": 400,
+        "recognized_truth": 348,
+        "returned": 299,
+        "correct_returned": 297,
+        "recall": 0.87,
+        "precision": 0.9933110367892977
+      },
+      "City": {
+        "truth": 160,
+        "recognized_truth": 160,
+        "returned": 177,
+        "correct_returned": 160,
+        "recall": 1.0,
+        "precision": 0.903954802259887
+      }
+    }
+  },
+  "model_snapshot": "ce747d79a8e362d3dee0b0b26d1201f7f1a8615a",
+  "kernel_source_sha256": "b594066b4995835fd5dead31b1f419305652d224bec4146700ebbd3044ab3035",
+  "nvidia_smi": "name, driver_version, temperature.gpu, clocks.current.sm [MHz], power.draw [W]\nNVIDIA A100-SXM4-40GB, 580.82.07, 30, 1095 MHz, 51.30 W\n",
+  "profiled_attention_kernels": {
+    "triton": [
+      "_deberta_attention_forward_kernel"
+    ],
+    "custom": [
+      "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, __half const*, __half const*, long, long, long, long, long, long, long, long, long, __half const*, __half const*, int, int const*, int, int, unsigned char const*, int const*, int const*, __half*, int, int, float)"
+    ]
+  }
+}

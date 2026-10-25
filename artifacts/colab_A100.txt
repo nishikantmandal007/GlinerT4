@@ -1,0 +1,29 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+[colab] Creating session 'run-b61a41'...
+[colab] Session READY (run-b61a41). Executing artifacts/colab_gpu_compare.py...
+/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_auth.py:138: UserWarning: 
+Error while fetching `HF_TOKEN` secret value from your vault: 'Requesting secret HF_TOKEN timed out. Secrets can only be fetched when running from the Colab UI.'.
+  warnings.warn(f"\nError while fetching `HF_TOKEN` secret value from your vault: '{str(e)}'.")
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+config.json:   0%|          | 0.00/234 [00:00<?, ?B/s]
+config.json:   0%|          | 0.00/823 [00:00<?, ?B/s]
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+tokenizer_config.json:   0%|          | 0.00/21.6k [00:00<?, ?B/s]
+spm.model: reconstructing file:   0%|          |  0.00B / 4.31MB            
+spm.model: downloading bytes:           |  0.00B            
+tokenizer.json: reconstructing file:   0%|          |  0.00B / 16.3MB           
+tokenizer.json: downloading bytes:           |  0.00B            
+added_tokens.json:   0%|          | 0.00/230 [00:00<?, ?B/s]
+special_tokens_map.json:   0%|          | 0.00/2.41k [00:00<?, ?B/s]
+model.safetensors: reconstructing file:   0%|          |  0.00B / 1.23GB        
+model.safetensors: downloading bytes:           |  0.00B            
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+RESULT {"gpu": "NVIDIA A100-SXM4-40GB", "torch": "2.11.0+cu130", "capability": "8.0", "chunks": 580, "standard_encoder_16x256_ms": 23.05, "standard_encoder_16x384_ms": 34.72, "standard_encoder_16x512_ms": 53.32, "standard_chunks_per_s": 60.5, "standard_entities_found": 5140, "standard_peak_mb": 1538, "disentangled_flash_encoder_16x256_ms": 9.48, "disentangled_flash_encoder_16x384_ms": 13.52, "disentangled_flash_encoder_16x512_ms": 19.22, "disentangled_flash_chunks_per_s": 68.1, "disentangled_flash_entities_found": 5142, "disentangled_flash_peak_mb": 1547}
+[colab] Stopping session 'run-b61a41'...
+[colab] Session terminated.
+EXIT 0

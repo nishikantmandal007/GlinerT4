@@ -1,0 +1,58 @@
+{
+  "base": {
+    "launch__registers_per_thread": "255",
+    "launch__occupancy_limit_registers": "2.000000",
+    "launch__occupancy_limit_shared_mem": "3.000000",
+    "sm__warps_active.avg.pct_of_peak_sustained_active": "12.325920",
+    "gpu__time_duration.sum": "988.416000",
+    "sm__throughput.avg.pct_of_peak_sustained_elapsed": "28.782962",
+    "stall_ratios": {
+      "smsp__average_warps_issue_stalled_barrier_per_issue_active.ratio": "0.387048",
+      "smsp__average_warps_issue_stalled_branch_resolving_per_issue_active.ratio": "0.252930",
+      "smsp__average_warps_issue_stalled_dispatch_stall_per_issue_active.ratio": "0.192532",
+      "smsp__average_warps_issue_stalled_drain_per_issue_active.ratio": "0.021875",
+      "smsp__average_warps_issue_stalled_imc_miss_per_issue_active.ratio": "0.013293",
+      "smsp__average_warps_issue_stalled_lg_throttle_per_issue_active.ratio": "0.010155",
+      "smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio": "1.070602",
+      "smsp__average_warps_issue_stalled_math_pipe_throttle_per_issue_active.ratio": "0.132331",
+      "smsp__average_warps_issue_stalled_membar_per_issue_active.ratio": "0",
+      "smsp__average_warps_issue_stalled_mio_throttle_per_issue_active.ratio": "0.185790",
+      "smsp__average_warps_issue_stalled_misc_per_issue_active.ratio": "0.000003",
+      "smsp__average_warps_issue_stalled_no_instruction_per_issue_active.ratio": "0.048776",
+      "smsp__average_warps_issue_stalled_not_selected_per_issue_active.ratio": "0.173044",
+      "smsp__average_warps_issue_stalled_selected_per_issue_active.ratio": "1.000000",
+      "smsp__average_warps_issue_stalled_short_scoreboard_per_issue_active.ratio": "0.925019",
+      "smsp__average_warps_issue_stalled_sleeping_per_issue_active.ratio": "0",
+      "smsp__average_warps_issue_stalled_tex_throttle_per_issue_active.ratio": "0",
+      "smsp__average_warps_issue_stalled_wait_per_issue_active.ratio": "1.770823"
+    }
+  },
+  "min3": {
+    "launch__registers_per_thread": "168",
+    "launch__occupancy_limit_registers": "3.000000",
+    "launch__occupancy_limit_shared_mem": "3.000000",
+    "sm__warps_active.avg.pct_of_peak_sustained_active": "17.846024",
+    "gpu__time_duration.sum": "863.680000",
+    "sm__throughput.avg.pct_of_peak_sustained_elapsed": "38.309786",
+    "stall_ratios": {
+      "smsp__average_warps_issue_stalled_barrier_per_issue_active.ratio": "0.353647",
+      "smsp__average_warps_issue_stalled_branch_resolving_per_issue_active.ratio": "0.223503",
+      "smsp__average_warps_issue_stalled_dispatch_stall_per_issue_active.ratio": "0.184719",
+      "smsp__average_warps_issue_stalled_drain_per_issue_active.ratio": "0.015432",
+      "smsp__average_warps_issue_stalled_imc_miss_per_issue_active.ratio": "0.017862",
+      "smsp__average_warps_issue_stalled_lg_throttle_per_issue_active.ratio": "0.011324",
+      "smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio": "1.071148",
+      "smsp__average_warps_issue_stalled_math_pipe_throttle_per_issue_active.ratio": "0.195235",
+      "smsp__average_warps_issue_stalled_membar_per_issue_active.ratio": "0",
+      "smsp__average_warps_issue_stalled_mio_throttle_per_issue_active.ratio": "0.228067",
+      "smsp__average_warps_issue_stalled_misc_per_issue_active.ratio": "0.000016",
+      "smsp__average_warps_issue_stalled_no_instruction_per_issue_active.ratio": "0.042572",
+      "smsp__average_warps_issue_stalled_not_selected_per_issue_active.ratio": "0.312894",
+      "smsp__average_warps_issue_stalled_selected_per_issue_active.ratio": "1.000000",
+      "smsp__average_warps_issue_stalled_short_scoreboard_per_issue_active.ratio": "1.098492",
+      "smsp__average_warps_issue_stalled_sleeping_per_issue_active.ratio": "0",
+      "smsp__average_warps_issue_stalled_tex_throttle_per_issue_active.ratio": "0",
+      "smsp__average_warps_issue_stalled_wait_per_issue_active.ratio": "2.464730"
+    }
+  }
+}

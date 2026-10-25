@@ -1,0 +1,105 @@
+{
+  "vocabulary_entries_checked": 250112,
+  "fallback_cases_checked": 9,
+  "gate": "Complete JSON including scores/spans equals unchanged baseline on every timed round.",
+  "paths": {
+    "triton_prep": {
+      "seconds": [
+        2.6579856270000164,
+        2.647561362000033,
+        2.6585954970000785,
+        2.669388096000148,
+        2.6603397210001276
+      ],
+      "chunks_per_s": 109.0801516542219,
+      "complete_results_equal": true,
+      "reference": "triton"
+    },
+    "triton_bulk": {
+      "seconds": [
+        2.6120094729999437,
+        2.605961306000154,
+        2.623227080000106,
+        2.60583564500007,
+        2.6174550369998997
+      ],
+      "chunks_per_s": 111.02563103147148,
+      "complete_results_equal": true,
+      "reference": "triton"
+    },
+    "base_prep": {
+      "seconds": [
+        2.530091316999915,
+        2.5378981030000887,
+        2.840008735999845,
+        2.5340583649999644,
+        2.5463025089998155
+      ],
+      "chunks_per_s": 114.26778705464436,
+      "complete_results_equal": true,
+      "reference": "base"
+    },
+    "base_bulk": {
+      "seconds": [
+        2.5126981430000797,
+        2.493679074000056,
+        2.4935473069999716,
+        2.490643850999959,
+        2.4948617340000965
+      ],
+      "chunks_per_s": 116.29403439425641,
+      "complete_results_equal": true,
+      "reference": "base"
+    },
+    "async_simple_bulk": {
+      "seconds": [
+        2.4417597729998306,
+        2.450445899000215,
+        2.4352405360000375,
+        2.457656758999974,
+        2.4447869630000696
+      ],
+      "chunks_per_s": 118.61974249246344,
+      "complete_results_equal": true,
+      "reference": "base"
+    },
+    "async_pipeline_bulk": {
+      "seconds": [
+        2.4555542119999245,
+        2.4722315030001027,
+        2.4721593140000095,
+        2.4628631810001025,
+        2.470962917000179
+      ],
+      "chunks_per_s": 117.36315345115274,
+      "complete_results_equal": true,
+      "reference": "base"
+    }
+  },
+  "extra_parity": {
+    "triton_prep": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "triton_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "base_prep": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "base_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "async_simple_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "async_pipeline_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    }
+  }
+}

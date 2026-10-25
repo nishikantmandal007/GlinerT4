@@ -1,0 +1,65 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- The CUDA compiler identification is NVIDIA 13.0.88 with host compiler GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting CUDA compiler ABI info
+-- Detecting CUDA compiler ABI info - done
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc - skipped
+-- Detecting CUDA compile features
+-- Detecting CUDA compile features - done
+-- Found CUDA: /usr/local/cuda (found version "13.0")
+-- Found CUDAToolkit: /usr/local/cuda/include (found version "13.0.88")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- PyTorch: CUDA detected: 13.0
+-- PyTorch: CUDA nvcc is: /usr/local/cuda/bin/nvcc
+-- PyTorch: CUDA toolkit directory: /usr/local/cuda
+-- PyTorch: Header version is: 13.0
+-- Found Python: /usr/local/bin/python (found version "3.13.16") found components: Interpreter
+-- /usr/local/cuda/lib64/libnvrtc.so shorthash is a49e67e8
+-- USE_CUDNN is set to 0. Compiling without cuDNN support
+-- USE_CUSPARSELT is set to 0. Compiling without cuSPARSELt support
+-- USE_CUDSS is set to 0. Compiling without cuDSS support
+-- USE_CUFILE is set to 0. Compiling without cuFile support
+-- Autodetected CUDA architecture(s):  8.0
+CMake Warning at /usr/local/lib/python3.13/dist-packages/torch/share/cmake/Caffe2/public/cuda.cmake:332 (message):
+  pytorch is not compatible with `CMAKE_CUDA_ARCHITECTURES` and will ignore
+  its value.  Please configure `TORCH_CUDA_ARCH_LIST` instead.
+Call Stack (most recent call first):
+  /usr/local/lib/python3.13/dist-packages/torch/share/cmake/Caffe2/Caffe2Config.cmake:86 (include)
+  /usr/local/lib/python3.13/dist-packages/torch/share/cmake/Torch/TorchConfig.cmake:62 (find_package)
+  CMakeLists.txt:3 (find_package)
+
+
+-- Added CUDA NVCC flags for: -gencode;arch=compute_80,code=sm_80
+CMake Warning at /usr/local/lib/python3.13/dist-packages/torch/share/cmake/Torch/TorchConfig.cmake:22 (message):
+  library kineto not found.
+Call Stack (most recent call first):
+  /usr/local/lib/python3.13/dist-packages/torch/share/cmake/Torch/TorchConfig.cmake:119 (append_torchlib_if_found)
+  CMakeLists.txt:3 (find_package)
+
+
+-- Found Torch: /usr/local/lib/python3.13/dist-packages/torch/lib/libtorch.so
+-- Configuring done (4.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /content/gliner-ab/min3/build
+
+[ 33%] Building CXX object CMakeFiles/gliner_t4_min3.dir/csrc/torch_binding.cpp.o
+[ 66%] Building CUDA object CMakeFiles/gliner_t4_min3.dir/csrc/disentangled_attention_v4.cu.o
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_ZN61_GLOBAL__N__3975ff5c_28_disentangled_attention_v4_cu_e3837f7332disentangled_attention_v4_kernelILi4EEEvPK6__halfS3_S3_lllllllllS3_S3_iPKiiiPKhS5_S5_PS1_iif' for 'sm_80'
+ptxas info    : Function properties for _ZN61_GLOBAL__N__3975ff5c_28_disentangled_attention_v4_cu_e3837f7332disentangled_attention_v4_kernelILi4EEEvPK6__halfS3_S3_lllllllllS3_S3_iPKiiiPKhS5_S5_PS1_iif
+    96 bytes stack frame, 136 bytes spill stores, 132 bytes spill loads
+ptxas info    : Used 168 registers, used 1 barriers, 96 bytes cumulative stack size, 532 bytes cmem[0]
+ptxas info    : Compile time = 204.268 ms
+ptxas info    : Compiling entry function '_ZN61_GLOBAL__N__3975ff5c_28_disentangled_attention_v4_cu_e3837f7332disentangled_attention_v4_kernelILi8EEEvPK6__halfS3_S3_lllllllllS3_S3_iPKiiiPKhS5_S5_PS1_iif' for 'sm_80'
+ptxas info    : Function properties for _ZN61_GLOBAL__N__3975ff5c_28_disentangled_attention_v4_cu_e3837f7332disentangled_attention_v4_kernelILi8EEEvPK6__halfS3_S3_lllllllllS3_S3_iPKiiiPKhS5_S5_PS1_iif
+    8 bytes stack frame, 4 bytes spill stores, 4 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 8 bytes cumulative stack size, 532 bytes cmem[0]
+ptxas info    : Compile time = 187.197 ms
+[100%] Linking CXX shared library /content/gliner-ab/min3/torch-ext/gliner_t4_min3/gliner_t4_min3.so
+[100%] Built target gliner_t4_min3

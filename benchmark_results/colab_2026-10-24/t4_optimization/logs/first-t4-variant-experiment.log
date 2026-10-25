@@ -1,0 +1,76 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+EXACT_BUILD {"path": "pos_sync", "source_sha256": "6f81e8b4ca3dba5e710a6db67f6302f5fbe4f2758952a09c5dbcfea5503b9534", "resources": ["    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads", "ptxas info    : Used 212 registers, used 1 barriers, 532 bytes cmem[0]", "    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads", "ptxas info    : Used 200 registers, used 1 barriers, 532 bytes cmem[0]"]}
+EXACT_BUILD {"path": "all_sync", "source_sha256": "382e66b75ba70a98ebfef9ab707ef9cbb3f85fa55a619655015add44c3cb5349", "resources": ["    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads", "ptxas info    : Used 207 registers, used 1 barriers, 532 bytes cmem[0]", "    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads", "ptxas info    : Used 190 registers, used 1 barriers, 532 bytes cmem[0]"]}
+RAW_EQUALITY {"cases": 279, "eligible": ["all_sync", "base", "pos_sync"], "failures": {"base": [], "pos_sync": [], "all_sync": []}}
+T4_ENCODER {"length": 96, "padded": false, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 16.87303415934245, "all_sync": 16.93124262491862, "pos_sync": 16.91548792521159}, "samples": {"base": [16.665013631184895, 16.777503967285156, 16.874837239583332, 16.87303415934245, 17.057931264241535], "all_sync": [17.00497055053711, 16.913995107014973, 17.02182388305664, 16.93124262491862, 16.918570200602215], "pos_sync": [16.91548792521159, 17.038912455240887, 17.016437530517578, 16.76896031697591, 16.827412923177082]}}
+T4_ENCODER {"length": 96, "padded": true, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 15.429888407389322, "all_sync": 15.383946736653646, "pos_sync": 15.471658070882162}, "samples": {"base": [15.228949228922525, 15.587477366129557, 15.207956949869791, 15.549578348795572, 15.429888407389322], "all_sync": [17.132938385009766, 15.288885752360025, 15.009674072265625, 15.464181264241537, 15.383946736653646], "pos_sync": [15.570667266845703, 15.358037312825521, 15.471658070882162, 15.21566899617513, 15.600213368733725]}}
+T4_ENCODER {"length": 256, "padded": false, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 52.684478759765625, "all_sync": 52.84033203125, "pos_sync": 52.36616516113281}, "samples": {"base": [52.33956400553385, 52.684478759765625, 51.79180908203125, 52.74143981933594, 52.81832377115885], "all_sync": [51.755126953125, 52.84033203125, 53.01824951171875, 52.5660146077474, 53.05028279622396], "pos_sync": [52.4510498046875, 52.22605895996094, 52.36285909016927, 52.5534413655599, 52.36616516113281]}}
+T4_ENCODER {"length": 256, "padded": true, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 45.239298502604164, "all_sync": 45.181365966796875, "pos_sync": 45.195454915364586}, "samples": {"base": [45.239298502604164, 44.3797353108724, 44.6584726969401, 45.3942616780599, 45.47949727376302], "all_sync": [45.181365966796875, 45.05391947428385, 44.97887166341146, 45.50731913248698, 45.796244303385414], "pos_sync": [44.84020487467448, 45.2956797281901, 44.9790293375651, 45.195454915364586, 45.59278869628906]}}
+T4_ENCODER {"length": 512, "padded": false, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 120.9387715657552, "all_sync": 121.242431640625, "pos_sync": 121.37760416666667}, "samples": {"base": [121.20787556966145, 120.82589721679688, 120.89935302734375, 120.9387715657552, 121.00675455729167], "all_sync": [121.242431640625, 120.87501017252605, 121.6408182779948, 121.1851806640625, 121.52482096354167], "pos_sync": [121.44107055664062, 121.37760416666667, 121.63991292317708, 120.98494466145833, 121.0712890625]}}
+T4_ENCODER {"length": 512, "padded": true, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 74.95015462239583, "all_sync": 75.31888834635417, "pos_sync": 74.77203369140625}, "samples": {"base": [74.89500935872395, 74.53789774576823, 74.95015462239583, 75.53176371256511, 75.71603393554688], "all_sync": [75.34307352701823, 74.45247904459636, 74.99966939290364, 75.8985595703125, 75.31888834635417], "pos_sync": [74.77203369140625, 74.31969197591145, 75.19816589355469, 74.53126525878906, 75.35734558105469]}}
+T4_ENCODER {"length": 1024, "padded": false, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 303.19138590494794, "all_sync": 305.1269938151042, "pos_sync": 303.74778238932294}, "samples": {"base": [294.3284098307292, 301.54123942057294, 303.19138590494794, 303.69394938151044, 309.76491292317706], "all_sync": [297.9710693359375, 300.01202392578125, 305.1269938151042, 306.55393473307294, 309.28525797526044], "pos_sync": [297.0749104817708, 301.3006998697917, 303.74778238932294, 306.77931722005206, 310.929443359375]}}
+T4_ENCODER {"length": 1024, "padded": true, "byte_equal": {"base": true, "all_sync": true, "pos_sync": true}, "ms": {"base": 187.04833984375, "all_sync": 188.8907674153646, "pos_sync": 188.03668212890625}, "samples": {"base": [182.52408854166666, 186.26251220703125, 187.04833984375, 187.21875, 191.56722005208334], "all_sync": [185.0589803059896, 186.28584798177084, 188.8907674153646, 189.5108439127604, 191.06819661458334], "pos_sync": [187.12064615885416, 186.0977579752604, 188.03668212890625, 190.6629435221354, 191.72733561197916]}}
+T4_VARIANT_SAMPLE {"trial": 0, "path": "base", "seconds": 6.63816754100003, "chunks_per_s": 43.68675514874274}
+T4_VARIANT_SAMPLE {"trial": 0, "path": "all_sync", "seconds": 6.6830533889999515, "chunks_per_s": 43.39333881086882}
+T4_VARIANT_SAMPLE {"trial": 0, "path": "pos_sync", "seconds": 6.68468381699995, "chunks_per_s": 43.382754957309324}
+T4_VARIANT_SAMPLE {"trial": 1, "path": "all_sync", "seconds": 6.650938492999899, "chunks_per_s": 43.6028690244579}
+T4_VARIANT_SAMPLE {"trial": 1, "path": "pos_sync", "seconds": 6.548306347999983, "chunks_per_s": 44.28626038373621}
+T4_VARIANT_SAMPLE {"trial": 1, "path": "base", "seconds": 6.465634407000039, "chunks_per_s": 44.85252053317933}
+T4_VARIANT_SAMPLE {"trial": 2, "path": "pos_sync", "seconds": 6.3977107499999875, "chunks_per_s": 45.3287138684725}
+T4_VARIANT_SAMPLE {"trial": 2, "path": "base", "seconds": 6.361841859000037, "chunks_per_s": 45.5842830468569}
+T4_VARIANT_SAMPLE {"trial": 2, "path": "all_sync", "seconds": 6.406929237999975, "chunks_per_s": 45.263493512615746}
+T4_VARIANT_SAMPLE {"trial": 3, "path": "base", "seconds": 6.312016909000022, "chunks_per_s": 45.94411012849189}
+T4_VARIANT_SAMPLE {"trial": 3, "path": "all_sync", "seconds": 6.428638669999941, "chunks_per_s": 45.11063926384941}
+T4_VARIANT_SAMPLE {"trial": 3, "path": "pos_sync", "seconds": 6.4120880369999895, "chunks_per_s": 45.22707709666471}
+T4_VARIANT_SAMPLE {"trial": 4, "path": "all_sync", "seconds": 6.4875577500000645, "chunks_per_s": 44.70095083161257}
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/colab_cli/commands/execution.py:258 in exec_command        │
+│                                                                              │
+│   255 │   │   │   )                                                          │
+│   256 │   │   │   state.store.add(s)                                         │
+│   257 │   │   │                                                              │
+│ ❱ 258 │   │   │   outputs = runtime.execute_code(                            │
+│   259 │   │   │   │   code,                                                  │
+│   260 │   │   │   │   output_hook=lambda o: display_output(o, output_image), │
+│   261 │   │   │   │   timeout=timeout,                                       │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/colab_cli/runtime.py:237 in execute_code                   │
+│                                                                              │
+│   234 │   │   │   │   │   │   if idx < len(outputs):                         │
+│   235 │   │   │   │   │   │   │   output_hook(outputs[idx])                  │
+│   236 │   │   │                                                              │
+│ ❱ 237 │   │   │   reply = self.kernel_client.execute_interactive(            │
+│   238 │   │   │   │   code, output_hook=wrapped_output_hook, **kwargs        │
+│   239 │   │   │   )                                                          │
+│   240 │   │   │   # execute_interactive returns the raw reply message        │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/client.py:364 in execute_interactive │
+│                                                                              │
+│   361 │   │   │   The reply message for this request                         │
+│   362 │   │   """                                                            │
+│   363 │   │   self._set_variables(variables)                                 │
+│ ❱ 364 │   │   return self._manager.client.execute_interactive(               │
+│   365 │   │   │   code,                                                      │
+│   366 │   │   │   silent=silent,                                             │
+│   367 │   │   │   store_history=store_history,                               │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/wsclient.py:1073 in                  │
+│ execute_interactive                                                          │
+│                                                                              │
+│   1070 │   │   │   # wait for output and redisplay it                        │
+│   1071 │   │   │   while True:                                               │
+│   1072 │   │   │   │   if not self.connection_ready.is_set():                │
+│ ❱ 1073 │   │   │   │   │   raise RuntimeError("Connection was lost.")        │
+│   1074 │   │   │   │                                                         │
+│   1075 │   │   │   │   if timeout is not None:                               │
+│   1076 │   │   │   │   │   timeout = max(0, deadline - time.monotonic())     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Connection was lost.

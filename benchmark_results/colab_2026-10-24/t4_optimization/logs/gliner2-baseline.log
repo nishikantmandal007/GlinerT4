@@ -1,0 +1,111 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+Colab DNS fallback resolved runtime
+ENV {"gpu": "Tesla T4", "capability": [7, 5], "versions": {"torch": "2.11.0+cu130", "triton": "3.6.0", "gliner2": "2.1.0", "disentangled-flash": "1.1.1", "transformers": "5.20.2"}, "cuda": "13.0", "cpu_threads": 4, "scope": "Single GPU, single serving thread, batch 16, FP16, grouped three passes. Same model instance for Triton/custom. Compilation and warmup excluded.", "kernel": "Original T4 v4 source recompiled for actual GPU; no tile or algorithm tuning."}
+/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_auth.py:138: UserWarning: 
+Error while fetching `HF_TOKEN` secret value from your vault: 'Requesting secret HF_TOKEN timed out. Secrets can only be fetched when running from the Colab UI.'.
+  warnings.warn(f"\nError while fetching `HF_TOKEN` secret value from your vault: '{str(e)}'.")
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+config.json:   0%|          | 0.00/234 [00:00<?, ?B/s]
+config.json:   0%|          | 0.00/823 [00:00<?, ?B/s]
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+tokenizer_config.json:   0%|          | 0.00/21.6k [00:00<?, ?B/s]
+spm.model: reconstructing file:   0%|          |  0.00B / 4.31MB            
+spm.model: downloading bytes:           |  0.00B            
+tokenizer.json: reconstructing file:   0%|          |  0.00B / 16.3MB           
+tokenizer.json: downloading bytes:           |  0.00B            
+added_tokens.json:   0%|          | 0.00/230 [00:00<?, ?B/s]
+special_tokens_map.json:   0%|          | 0.00/2.41k [00:00<?, ?B/s]
+model.safetensors: reconstructing file:   0%|          |  0.00B / 1.23GB        
+model.safetensors: downloading bytes:           |  0.00B            
+T4_BASELINE {"trial": 0, "seconds": 5.24043989200004, "chunks_per_s": 55.338865815961114}
+T4_BASELINE {"trial": 1, "seconds": 5.290613699000005, "chunks_per_s": 54.81405683707616}
+T4_BASELINE {"trial": 2, "seconds": 5.326898845999949, "chunks_per_s": 54.44068085087921}
+         974441 function calls (948023 primitive calls) in 2.305 seconds
+
+   Ordered by: cumulative time
+   List reduced from 533 to 40 due to restriction <40>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       21    0.002    0.000    1.691    0.081 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:446(_extract_from_batch)
+ 5364/394    0.079    0.000    1.433    0.004 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1775(_wrapped_call_impl)
+ 5364/394    0.017    0.000    1.432    0.004 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1783(_call_impl)
+       21    0.000    0.000    1.162    0.055 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:657(encode_tokens)
+       21    0.000    0.000    1.161    0.055 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py:1795(inner)
+        3    0.003    0.001    1.126    0.375 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:252(batch_extract)
+       21    0.001    0.000    1.063    0.051 /usr/local/lib/python3.13/dist-packages/transformers/models/deberta_v2/modeling_deberta_v2.py:719(forward)
+       21    0.004    0.000    0.941    0.045 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:441(forward)
+       18    0.717    0.040    0.717    0.040 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:469(unpack)
+       21    0.000    0.000    0.578    0.028 /usr/local/lib/python3.13/dist-packages/gliner2/training/trainer.py:539(__call__)
+       21    0.001    0.000    0.578    0.028 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:462(collate_fn_inference)
+       21    0.003    0.000    0.555    0.026 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:621(_collate_batch)
+      291    0.048    0.000    0.503    0.002 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:672(_transform_record)
+       21    0.011    0.001    0.325    0.015 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:687(_compute_direct_span_logits_batched)
+      291    0.102    0.000    0.262    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/processor.py:1542(_format_input_with_mapping)
+      289    0.005    0.000    0.257    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/layers.py:165(forward)
+       18    0.004    0.000    0.201    0.011 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:389(forward_packed)
+       21    0.006    0.000    0.192    0.009 /usr/local/lib/python3.13/dist-packages/gliner2/inference/runtime.py:514(_extract_from_batch_sync_collapsed)
+      289    0.076    0.000    0.182    0.001 /usr/local/lib/python3.13/dist-packages/gliner2/layers.py:30(forward)
+       22    0.136    0.006    0.136    0.006 {method 'cpu' of 'torch._C.TensorBase' objects}
+      468    0.006    0.000    0.135    0.000 /usr/local/lib/python3.13/dist-packages/disentangled_flash/kernel.py:1597(prepare_shape)
+      216    0.004    0.000    0.124    0.001 /content/gliner-ab/torch-ext/gliner_t4/__init__.py:81(forward_packed)
+     2957    0.117    0.000    0.117    0.000 {built-in method torch._C._nn.linear}
+      776    0.002    0.000    0.116    0.000 /tmp/ipykernel_1653/90281759.py:19(split_call)
+       98    0.005    0.000    0.114    0.001 /tmp/ipykernel_1653/90281759.py:17(split_cached)
+    15487    0.096    0.000    0.110    0.000 /usr/local/lib/python3.13/dist-packages/gliner2/processing/word_splitter.py:42(__call__)
+      291    0.029    0.000    0.109    0.000 /content/gliner-ab/exact_prep.py:22(convert)
+       21    0.000    0.000    0.097    0.005 /usr/local/lib/python3.13/dist-packages/gliner2/models/base.py:512(prepare_active_length)
+      276    0.017    0.000    0.094    0.000 /usr/local/lib/python3.13/dist-packages/disentangled_flash/_torch.py:306(_project_active_positions)
+        2    0.000    0.000    0.091    0.045 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:244(prepare_for_inference)
+12610/582    0.027    0.000    0.073    0.000 /usr/lib/python3.13/copy.py:119(deepcopy)
+     1579    0.070    0.000    0.070    0.000 {method 'item' of 'torch._C.TensorBase' objects}
+ 1164/582    0.006    0.000    0.070    0.000 /usr/lib/python3.13/copy.py:218(_deepcopy_dict)
+      273    0.001    0.000    0.069    0.000 /usr/local/lib/python3.13/dist-packages/disentangled_flash/deberta.py:273(<genexpr>)
+     1532    0.002    0.000    0.063    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/linear.py:130(forward)
+      352    0.003    0.000    0.048    0.000 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/container.py:248(forward)
+        3    0.000    0.000    0.044    0.015 /usr/lib/python3.13/asyncio/base_events.py:1981(_run_once)
+        3    0.000    0.000    0.043    0.014 /usr/lib/python3.13/selectors.py:435(select)
+   140704    0.043    0.000    0.043    0.000 {method 'get' of 'dict' objects}
+      405    0.016    0.000    0.042    0.000 {built-in method builtins.all}
+
+
+
+/usr/local/lib/python3.13/dist-packages/torch/profiler/profiler.py:224: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.
+  _warn_once(
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                            aten::addmm         5.61%      96.697ms         7.22%     124.384ms      44.888us     616.602ms        48.19%     616.602ms     222.520us          2771  
+                      gliner_t4::disentangled_attention         0.18%       3.184ms         0.46%       7.994ms      31.721us     326.038ms        25.48%     326.038ms       1.294ms           252  
+void (anonymous namespace)::disentangled_attention_v...         0.00%       0.000us         0.00%       0.000us       0.000us     326.038ms        25.48%     326.038ms       1.294ms           252  
+    turing_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_tn         0.00%       0.000us         0.00%       0.000us       0.000us     281.412ms        21.99%     281.412ms     583.842us           482  
+    turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn         0.00%       0.000us         0.00%       0.000us       0.000us     193.606ms        15.13%     193.606ms     531.884us           364  
+                                              aten::add         2.40%      41.311ms         4.05%      69.768ms      17.569us     113.917ms         8.90%     113.921ms      28.688us          3971  
+turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_sta...         0.00%       0.000us         0.00%       0.000us       0.000us      73.740ms         5.76%      73.740ms     455.182us           162  
+                                             aten::gelu         0.21%       3.575ms         0.32%       5.569ms      22.098us      62.318ms         4.87%      62.318ms     247.294us           252  
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us      62.318ms         4.87%      62.318ms     247.294us           252  
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us      61.841ms         4.83%      61.841ms      50.155us          1233  
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us      52.403ms         4.10%      52.403ms      18.870us          2777  
+                                aten::native_layer_norm         0.52%       8.939ms         1.29%      22.194ms      40.872us      47.072ms         3.68%      47.072ms      86.689us           543  
+void at::native::(anonymous namespace)::vectorized_l...         0.00%       0.000us         0.00%       0.000us       0.000us      47.072ms         3.68%      47.072ms      86.689us           543  
+void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s...         0.00%       0.000us         0.00%       0.000us       0.000us      30.139ms         2.36%      30.139ms      30.785us           979  
+                                        aten::clamp_min         0.35%       5.945ms         0.57%       9.827ms      23.681us      27.610ms         2.16%      27.610ms      66.530us           415  
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us      27.610ms         2.16%      27.610ms      66.530us           415  
+                                               aten::mm         0.31%       5.310ms         0.40%       6.951ms      43.718us      19.307ms         1.51%      19.311ms     121.453us           159  
+         turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn         0.00%       0.000us         0.00%       0.000us       0.000us      14.959ms         1.17%      14.959ms     439.972us            34  
+void gemv2T_kernel_val<int, int, __half, __half, __h...         0.00%       0.000us         0.00%       0.000us       0.000us      14.352ms         1.12%      14.352ms      23.605us           608  
+    turing_fp16_s1688gemm_fp16_128x256_ldg8_relu_f2f_tn         0.00%       0.000us         0.00%       0.000us       0.000us      13.647ms         1.07%      13.647ms     568.605us            24  
+                                          aten::baddbmm         0.04%     722.778us         0.08%       1.402ms      66.777us      13.602ms         1.06%      13.668ms     650.838us            21  
+                                              aten::mul         1.26%      21.622ms         2.13%      36.771ms      14.236us       9.608ms         0.75%       9.608ms       3.720us          2583  
+std::enable_if<!(false), void>::type internal::gemvx...         0.00%       0.000us         0.00%       0.000us       0.000us       7.922ms         0.62%       7.922ms      94.306us            84  
+                                            aten::copy_         0.81%      14.029ms         7.60%     130.941ms      32.516us       7.888ms         0.62%       7.888ms       1.959us          4027  
+                                          aten::sigmoid         0.99%      17.110ms         1.68%      28.926ms      14.661us       7.210ms         0.56%       7.210ms       3.654us          1973  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 1.722s
+Self CUDA time total: 1.280s
+
+T4_BASELINE_DONE

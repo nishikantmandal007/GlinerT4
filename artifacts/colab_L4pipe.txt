@@ -1,0 +1,8 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+RESULT {"streams": "1", "chunks_per_s": 65.6, "serving_gpu_mb": [2074], "util": [55], "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}}
+RESULT {"streams": "2", "chunks_per_s": 83.0, "serving_gpu_mb": [3278], "util": [73], "accuracy": {"Person": {"recall": 0.994, "precision": 0.961, "detected": 2880}, "Organization": {"recall": 0.977, "precision": 0.846, "detected": 596}, "Street": {"recall": 0.861, "precision": 1.0, "detected": 632}, "City": {"recall": 1.0, "precision": 0.93, "detected": 688}}}
+EXIT 0

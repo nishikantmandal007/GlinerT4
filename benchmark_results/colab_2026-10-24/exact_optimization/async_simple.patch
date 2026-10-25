@@ -1,0 +1,104 @@
+--- a/csrc/disentangled_attention_v4.cu
++++ b/csrc/disentangled_attention_v4.cu
+@@ -83,6 +83,23 @@
+   }
+ }
+ 
++
++// Copy the same 16 bytes as fetch_rows/store_rows without retaining them in registers.
++template <int CHUNKS, int THREADS>
++__device__ __forceinline__ void copy_rows_async(__half* tile, const __half* base, int64_t stride, int row0, int limit) {
++#pragma unroll
++  for (int m = 0; m < CHUNKS; ++m) {
++    const int index = threadIdx.x + m * THREADS, row = row0 + (index >> 3);
++    const bool valid = row >= 0 && row < limit;
++    const __half* src = base + (valid ? row : 0) * stride + (index & 7) * 8;
++    const uint32_t dst = smem_u32(tile + swz(index >> 3, index & 7));
++    const int size = valid ? 16 : 0;
++    asm volatile("cp.async.ca.shared.global [%0], [%1], 16, %2;\n" :: "r"(dst), "l"(src), "r"(size) : "memory");
++  }
++}
++__device__ __forceinline__ void copy_commit() { asm volatile("cp.async.commit_group;\n" ::: "memory"); }
++__device__ __forceinline__ void copy_wait() { asm volatile("cp.async.wait_group 0;\n" ::: "memory"); }
++
+ template <int NT>
+ __device__ __forceinline__ void warp_gemm_abt(float (*acc)[4], const uint32_t (*a)[2], const __half* b, int row0,
+                                               int lane) {
+@@ -119,7 +136,7 @@
+ }
+ 
+ template <int WARPS>
+-__global__ void __launch_bounds__(Shape<WARPS>::THREADS, 8 / WARPS) disentangled_attention_v4_kernel(
++__global__ void __launch_bounds__(Shape<WARPS>::THREADS, 12 / WARPS) disentangled_attention_v4_kernel(
+     const __half* __restrict__ query, const __half* __restrict__ key, const __half* __restrict__ value,
+     int64_t q_sb, int64_t q_sh, int64_t q_sl, int64_t k_sb, int64_t k_sh, int64_t k_sl, int64_t v_sb, int64_t v_sh,
+     int64_t v_sl, const __half* __restrict__ pos_key, const __half* __restrict__ pos_query, int pos_rows,
+@@ -186,13 +203,6 @@
+   auto window_start = [&](int j0) {
+     return __ldg(delta_to_local + (i0 - min(j0 + BN - 1, real - 1) + position_offset));
+   };
+-  uint4 k_regs[S::KV_CHUNKS / 2], v_regs[S::KV_CHUNKS / 2], pk_regs[S::POS_CHUNKS], pq_regs[S::POS_CHUNKS];
+-  int slot_lo_next = window_start(0);
+-  fetch_rows<S::KV_CHUNKS / 2, S::THREADS>(k_regs, k_base, k_sl, 0, real);
+-  fetch_rows<S::KV_CHUNKS / 2, S::THREADS>(v_regs, v_base, v_sl, 0, real);
+-  fetch_rows<S::POS_CHUNKS, S::THREADS>(pk_regs, pk_base, D, slot_lo_next, pos_rows);
+-  fetch_rows<S::POS_CHUNKS, S::THREADS>(pq_regs, pq_base, D, slot_lo_next, pos_rows);
+-
+   float o[8][4];
+ #pragma unroll
+   for (int nt = 0; nt < 8; ++nt) o[nt][0] = o[nt][1] = o[nt][2] = o[nt][3] = 0.f;
+@@ -200,22 +210,18 @@
+ 
+   for (int j0 = 0; j0 < real; j0 += BN) {
+     const int j_last = min(j0 + BN - 1, real - 1);
+-    const int slot_lo = slot_lo_next;
++    const int slot_lo = window_start(j0);
+     const int warp_lo = min(__ldg(delta_to_local + (warp_row0 - j_last + position_offset)) - slot_lo,
+                             S::CTA_WINDOW - WARP_WINDOW);
+     const bool has_next = j0 + BN < real;
+ 
+-    __syncthreads();  // last tile's shared reads are done
+-    store_rows<S::KV_CHUNKS / 2, S::THREADS>(k_regs, k_tile);
+-    store_rows<S::KV_CHUNKS / 2, S::THREADS>(v_regs, v_tile);
+-    store_rows<S::POS_CHUNKS, S::THREADS>(pk_regs, pos_tile);
+-    __syncthreads();
+-    if (has_next) {  // lands while this tile computes
+-      slot_lo_next = window_start(j0 + BN);
+-      fetch_rows<S::KV_CHUNKS / 2, S::THREADS>(k_regs, k_base, k_sl, j0 + BN, real);
+-      fetch_rows<S::KV_CHUNKS / 2, S::THREADS>(v_regs, v_base, v_sl, j0 + BN, real);
+-      fetch_rows<S::POS_CHUNKS, S::THREADS>(pk_regs, pk_base, D, slot_lo_next, pos_rows);
+-    }
++    __syncthreads();
++    copy_rows_async<S::KV_CHUNKS / 2, S::THREADS>(k_tile, k_base, k_sl, j0, real);
++    copy_rows_async<S::KV_CHUNKS / 2, S::THREADS>(v_tile, v_base, v_sl, j0, real);
++    copy_rows_async<S::POS_CHUNKS, S::THREADS>(pos_tile, pk_base, D, slot_lo, pos_rows);
++    copy_commit();
++    copy_wait();
++    __syncthreads();
+ 
+     float s[4][4];
+     warp_gemm_abt<4>(s, q_frag, k_tile, 0, lane);
+@@ -224,10 +230,11 @@
+       warp_gemm_abt<WARP_WINDOW / 8>(c, q_frag, pos_tile, warp_lo, lane);
+       store_block<WARP_WINDOW / 8>(my_cq, WARP_WINDOW, 0, c, lane);
+     }
+-    __syncthreads();  // pos_tile free
+-    store_rows<S::POS_CHUNKS, S::THREADS>(pq_regs, pos_tile);
+-    __syncthreads();
+-    if (has_next) fetch_rows<S::POS_CHUNKS, S::THREADS>(pq_regs, pq_base, D, slot_lo_next, pos_rows);
++    __syncthreads();
++    copy_rows_async<S::POS_CHUNKS, S::THREADS>(pos_tile, pq_base, D, slot_lo, pos_rows);
++    copy_commit();
++    copy_wait();
++    __syncthreads();
+     {
+       // p2c block [32 keys][CTA_WINDOW slots]: warp w takes key block w % 2 and slot part w / 2
+       uint32_t k_frag[8][2];
+@@ -334,6 +341,7 @@
+   static bool configured = false;
+   if (!configured) {
+     cudaFuncSetAttribute(disentangled_attention_v4_kernel<WARPS>, cudaFuncAttributeMaxDynamicSharedMemorySize, S::SMEM);
++    cudaFuncSetAttribute(disentangled_attention_v4_kernel<WARPS>, cudaFuncAttributePreferredSharedMemoryCarveout, 100);
+     configured = true;
+   }
+   dim3 grid((length + S::BM - 1) / S::BM, batch * heads);

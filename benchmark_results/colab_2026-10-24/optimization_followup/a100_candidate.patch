@@ -1,0 +1,11 @@
+--- a/csrc/disentangled_attention_v4.cu
++++ b/csrc/disentangled_attention_v4.cu
+@@ -119,7 +119,7 @@
+ }
+ 
+ template <int WARPS>
+-__global__ void __launch_bounds__(Shape<WARPS>::THREADS, 8 / WARPS) disentangled_attention_v4_kernel(
++__global__ void __launch_bounds__(Shape<WARPS>::THREADS, 12 / WARPS) disentangled_attention_v4_kernel(
+     const __half* __restrict__ query, const __half* __restrict__ key, const __half* __restrict__ value,
+     int64_t q_sb, int64_t q_sh, int64_t q_sl, int64_t k_sb, int64_t k_sh, int64_t k_sl, int64_t v_sb, int64_t v_sh,
+     int64_t v_sl, const __half* __restrict__ pos_key, const __half* __restrict__ pos_query, int pos_rows,

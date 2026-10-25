@@ -1,0 +1,522 @@
+{
+  "gpu": "NVIDIA L4",
+  "capability": [
+    8,
+    9
+  ],
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "gliner2": "2.1.0",
+    "disentangled-flash": "1.1.1",
+    "transformers": "5.20.2"
+  },
+  "cuda": "13.0",
+  "cpu_threads": 4,
+  "scope": "Single GPU, single serving thread, batch 16, FP16, grouped three passes. Same model instance for Triton/custom. Compilation and warmup excluded.",
+  "kernel": "Original T4 v4 source recompiled for actual GPU; no tile or algorithm tuning.",
+  "unique_corpus_chunks": 290,
+  "corpus_sha256": "6304617b6cb66812741289f10efe54850159917f47eb3cf7bfd3b970dee12a40",
+  "attention_backends": [
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton",
+    "triton"
+  ],
+  "model_commit": null,
+  "input_tokens": 77027,
+  "encoder": [
+    {
+      "length": 256,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 28.03117980957031,
+      "custom_ms": 23.604428100585938,
+      "timing_samples": {
+        "triton": [
+          27.574478149414062,
+          27.61707458496094,
+          28.03117980957031,
+          28.498330688476564,
+          29.100238037109374,
+          27.72357177734375,
+          29.641522216796876
+        ],
+        "custom": [
+          23.28289337158203,
+          23.077069091796876,
+          25.009561157226564,
+          23.885618591308592,
+          23.604428100585938,
+          23.041229248046875,
+          24.402943420410157
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.001468913396820426,
+        "max_abs": 0.13682061433792114
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0014977812534198165,
+        "max_abs": 0.16367608308792114
+      },
+      "speedup": 1.1875390367485534
+    },
+    {
+      "length": 256,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 27.545803833007813,
+      "custom_ms": 20.455628967285158,
+      "timing_samples": {
+        "triton": [
+          27.062066650390626,
+          27.300454711914064,
+          28.687973022460938,
+          27.545803833007813,
+          27.4798583984375,
+          27.608474731445312,
+          27.822488403320314
+        ],
+        "custom": [
+          20.455628967285158,
+          20.328448486328124,
+          21.764300537109374,
+          20.652851867675782,
+          20.348927307128907,
+          20.328857421875,
+          21.048934936523438
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.001383056165650487,
+        "max_abs": 0.1791071891784668
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0013828163500875235,
+        "max_abs": 0.1918025016784668
+      },
+      "speedup": 1.346612410552715
+    },
+    {
+      "length": 384,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 44.79098815917969,
+      "custom_ms": 38.271795654296874,
+      "timing_samples": {
+        "triton": [
+          44.79098815917969,
+          43.72664184570313,
+          43.754495239257814,
+          44.81331176757813,
+          44.403506469726565,
+          44.949710083007815,
+          45.700094604492186
+        ],
+        "custom": [
+          38.49175109863281,
+          38.04569702148437,
+          38.21035461425781,
+          38.845849609375,
+          38.271795654296874,
+          37.31230773925781,
+          38.80447998046875
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0017071914626285434,
+        "max_abs": 0.1515815258026123
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0017414792673662305,
+        "max_abs": 0.2199935019016266
+      },
+      "speedup": 1.1703393424173159
+    },
+    {
+      "length": 384,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 29.418087768554688,
+      "custom_ms": 23.212646484375,
+      "timing_samples": {
+        "triton": [
+          28.931072998046876,
+          28.866558837890626,
+          29.418087768554688,
+          29.562469482421875,
+          29.442047119140625,
+          28.96732177734375,
+          30.6524169921875
+        ],
+        "custom": [
+          23.05699768066406,
+          23.05065002441406,
+          24.705638122558593,
+          24.04884490966797,
+          23.212646484375,
+          22.857933044433594,
+          24.02856903076172
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.001615959219634533,
+        "max_abs": 0.15077972412109375
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0015918187564238906,
+        "max_abs": 0.15209341049194336
+      },
+      "speedup": 1.2673301938388077
+    },
+    {
+      "length": 512,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 65.66072387695313,
+      "custom_ms": 55.18827514648437,
+      "timing_samples": {
+        "triton": [
+          61.92066650390625,
+          62.98603515625,
+          66.65379638671875,
+          64.2418701171875,
+          66.64151000976562,
+          66.38591918945312,
+          65.66072387695313
+        ],
+        "custom": [
+          56.84019165039062,
+          54.940057373046876,
+          55.70560302734375,
+          53.96971435546875,
+          55.18827514648437,
+          54.22796630859375,
+          55.226983642578126
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.002039448358118534,
+        "max_abs": 0.4477229118347168
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.002051932504400611,
+        "max_abs": 0.3877461552619934
+      },
+      "speedup": 1.1897585801091282
+    },
+    {
+      "length": 512,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 41.268838500976564,
+      "custom_ms": 32.79441833496094,
+      "timing_samples": {
+        "triton": [
+          40.125030517578125,
+          43.2822265625,
+          43.50873718261719,
+          40.487527465820314,
+          42.44766845703125,
+          40.808038330078126,
+          41.268838500976564
+        ],
+        "custom": [
+          32.22282104492187,
+          31.868109130859374,
+          32.79441833496094,
+          31.952487182617187,
+          34.098995971679685,
+          32.983245849609375,
+          33.012734985351564
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0017933340277522802,
+        "max_abs": 0.28474974632263184
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0017257354920729995,
+        "max_abs": 0.22645306587219238
+      },
+      "speedup": 1.258410442882634
+    },
+    {
+      "length": 1024,
+      "padded": false,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 155.60172119140626,
+      "custom_ms": 139.7149658203125,
+      "timing_samples": {
+        "triton": [
+          154.24266357421874,
+          155.60172119140626,
+          155.3997802734375,
+          156.16942138671874,
+          155.16754150390625,
+          156.85140380859374,
+          156.58045654296876
+        ],
+        "custom": [
+          138.74483642578124,
+          139.32032470703126,
+          139.7149658203125,
+          139.96134033203126,
+          138.98096923828126,
+          140.19420166015624,
+          139.76575927734376
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.002561720088124275,
+        "max_abs": 0.31309187412261963
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0025086505338549614,
+        "max_abs": 0.3051481246948242
+      },
+      "speedup": 1.1137083295108536
+    },
+    {
+      "length": 1024,
+      "padded": true,
+      "batch": 16,
+      "custom_calls": 12,
+      "triton_ms": 98.93457641601563,
+      "custom_ms": 77.26817016601562,
+      "timing_samples": {
+        "triton": [
+          100.49003295898437,
+          99.6220947265625,
+          96.94105834960938,
+          99.59505615234374,
+          97.66154174804687,
+          98.34926147460938,
+          98.93457641601563
+        ],
+        "custom": [
+          77.04146118164063,
+          76.683056640625,
+          78.721435546875,
+          76.95195922851562,
+          77.82236328125,
+          77.26817016601562,
+          77.28209838867187
+        ]
+      },
+      "triton_vs_fp32": {
+        "mean_abs": 0.0022613229230046272,
+        "max_abs": 0.27089786529541016
+      },
+      "custom_vs_fp32": {
+        "mean_abs": 0.0022949804551899433,
+        "max_abs": 0.33663320541381836
+      },
+      "speedup": 1.2804053234785857
+    }
+  ],
+  "extraction": {
+    "triton": {
+      "seconds": [
+        4.640582565999921,
+        4.638650403999918,
+        4.663834159000089
+      ],
+      "median_seconds": 4.640582565999921,
+      "chunks_per_s": 62.4921539215223,
+      "input_tokens_per_s": 16598.562552114134
+    },
+    "custom": {
+      "seconds": [
+        4.109940527999925,
+        4.1254156519999015,
+        4.105276128000014
+      ],
+      "median_seconds": 4.109940527999925,
+      "chunks_per_s": 70.56063172308885,
+      "input_tokens_per_s": 18741.633723221945
+    },
+    "speedup": 1.129111853172783
+  },
+  "parity": {
+    "identical_chunks": 288,
+    "total_chunks": 290,
+    "differences": [
+      {
+        "chunk": 57,
+        "triton": {
+          "Organization": [
+            "Aaranya Logistics Private Limited"
+          ],
+          "Person": [
+            "Anitha Srinivasan",
+            "Mansi Shah",
+            "Rafael Oliveira",
+            "Sravani Yadav"
+          ],
+          "Street": [
+            "Vennela Nagar Road"
+          ],
+          "City": [
+            "Hyderabad"
+          ]
+        },
+        "custom": {
+          "Organization": [
+            "Aaranya Logistics Private Limited"
+          ],
+          "Person": [
+            "Anitha Srinivasan",
+            "Mansi Shah",
+            "Rafael Oliveira",
+            "Sravani Yadav"
+          ],
+          "Street": [
+            "154 Vennela Nagar Road"
+          ],
+          "City": [
+            "Hyderabad"
+          ]
+        }
+      },
+      {
+        "chunk": 124,
+        "triton": {
+          "Organization": [
+            "Savera Learning Cooperative Private Limited"
+          ],
+          "Person": [
+            "Anusha Kumar",
+            "Lucas Walker",
+            "Parth Vyas",
+            "Pooja",
+            "Priya Balasubramanian"
+          ],
+          "Street": [
+            "75 Marudham Street"
+          ],
+          "City": [
+            "Chennai"
+          ]
+        },
+        "custom": {
+          "Organization": [
+            "Savera Learning Cooperative Private Limited"
+          ],
+          "Person": [
+            "Anusha Kumar",
+            "Lucas Walker",
+            "Parth Vyas",
+            "Pooja",
+            "Priya Balasubramanian"
+          ],
+          "Street": [
+            "Marudham Street"
+          ],
+          "City": [
+            "Chennai"
+          ]
+        }
+      }
+    ]
+  },
+  "peak_allocated_mb": 6782.1572265625,
+  "ground_truth_method": "Per-document unique values; Unicode/case/space normalization; Street ignores house numbers and permits containment. Raw grouped GLiNER2 outputs, without ai-utils span resolver.",
+  "ground_truth": {
+    "triton": {
+      "Person": {
+        "truth": 696,
+        "recognized_truth": 691,
+        "returned": 720,
+        "correct_returned": 691,
+        "recall": 0.992816091954023,
+        "precision": 0.9597222222222223
+      },
+      "Organization": {
+        "truth": 129,
+        "recognized_truth": 126,
+        "returned": 149,
+        "correct_returned": 126,
+        "recall": 0.9767441860465116,
+        "precision": 0.8456375838926175
+      },
+      "Street": {
+        "truth": 400,
+        "recognized_truth": 348,
+        "returned": 299,
+        "correct_returned": 297,
+        "recall": 0.87,
+        "precision": 0.9933110367892977
+      },
+      "City": {
+        "truth": 160,
+        "recognized_truth": 160,
+        "returned": 177,
+        "correct_returned": 160,
+        "recall": 1.0,
+        "precision": 0.903954802259887
+      }
+    },
+    "custom": {
+      "Person": {
+        "truth": 696,
+        "recognized_truth": 691,
+        "returned": 720,
+        "correct_returned": 691,
+        "recall": 0.992816091954023,
+        "precision": 0.9597222222222223
+      },
+      "Organization": {
+        "truth": 129,
+        "recognized_truth": 126,
+        "returned": 149,
+        "correct_returned": 126,
+        "recall": 0.9767441860465116,
+        "precision": 0.8456375838926175
+      },
+      "Street": {
+        "truth": 400,
+        "recognized_truth": 348,
+        "returned": 300,
+        "correct_returned": 298,
+        "recall": 0.87,
+        "precision": 0.9933333333333333
+      },
+      "City": {
+        "truth": 160,
+        "recognized_truth": 160,
+        "returned": 177,
+        "correct_returned": 160,
+        "recall": 1.0,
+        "precision": 0.903954802259887
+      }
+    }
+  },
+  "model_snapshot": "ce747d79a8e362d3dee0b0b26d1201f7f1a8615a",
+  "kernel_source_sha256": "b594066b4995835fd5dead31b1f419305652d224bec4146700ebbd3044ab3035",
+  "nvidia_smi": "name, driver_version, temperature.gpu, clocks.current.sm [MHz], power.draw [W]\nNVIDIA L4, 580.82.07, 55, 2040 MHz, 29.42 W\n",
+  "profiled_attention_kernels": {
+    "triton": [
+      "_deberta_attention_forward_kernel"
+    ],
+    "custom": [
+      "void (anonymous namespace)::disentangled_attention_v4_kernel<4>(__half const*, __half const*, __half const*, long, long, long, long, long, long, long, long, long, __half const*, __half const*, int, int const*, int, int, unsigned char const*, int const*, int const*, __half*, int, int, float)"
+    ]
+  }
+}

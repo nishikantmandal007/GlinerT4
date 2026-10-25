@@ -1,0 +1,89 @@
+{
+  "vocabulary_entries_checked": 250112,
+  "fallback_cases_checked": 9,
+  "gate": "Complete JSON including scores/spans equals unchanged baseline on every timed round.",
+  "paths": {
+    "triton_prep": {
+      "seconds": [
+        4.216992235000021,
+        4.212761884000088,
+        4.210301623000078,
+        4.216407366999988,
+        4.226974777999999
+      ],
+      "chunks_per_s": 68.77893304847763,
+      "complete_results_equal": true,
+      "reference": "triton"
+    },
+    "triton_bulk": {
+      "seconds": [
+        4.184268816999975,
+        4.15263866600003,
+        4.171424344000002,
+        4.175480203999996,
+        4.164035243000058
+      ],
+      "chunks_per_s": 69.52061839911434,
+      "complete_results_equal": true,
+      "reference": "triton"
+    },
+    "base_prep": {
+      "seconds": [
+        3.987810510000031,
+        3.7097580929998912,
+        3.688286188999996,
+        3.7073834259999785,
+        3.9947006390000297
+      ],
+      "chunks_per_s": 78.1722130473181,
+      "complete_results_equal": true,
+      "reference": "base"
+    },
+    "base_bulk": {
+      "seconds": [
+        3.66785341100001,
+        3.671388974000024,
+        3.6716939760000287,
+        3.6642011320000165,
+        3.670240267000054
+      ],
+      "chunks_per_s": 79.01390069948675,
+      "complete_results_equal": true,
+      "reference": "base"
+    },
+    "async_simple_bulk": {
+      "seconds": [
+        3.5946312970000918,
+        3.5816702890000442,
+        3.6028465910000023,
+        3.5864883719999625,
+        3.606208565999964
+      ],
+      "chunks_per_s": 80.6758679929205,
+      "complete_results_equal": true,
+      "reference": "base"
+    }
+  },
+  "extra_parity": {
+    "triton_prep": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "triton_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "base_prep": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "base_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    },
+    "async_simple_bulk": {
+      "cases": 21,
+      "complete_results_equal": true
+    }
+  }
+}

@@ -1,0 +1,125 @@
+
+[colab] A new version of Colab CLI is available: 0.7.5 (current: 0.7.4)
+[colab] Run 'colab update' to update.
+[colab] To silence this check, set "enable_update_check": false in ~/.config/colab-cli/settings.json
+
+/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_auth.py:138: UserWarning: 
+Error while fetching `HF_TOKEN` secret value from your vault: 'Requesting secret HF_TOKEN timed out. Secrets can only be fetched when running from the Colab UI.'.
+  warnings.warn(f"\nError while fetching `HF_TOKEN` secret value from your vault: '{str(e)}'.")
+config.json:   0%|          | 0.00/234 [00:00<?, ?B/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+config.json:   0%|          | 0.00/823 [00:00<?, ?B/s]
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+tokenizer_config.json:   0%|          | 0.00/21.6k [00:00<?, ?B/s]
+spm.model: reconstructing file:   0%|          |  0.00B / 4.31MB            
+spm.model: downloading bytes:           |  0.00B            
+tokenizer.json: reconstructing file:   0%|          |  0.00B / 16.3MB           
+tokenizer.json: downloading bytes:           |  0.00B            
+added_tokens.json:   0%|          | 0.00/230 [00:00<?, ?B/s]
+special_tokens_map.json:   0%|          | 0.00/2.41k [00:00<?, ?B/s]
+model.safetensors: reconstructing file:   0%|          |  0.00B / 1.23GB        
+model.safetensors: downloading bytes:           |  0.00B            
+[transformers] You are using a model of type `extractor` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+RESULT {"gpu": "NVIDIA L4", "torch": "2.11.0+cu130", "capability": "8.9", "chunks": 580, "standard_encoder_16x256_ms": 56.03, "standard_encoder_16x384_ms": 123.6, "standard_encoder_16x512_ms": 197.37, "standard_chunks_per_s": 28.3, "standard_entities_found": 5142, "standard_peak_mb": 1538, "disentangled_flash_encoder_16x256_ms": 29.0, "disentangled_flash_encoder_16x384_ms": 47.08, "disentangled_flash_encoder_16x512_ms": 68.98, "disentangled_flash_chunks_per_s": 52.9, "disentangled_flash_entities_found": 5144, "disentangled_flash_peak_mb": 1547}
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/wsclient.py:1353 in _recv_reply      │
+│                                                                              │
+│   1350 │   │   │   │   if channel == "control":                              │
+│   1351 │   │   │   │   │   reply =                                           │
+│        self.control_channel.get_msg(timeout=timeout)                         │
+│   1352 │   │   │   │   else:                                                 │
+│ ❱ 1353 │   │   │   │   │   reply =                                           │
+│        self.shell_channel.get_msg(timeout=timeout)                           │
+│   1354 │   │   │   except queue.Empty as e:                                  │
+│   1355 │   │   │   │   msg = "Timeout waiting for reply"                     │
+│   1356 │   │   │   │   raise TimeoutError(msg) from e                        │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/wsclient.py:411 in get_msg           │
+│                                                                              │
+│    408 │   │   ------                                                        │
+│    409 │   │   Empty exception if no message is received before the timeout. │
+│    410 │   │   """                                                           │
+│ ❱  411 │   │   return self._messages.get(timeout=timeout)                    │
+│    412 │                                                                     │
+│    413 │   def get_msgs(self) -> list[dict[str, t.Any]]:                     │
+│    414 │   │   """Get all available messages.                                │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/python/cpython-3.13.14-macos-aarch │
+│ 64-none/lib/python3.13/queue.py:209 in get                                   │
+│                                                                              │
+│   206 │   │   │   │   while not self._qsize():                               │
+│   207 │   │   │   │   │   remaining = endtime - time()                       │
+│   208 │   │   │   │   │   if remaining <= 0.0:                               │
+│ ❱ 209 │   │   │   │   │   │   raise Empty                                    │
+│   210 │   │   │   │   │   self.not_empty.wait(remaining)                     │
+│   211 │   │   │   │   │   if self.is_shutdown and not self._qsize():         │
+│   212 │   │   │   │   │   │   raise ShutDown                                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Empty
+
+The above exception was the direct cause of the following exception:
+
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/colab_cli/commands/execution.py:258 in exec_command        │
+│                                                                              │
+│   255 │   │   │   )                                                          │
+│   256 │   │   │   state.store.add(s)                                         │
+│   257 │   │   │                                                              │
+│ ❱ 258 │   │   │   outputs = runtime.execute_code(                            │
+│   259 │   │   │   │   code,                                                  │
+│   260 │   │   │   │   output_hook=lambda o: display_output(o, output_image), │
+│   261 │   │   │   │   timeout=timeout,                                       │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/colab_cli/runtime.py:237 in execute_code                   │
+│                                                                              │
+│   234 │   │   │   │   │   │   if idx < len(outputs):                         │
+│   235 │   │   │   │   │   │   │   output_hook(outputs[idx])                  │
+│   236 │   │   │                                                              │
+│ ❱ 237 │   │   │   reply = self.kernel_client.execute_interactive(            │
+│   238 │   │   │   │   code, output_hook=wrapped_output_hook, **kwargs        │
+│   239 │   │   │   )                                                          │
+│   240 │   │   │   # execute_interactive returns the raw reply message        │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/client.py:364 in execute_interactive │
+│                                                                              │
+│   361 │   │   │   The reply message for this request                         │
+│   362 │   │   """                                                            │
+│   363 │   │   self._set_variables(variables)                                 │
+│ ❱ 364 │   │   return self._manager.client.execute_interactive(               │
+│   365 │   │   │   code,                                                      │
+│   366 │   │   │   silent=silent,                                             │
+│   367 │   │   │   store_history=store_history,                               │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/wsclient.py:1112 in                  │
+│ execute_interactive                                                          │
+│                                                                              │
+│   1109 │   │   │   # output is done, get the reply                           │
+│   1110 │   │   │   if timeout is not None:                                   │
+│   1111 │   │   │   │   timeout = max(0, deadline - time.monotonic())         │
+│ ❱ 1112 │   │   │   return self._recv_reply(msg_id, timeout=timeout)          │
+│   1113 │                                                                     │
+│   1114 │   def is_alive(self) -> bool:                                       │
+│   1115 │   │   """Is the kernel process still running?"""                    │
+│                                                                              │
+│ /Users/nishikantmandal007/.local/share/uv/tools/google-colab-cli/lib/python3 │
+│ .13/site-packages/jupyter_kernel_client/wsclient.py:1356 in _recv_reply      │
+│                                                                              │
+│   1353 │   │   │   │   │   reply =                                           │
+│        self.shell_channel.get_msg(timeout=timeout)                           │
+│   1354 │   │   │   except queue.Empty as e:                                  │
+│   1355 │   │   │   │   msg = "Timeout waiting for reply"                     │
+│ ❱ 1356 │   │   │   │   raise TimeoutError(msg) from e                        │
+│   1357 │   │   │   if reply["parent_header"].get("msg_id") != msg_id:        │
+│   1358 │   │   │   │   self.log.debug("Ignoring message not from request:    │
+│        %s", msg_id)                                                          │
+│   1359 │   │   │   │   continue                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+TimeoutError: Timeout waiting for reply
+EXIT 1
