@@ -37,7 +37,8 @@ five English test sets, once as single sentences and once joined into documents 
 of a domain goes in one prompt, threshold 0.5, strict F1 (label, start and end must match).
 
 Pinned: gliner2 2.1.0, `fastino/gliner2-multi-v1`, disentangled-flash 1.1.1, glinert4 from [{REPO}]({REPO}).
-Pick a GPU runtime (Runtime → Change runtime type → T4). It takes about 15 minutes.
+Section 5 runs both on a whole document of your own (.docx, .pdf or .txt) and, if you have it, scores them against
+your ground truth page by page. Pick a GPU runtime (Runtime → Change runtime type → T4). It takes about 15 minutes.
 """)
 
 code(f"""
@@ -45,7 +46,7 @@ import sys
 
 if "google.colab" in sys.modules:
     !pip install -q uv
-    !uv pip install --system -q "gliner2[local]==2.1.0" disentangled-flash==1.1.1 ninja
+    !uv pip install --system -q "gliner2[local]==2.1.0" disentangled-flash==1.1.1 ninja python-docx pypdf
     !uv pip install --system -q --no-deps "glinert4 @ git+{REPO}@{REF}#subdirectory=production"
 """)
 
@@ -317,6 +318,401 @@ def on_click(_):
 
 button.on_click(on_click)
 display(widgets.VBox([text_box, label_box, button, output]))
+""")
+
+md("""
+## 5. Your own document
+
+Both GLiNER2 fp16 and glinert4 run the production detector (Person, Organization, Street, City, one pass, 384-word
+windows with 64 words of overlap) on a whole document. A .docx is read page by page (explicit page breaks), with its
+tables, tracked deletions, comments, header, footer and document properties, because PII hides in all of them.
+
+Ground truth is optional, in either of two forms:
+
+- a manifest, `{"pii": [{"type": "Names", "value": "…", "location": {"page": 3, "part": "word/document.xml"}}],
+  "controls": [{"value": "…"}]}`, scored per page and per occurrence; controls are values that must not be detected;
+- plain values, `{"Person": ["…"], "City": ["…"]}`, scored on the whole document.
+
+`Names` counts as Person. Other types (emails, phone numbers, dates) are listed but not scored, because this detector
+does not look for them. The default input is a synthetic 100-page service contract with its manifest.
+""")
+
+code(r"""
+import io
+import json
+import re
+import unicodedata
+from collections import Counter
+from pathlib import Path
+
+from docx import Document
+from docx.oxml.ns import qn
+from docx.table import Table
+from docx.text.paragraph import Paragraph
+from glinert4 import Detector
+
+SAMPLES = "https://raw.githubusercontent.com/nishikantmandal007/GlinerT4/claude/upbeat-bell-km1ebk/notebooks/samples/"
+DOCUMENT = "samples/02_service_contract_100p.docx"
+GROUND_TRUTH = "samples/02_service_contract_100p.docx.manifest.json"
+GT_LABELS = {"Names": "Person", "Person": "Person", "Organization": "Organization", "Street": "Street", "City": "City"}
+
+
+# a .docx as {page: text} split at explicit page breaks, plus its header, footer, comments and properties
+def read_docx(data):
+    doc = Document(io.BytesIO(data))
+    pages, lines = [], []
+    for block in doc.element.body.iterchildren():
+        if block.tag == qn("w:p"):
+            if block.find(f"{qn('w:pPr')}/{qn('w:pageBreakBefore')}") is not None and lines:
+                pages.append("\n".join(lines))
+                lines = []
+            lines.append(Paragraph(block, doc).text)
+            for change in block.iter(qn("w:del")):
+                deleted = "".join(t.text or "" for t in change.iter(qn("w:delText")))
+                lines.append(f"Deleted by {change.get(qn('w:author'))}: {deleted}")
+            if any(br.get(qn("w:type")) == "page" for br in block.iter(qn("w:br"))):
+                pages.append("\n".join(lines))
+                lines = []
+        elif block.tag == qn("w:tbl"):
+            lines += ["\t".join(cell.text for cell in row.cells) for row in Table(block, doc).rows]
+    if lines:
+        pages.append("\n".join(lines))
+    parts = dict(enumerate(pages, 1))
+    unique = lambda texts: "\n".join(dict.fromkeys(t for t in texts if t.strip()))
+    parts["header"] = unique(p.text for s in doc.sections for p in s.header.paragraphs)
+    parts["footer"] = unique(p.text for s in doc.sections for p in s.footer.paragraphs)
+    parts["comments"] = "\n".join(f"Comment by {c.author}: {c.text}" for c in doc.comments)
+    core = doc.core_properties
+    parts["properties"] = "\n".join(f"{field.replace('_', ' ').capitalize()}: {getattr(core, field)}"
+                                    for field in ("author", "last_modified_by", "title", "subject", "keywords")
+                                    if getattr(core, field))
+    return {name: text for name, text in parts.items() if text.strip()}
+
+
+def read_document(name, data):
+    if name.lower().endswith(".docx"):
+        return read_docx(data)
+    if name.lower().endswith(".pdf"):
+        from pypdf import PdfReader
+
+        return {page: p.extract_text() or "" for page, p in enumerate(PdfReader(io.BytesIO(data)).pages, 1)}
+    return {1: data.decode("utf-8-sig")}
+
+
+def part_name(location):
+    location = location or {}
+    part = location.get("part") or "word/document.xml"
+    if part.endswith("document.xml"):
+        return location.get("page") or 1
+    for name in ("header", "footer", "comments"):
+        if name in part:
+            return name
+    return "properties" if part.startswith("docProps/") else part
+
+
+# Counter{(part, label, value): occurrences}, the control values, and the types this detector does not score
+def read_ground_truth(data):
+    raw = json.loads(data)
+    truth, controls = Counter(), {c["value"] for c in raw.get("controls", [])}
+    if "pii" in raw:
+        for item in raw["pii"]:
+            if item["type"] in GT_LABELS:
+                truth[part_name(item.get("location")), GT_LABELS[item["type"]], item["value"]] += 1
+        return truth, controls, Counter(item["type"] for item in raw["pii"] if item["type"] not in GT_LABELS)
+    for label, values in raw.items():
+        for value in values:
+            truth[None, GT_LABELS.get(label, label), value] += 1
+    return truth, controls, Counter()
+
+
+def norm(text):
+    return " ".join(unicodedata.normalize("NFKC", text).casefold().split())
+
+
+# a street matches when one holds the other, since detections drop house numbers
+def same(label, found, expected):
+    found, expected = norm(found), norm(expected)
+    return found == expected or (label == "Street" and bool(found) and (found in expected or expected in found))
+
+
+def word_pattern(value):
+    return rf"(?<!\w){re.escape(value)}(?!\w)"
+
+
+# where each expected value and each control value occurs in a text, as (start, end, label)
+def positions(text, values):
+    return [(m.start(), m.end(), label) for label, value in values for m in re.finditer(word_pattern(value), text)]
+
+
+# every detection gets a kind: correct, or by where it falls, control flagged / wrong label / boundary / invented;
+# expected values nobody found are added as "missed"
+def judge(parts, found, truth, controls):
+    open_truth = Counter(truth)
+    marks = {part: [] for part in parts}
+    for part, occurrences in found.items():
+        text = parts[part]
+        nearby = [key for key in truth if key[0] in (part, None)]
+        expected = positions(text, {(k[1], k[2]) for k in nearby})
+        control_spans = positions(text, {(None, value) for value in controls})
+        for occurrence in sorted(occurrences, key=lambda o: o["start"]):
+            label, start, end = occurrence["label"], occurrence["start"], occurrence["end"]
+            key = next((k for k in nearby if open_truth[k] > 0 and k[1] == label and same(label, text[start:end], k[2])),
+                       None)
+            overlapping = {other for s, e, other in expected if s < end and start < e}
+            if key:
+                open_truth[key] -= 1
+                kind = "correct"
+            elif any(s < end and start < e for s, e, _ in control_spans):
+                kind = "control flagged"
+            elif label in overlapping:
+                kind = "boundary"
+            elif overlapping:
+                kind = "wrong label"
+            else:
+                kind = "invented"
+            marks[part].append({**occurrence, "kind": kind})
+    for (part, label, value), count in open_truth.items():
+        pattern = word_pattern(value)
+        names = [part] if part is not None else [name for name in parts if re.search(pattern, parts[name])]
+        for name in names:
+            taken = [(m["start"], m["end"]) for m in marks.get(name, []) if "start" in m]
+            for match in re.finditer(pattern, parts.get(name, "")):
+                if count and not any(s < match.end() and match.start() < e for s, e in taken):
+                    marks[name].append({"label": label, "start": match.start(), "end": match.end(), "kind": "missed"})
+                    taken.append(match.span())
+                    count -= 1
+        home = names[0] if names and names[0] in marks else "not in the text"
+        marks.setdefault(home, []).extend({"label": label, "value": value, "kind": "missed"} for _ in range(count))
+    return marks
+""")
+
+code(r"""
+# the detector's occurrences per part: the pages go in as one document, the other parts as texts of their own
+def detect(detector, parts):
+    pages = [name for name in parts if isinstance(name, int)]
+    others = [name for name in parts if not isinstance(name, int)]
+    starts, position = {}, 0
+    for page in pages:
+        starts[page] = position
+        position += len(parts[page]) + 2
+    texts = ["\n\n".join(parts[page] for page in pages)] * bool(pages) + [parts[name] for name in others]
+    torch.cuda.synchronize()
+    start = time.perf_counter()
+    results = detector.detect(texts)
+    torch.cuda.synchronize()
+    seconds = time.perf_counter() - start
+    found = {name: [] for name in parts}
+    for occurrence in results[0]["occurrences"] if pages else []:
+        page = max((p for p in pages if starts[p] <= occurrence["start"]), key=starts.get)
+        end = min(occurrence["end"] - starts[page], len(parts[page]))
+        found[page].append({**occurrence, "start": occurrence["start"] - starts[page], "end": end})
+    for name, result in zip(others, results[bool(pages):]):
+        found[name] = result["occurrences"]
+    return found, seconds
+
+
+# (name, bytes) from an upload, a local path, or the sample of that name in the repository
+def read_source(source):
+    if isinstance(source, tuple):
+        return source
+    path = Path(source)
+    return path.name, path.read_bytes() if path.exists() else urllib.request.urlopen(SAMPLES + path.name).read()
+
+
+detectors = {"GLiNER2 fp16": Detector(model=stock, fast=False), "glinert4": Detector(model=fast)}
+
+
+def evaluate(document, ground_truth=None):
+    name, data = read_source(document)
+    parts = read_document(name, data)
+    truth, controls, other = read_ground_truth(read_source(ground_truth)[1]) if ground_truth else (None, set(), Counter())
+    runs = {}
+    for setup, detector in detectors.items():
+        glinert4.uninstall() if setup == "GLiNER2 fp16" else glinert4.install()
+        detector.detect(["Anna Müller of Siemens AG lives at Hauptstraße 5, Berlin."])
+        found, seconds = detect(detector, parts)
+        marks = judge(parts, found, truth, controls) if truth else {
+            part: [{**o, "kind": "detected"} for o in occurrences] for part, occurrences in found.items()}
+        runs[setup] = {"seconds": seconds, "found": found, "marks": marks}
+    report = {"name": name, "parts": parts, "truth": truth, "controls": controls, "other": other, "runs": runs}
+    summary(report)
+    return report
+
+
+def summary(report):
+    parts, runs = report["parts"], report["runs"]
+    words = sum(len(text.split()) for text in parts.values())
+    pages = sum(isinstance(name, int) for name in parts)
+    before, after = runs["GLiNER2 fp16"], runs["glinert4"]
+    identical = all(sorted((o["label"], o["start"], o["end"]) for o in before["found"][part])
+                    == sorted((o["label"], o["start"], o["end"]) for o in after["found"][part]) for part in parts)
+    display(Markdown(f"**{report['name']}**: {pages} pages, {words:,} words. GLiNER2 fp16 {before['seconds']:.2f} s, "
+                     f"glinert4 {after['seconds']:.2f} s, **{before['seconds'] / after['seconds']:.1f}× faster**, "
+                     f"{'identical detections' if identical else 'detections differ'}."))
+    if report["truth"] is None:
+        return
+    rows = []
+    for label in dict.fromkeys(key[1] for key in report["truth"]):
+        row = [label]
+        for run in (before, after):
+            kinds = Counter(m["kind"] for marks in run["marks"].values() for m in marks if m["label"] == label)
+            tp, fn = kinds["correct"], kinds["missed"]
+            fp = sum(kinds.values()) - tp - fn
+            row += [f"{tp / max(1, tp + fp):.3f}", f"{tp / max(1, tp + fn):.3f}", fp, fn]
+        rows.append(row)
+    display(Markdown(table(["Label", "fp16 precision", "fp16 recall", "fp16 FP", "fp16 FN",
+                            "glinert4 precision", "glinert4 recall", "glinert4 FP", "glinert4 FN"], rows)))
+    kinds = Counter(m["kind"] for marks in after["marks"].values() for m in marks)
+    errors = ", ".join(f"{kind} {n}" for kind, n in kinds.items() if kind != "correct") or "none"
+    skipped = ", ".join(f"{kind} {n}" for kind, n in report["other"].items())
+    display(Markdown(f"glinert4 errors by kind: {errors}. Control values in the ground truth: {len(report['controls'])}."
+                     + (f" Not scored by this detector: {skipped}." if skipped else "")))
+
+
+report = evaluate(DOCUMENT, GROUND_TRUTH)
+""")
+
+md("""
+### The document, marked up
+
+Every detection in its label's colour. With ground truth, a false positive gets a solid red outline and its kind, and
+a missed entity a dashed one where it should have been found. Switch between the two models, jump to a page, or show
+only the pages with errors.
+""")
+
+code(r"""
+ERROR = "#d03b3b"
+STYLE = ("<style>"
+         ".gt-page{font:14px/1.75 Georgia,'Times New Roman',serif;color:#1d1d1b;background:#fff;border:1px solid #e3e2dd;"
+         "border-radius:8px;padding:22px 26px;margin:10px 0;white-space:pre-wrap;max-width:860px;"
+         "box-shadow:0 1px 3px #0000000d}"
+         ".gt-head{font:600 13px/1.4 system-ui,sans-serif;color:#52514e;margin:18px 0 0;max-width:860px;display:flex;"
+         "gap:12px;flex-wrap:wrap;align-items:center}"
+         ".gt-head b{color:#1d1d1b;font-size:15px}"
+         ".gt-pill{font:500 12px system-ui,sans-serif;border-radius:999px;padding:2px 9px;background:#f0efec;color:#1d1d1b}"
+         ".gt-mark{border-radius:3px;padding:1px 2px;color:#1d1d1b}"
+         ".gt-tag{font:600 10px system-ui,sans-serif;letter-spacing:.02em;margin-left:3px;vertical-align:1px}"
+         ".gt-note{font:12px/1.6 system-ui,sans-serif;color:#52514e;max-width:860px;margin:-2px 0 8px;padding:8px 12px;"
+         "border-left:3px solid #d03b3b;background:#d03b3b0d;border-radius:4px}"
+         ".gt-legend{font:12px system-ui,sans-serif;color:#52514e;display:flex;gap:16px;flex-wrap:wrap;margin:6px 0 4px}"
+         "</style>")
+
+
+def tag(mark):
+    return f'{html.escape(mark["kind"]).upper()} · {html.escape(mark["label"])}'
+
+
+def mark_html(text, mark, color):
+    body = html.escape(text)
+    if mark["kind"] in ("correct", "detected"):
+        return f'<span class="gt-mark" style="background:{color}22;border-bottom:2px solid {color}">{body}</span>'
+    line, fill = ("dashed", "transparent") if mark["kind"] == "missed" else ("solid", f"{color}22")
+    return (f'<span class="gt-mark" style="background:{fill};outline:2px {line} {ERROR};outline-offset:1px">{body}'
+            f'<span class="gt-tag" style="color:{ERROR}">{tag(mark)}</span></span>')
+
+
+# one page: its text with every mark, counts on top, and marks that overlap another one listed underneath
+def page_html(name, text, marks, palette):
+    out, last, aside = [], 0, [m for m in marks if "start" not in m]
+    order = {"missed": 2, "correct": 1, "detected": 1}
+    for mark in sorted((m for m in marks if "start" in m), key=lambda m: (m["start"], order.get(m["kind"], 0))):
+        if mark["start"] < last:
+            aside.append(mark)
+            continue
+        out += [html.escape(text[last:mark["start"]]),
+                mark_html(text[mark["start"]:mark["end"]], mark, palette.get(mark["label"], "#888888"))]
+        last = mark["end"]
+    out.append(html.escape(text[last:]))
+    kinds = [m["kind"] for m in marks]
+    good = kinds.count("correct") + kinds.count("detected")
+    wrong = len(kinds) - good - kinds.count("missed")
+    pills = [f'<span class="gt-pill">{good} {"detected" if "detected" in kinds else "correct"}</span>'] * bool(good)
+    pills += [f'<span class="gt-pill" style="background:{ERROR}1a;color:{ERROR}">{n} {what}</span>'
+              for n, what in ((wrong, "false positive" + "s" * (wrong != 1)), (kinds.count("missed"), "missed")) if n]
+    notes = "".join(f'<div>{tag(m)}: "{html.escape(m.get("value") or text[m["start"]:m["end"]])}"</div>' for m in aside)
+    title = f"Page {name}" if isinstance(name, int) else str(name).capitalize()
+    return (f'<div class="gt-head"><b>{title}</b>{"".join(pills)}</div><div class="gt-page">{"".join(out)}</div>'
+            + (f'<div class="gt-note"><b>Not shown inline (overlaps another mark)</b>{notes}</div>' if notes else ""))
+
+
+def document_html(report, setup, errors_only=False, part="All"):
+    marks = report["runs"][setup]["marks"]
+    labels = list(dict.fromkeys([*detectors[setup].config.labels, *(m["label"] for ms in marks.values() for m in ms)]))
+    palette = dict(zip(labels, PALETTE))
+    legend = [f'<span class="gt-mark" style="background:{c}22;border-bottom:2px solid {c}">{html.escape(l)}</span>'
+              for l, c in palette.items()]
+    if report["truth"] is not None:
+        legend += [f'<span class="gt-mark" style="outline:2px solid {ERROR}">false positive</span>',
+                   f'<span class="gt-mark" style="outline:2px dashed {ERROR}">missed</span>']
+    shown = [name for name in marks if part in ("All", name)
+             and (not errors_only or any(m["kind"] not in ("correct", "detected") for m in marks[name]))]
+    pages = "".join(page_html(name, report["parts"].get(name, ""), marks[name], palette) for name in shown)
+    return STYLE + f'<div class="gt-legend">{"".join(legend)}</div>' + (pages or "<p>Nothing to show.</p>")
+
+
+setup_choice = widgets.ToggleButtons(options=list(detectors), value="glinert4")
+errors_choice = widgets.Checkbox(description="only pages with errors")
+part_choice = widgets.Dropdown(options=["All", *report["runs"]["glinert4"]["marks"]], description="Page")
+viewer = widgets.Output()
+
+
+def show(_=None):
+    with viewer:
+        viewer.clear_output()
+        display(HTML(document_html(report, setup_choice.value, errors_choice.value, part_choice.value)))
+
+
+for choice in (setup_choice, errors_choice, part_choice):
+    choice.observe(show, "value")
+display(widgets.VBox([widgets.HBox([setup_choice, errors_choice, part_choice]), viewer]))
+show()
+""")
+
+md("""
+The pages where glinert4 made a mistake, as a static copy of the viewer for anyone reading this without running it:
+""")
+
+code(r"""
+display(HTML(document_html(report, "glinert4", errors_only=report["truth"] is not None)))
+""")
+
+md("""
+### Upload your own
+
+Pick a document and, optionally, its ground truth, then press Evaluate. The summary appears below and the viewer above
+switches to your document.
+""")
+
+code(r"""
+document_upload = widgets.FileUpload(accept=".docx,.pdf,.txt", description="Document")
+truth_upload = widgets.FileUpload(accept=".json", description="Ground truth")
+evaluate_button = widgets.Button(description="Evaluate", button_style="primary", icon="search")
+upload_output = widgets.Output()
+
+
+# the first uploaded file as (name, bytes), for ipywidgets 7 and 8
+def uploaded(upload):
+    files = list(upload.value.values()) if isinstance(upload.value, dict) else list(upload.value)
+    if not files:
+        return None
+    file = files[0]
+    return file.get("name") or file["metadata"]["name"], bytes(file["content"])
+
+
+def on_evaluate(_):
+    global report
+    with upload_output:
+        upload_output.clear_output()
+        if uploaded(document_upload) is None:
+            print("Choose a document first.")
+            return
+        report = evaluate(uploaded(document_upload), uploaded(truth_upload))
+        part_choice.options = ["All", *report["runs"]["glinert4"]["marks"]]
+        show()
+
+
+evaluate_button.on_click(on_evaluate)
+display(widgets.VBox([widgets.HBox([document_upload, truth_upload, evaluate_button]), upload_output]))
 """)
 
 md("""
