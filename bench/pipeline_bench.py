@@ -8,6 +8,7 @@
 #   python bench/pipeline_bench.py --corpus corpus.json --out results_dir [--trials 3]
 # --standin runs the same harness on the CPU with tests/gliner2_standin.py (no GPU, no Hub) to check the script itself.
 import argparse
+import contextlib
 import functools
 import hashlib
 import importlib.metadata
@@ -33,7 +34,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--corpus", required=True, help="corpus.json: a list of documents, each with a 'chunks' list")
 parser.add_argument("--out", required=True)
 parser.add_argument("--trials", type=int, default=3)
-parser.add_argument("--configs", default="", help="comma-separated subset of config names")
+parser.add_argument("--configs", default="", help="comma-separated config names, or 'all'; default: the exact set")
 parser.add_argument("--standin", action="store_true", help="CPU smoke test of this script with a stand-in model")
 args = parser.parse_args()
 out = Path(args.out)
@@ -72,6 +73,7 @@ report["env"] = {
     "capability": torch.cuda.get_device_capability() if CUDA else None,
     "versions": {p: version(p) for p in ("torch", "triton", "gliner2", "disentangled-flash", "transformers")},
     "cuda": torch.version.cuda, "cpu_count": os.cpu_count(), "torch_threads": torch.get_num_threads(),
+    "lscpu": subprocess.run(["lscpu"], capture_output=True, text=True).stdout.strip() or None,
     "git_commit": subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True,
                                  text=True).stdout.strip() or None,
 }
@@ -81,6 +83,7 @@ if CUDA:
         print("WARNING: not a T4 (sm_75); the custom kernel is built for sm_75 only", flush=True)
     subprocess.run(["nvidia-smi"], check=False)
 
+import gliner2_exact  # noqa: E402
 import gliner2_pipeline  # noqa: E402
 from gliner2.processing.word_splitter import WhitespaceTokenSplitter  # noqa: E402
 from gliner2.training.trainer import ExtractorCollator  # noqa: E402
@@ -104,16 +107,34 @@ docs = json.loads(Path(args.corpus).read_text())
 chunks = sorted([s for d in docs for s in d["chunks"]], key=len)
 report["corpus"] = {"chunks": len(chunks), "sha256": hashlib.sha256(Path(args.corpus).read_bytes()).hexdigest()}
 
-if CUDA:
-    model = AutoExtractor.from_pretrained("fastino/gliner2-multi-v1", map_location="cuda", quantize=True,
-                                          attention_backend="disentangled_flash")
-    model.eval()
-    attention = [m for m in model.encoder.modules() if isinstance(m, kernel.InferenceDisentangledSelfAttention)]
-    assert len(attention) == 12 and all(m.backend != "torch" for m in attention), "fused attention did not activate"
-else:
-    import gliner2_standin  # noqa: E402
 
-    model = gliner2_standin.build()
+
+def load_model(first=None):
+    if CUDA:
+        loaded = AutoExtractor.from_pretrained("fastino/gliner2-multi-v1", map_location="cuda", quantize=True,
+                                               attention_backend="disentangled_flash")
+        loaded.eval()
+        attention = [m for m in loaded.encoder.modules() if isinstance(m, kernel.InferenceDisentangledSelfAttention)]
+        assert len(attention) == 12 and all(m.backend != "torch" for m in attention), "fused attention did not activate"
+    else:
+        import copy
+        import gliner2_standin  # noqa: E402
+
+        loaded = gliner2_standin.build() if first is None else copy.deepcopy(first)
+    if first is not None:
+        # as the serving code does (DETECTION_SHARE_WEIGHTS): a second serving copy reads the first copy's fp16 weights
+        pairs = list(zip(loaded.named_parameters(), first.named_parameters()))
+        assert all(a[0] == b[0] and a[1].shape == b[1].shape for a, b in pairs)
+        for (_, mine), (_, theirs) in pairs:
+            mine.data = theirs.data
+        if CUDA:
+            torch.cuda.empty_cache()
+    loaded.eval = types.MethodType(lambda self: self, loaded)
+    report.setdefault("bulk_lookup_installed", []).append(install_bulk_token_id_lookup(loaded.processor.tokenizer))
+    return loaded
+
+
+model = load_model()
 
 # the baseline's exact preparation (as in t4_optimization/baseline.py)
 _split = WhitespaceTokenSplitter.__call__
@@ -131,8 +152,6 @@ def _split_call(self, text, lower=True):
 
 
 WhitespaceTokenSplitter.__call__ = _split_call
-model.eval = types.MethodType(lambda self: self, model)
-report["bulk_lookup_installed"] = install_bulk_token_id_lookup(model.processor.tokenizer)
 
 labels = {
     "Person": "First and last names of people. NOT company names, street addresses, cities, or identifier codes.",
@@ -143,38 +162,114 @@ labels = {
 passes = [{"Organization": labels["Organization"]}, {k: labels[k] for k in ("Person", "Street", "City")},
           {"City": "Name of a city, town or village."}]
 
-# name: (prefetch depth, DataLoader workers, batch size); depth 0 is stock gliner2
-CONFIGS = {
-    "baseline": (0, 0, 16),
-    "prefetch1": (1, 0, 16),
-    "prefetch2": (2, 0, 16),
-    "workers1": (0, 1, 16),
-    "workers2": (0, 2, 16),
-    "batch8": (0, 0, 8),
-    "batch32": (0, 0, 32),
-    "batch32_prefetch2": (2, 0, 32),
+
+
+def config(depth=0, workers=0, batch=16, count0=False, fmt=False, streams=1):
+    return {"prefetch_depth": depth, "num_workers": workers, "batch_size": batch, "count_step0": count0,
+            "format_cache": fmt, "streams": streams}
+
+
+# depth 0, no exact flags, one stream is stock gliner2 (plus the baseline preparation above)
+EXACT_CONFIGS = {
+    "baseline": config(),
+    "count0": config(count0=True),
+    "fmtcache": config(fmt=True),
+    "exact": config(count0=True, fmt=True),
+    "exact_prefetch1": config(depth=1, count0=True, fmt=True),
+    "streams2": config(streams=2),
+    "exact_streams2": config(count0=True, fmt=True, streams=2),
 }
-if args.configs:
-    CONFIGS = {k: v for k, v in CONFIGS.items() if k == "baseline" or k in args.configs.split(",")}
+# tested on 2026-10-25 (none beat the baseline on Colab's 2 vCPUs); kept for hosts with more cores
+EARLIER_CONFIGS = {
+    "prefetch1": config(depth=1),
+    "prefetch2": config(depth=2),
+    "workers1": config(workers=1),
+    "workers2": config(workers=2),
+    "batch8": config(batch=8),
+    "batch32": config(batch=32),
+}
+if args.configs == "all":
+    CONFIGS = {**EXACT_CONFIGS, **EARLIER_CONFIGS}
+elif args.configs:
+    every = {**EXACT_CONFIGS, **EARLIER_CONFIGS}
+    CONFIGS = {k: every[k] for k in ["baseline"] + [n for n in args.configs.split(",") if n != "baseline"]}
+else:
+    CONFIGS = EXACT_CONFIGS
+
+second_model = load_model(first=model) if any(c["streams"] > 1 for c in CONFIGS.values()) else None
+streams = [torch.cuda.Stream() for _ in range(2)] if CUDA else [None, None]
 
 
 def configure(name):
-    depth, _, _ = CONFIGS[name]
-    if depth:
-        gliner2_pipeline.install(depth)
+    c = CONFIGS[name]
+    if c["prefetch_depth"]:
+        gliner2_pipeline.install(c["prefetch_depth"])
     else:
         gliner2_pipeline.uninstall()
+    if c["count_step0"] or c["format_cache"]:
+        gliner2_exact.install(count_step0=c["count_step0"], format_cache=c["format_cache"])
+    else:
+        gliner2_exact.uninstall()
+    for m in (model, second_model):
+        if m is not None:
+            m.processor.__dict__.pop("_exact_text_parts", None)  # each timed run starts with a cold text cache
+
+
+def schema(extractor, labels_of_pass):
+    return extractor.create_schema().entities(labels_of_pass)
+
+
+def extract_two_streams(data, batch_size):
+    # two serving threads, each with its own model copy (shared weights) on its own CUDA stream, as DETECTION_STREAMS=2
+    # serves: the same batches of batch_size as the one-stream loop, handed out in order, results put back in order
+    import queue
+    import threading
+
+    work = queue.Queue()
+    for p_index in range(len(passes)):
+        for start in range(0, len(data), batch_size):
+            work.put((p_index, start))
+    results, errors = {}, []
+
+    def serve(extractor, stream):
+        try:
+            with torch.inference_mode(), (torch.cuda.stream(stream) if CUDA else contextlib.nullcontext()):
+                while True:
+                    try:
+                        p_index, start = work.get_nowait()
+                    except queue.Empty:
+                        break
+                    results[(p_index, start)] = extractor.batch_extract(
+                        data[start:start + batch_size], schema(extractor, passes[p_index]), batch_size, 0.65, 0,
+                        True, True, True)
+                if CUDA:
+                    stream.synchronize()
+        except BaseException as error:
+            errors.append(error)
+
+    threads = [threading.Thread(target=serve, args=(m, s)) for m, s in zip((model, second_model), streams)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    if errors:
+        raise errors[0]
+    return [[item for start in range(0, len(data), batch_size) for item in results[(p_index, start)]]
+            for p_index in range(len(passes))]
 
 
 @torch.inference_mode()
 def extract(name, data=chunks):
     configure(name)
-    _, workers, batch_size = CONFIGS[name]
+    c = CONFIGS[name]
     _split_cached.cache_clear()
     sync()
     start = time.perf_counter()
-    outputs = [model.batch_extract(data, model.create_schema().entities(p), batch_size, 0.65, workers, True, True, True)
-               for p in passes]
+    if c["streams"] > 1:
+        outputs = extract_two_streams(data, c["batch_size"])
+    else:
+        outputs = [model.batch_extract(data, schema(model, p), c["batch_size"], 0.65, c["num_workers"], True, True,
+                                       True) for p in passes]
     sync()
     return time.perf_counter() - start, outputs
 
@@ -220,8 +315,7 @@ for trial in range(args.trials):
 
 base_median = statistics.median(results["baseline"]["seconds"])
 for name, row in results.items():
-    depth, workers, batch_size = CONFIGS[name]
-    row.update(prefetch_depth=depth, num_workers=workers, batch_size=batch_size)
+    row.update(CONFIGS[name])
     if not row["seconds"]:
         continue
     median = statistics.median(row["seconds"])
@@ -253,6 +347,7 @@ def stage_breakdown(name):
                 stages[stage] += time.perf_counter() - t
         return wrapper
 
+    configure(name)
     cls = type(model)
     patched = {
         (ExtractorCollator, "__call__"): timed("collate", ExtractorCollator.__call__, False),
@@ -265,14 +360,20 @@ def stage_breakdown(name):
     patched[(PreprocessedBatch, "to")] = timed("to_device", PreprocessedBatch.to, True)
     patched[(SchemaTransformer, "extract_embeddings_from_batch")] = timed(
         "embeddings", SchemaTransformer.extract_embeddings_from_batch, True)
-    originals = {key: getattr(*key) for key in patched}
+    missing = object()
+    # restore exactly what each class itself held: re-setting an inherited method on a subclass would shadow later
+    # patches of its base (gliner2_exact patches the mixin)
+    originals = {key: key[0].__dict__.get(key[1], missing) for key in patched}
     try:
         for (owner, attr), fn in patched.items():
             setattr(owner, attr, fn)
         total, _ = extract(name)
     finally:
         for (owner, attr), fn in originals.items():
-            setattr(owner, attr, fn)
+            if fn is missing:
+                delattr(owner, attr)
+            else:
+                setattr(owner, attr, fn)
     stages["other"] = total - sum(stages.values())
     return {"total_seconds": total, "stages_seconds": stages,
             "stages_ms_per_chunk": {k: 1000 * v / len(chunks) for k, v in stages.items()}}
@@ -280,6 +381,9 @@ def stage_breakdown(name):
 
 report["breakdown_baseline"] = stage_breakdown("baseline")
 emit("BREAKDOWN", report["breakdown_baseline"])
+if "exact" in CONFIGS:
+    report["breakdown_exact"] = stage_breakdown("exact")
+    emit("BREAKDOWN_EXACT", report["breakdown_exact"])
 save()
 
 
@@ -310,15 +414,15 @@ if CUDA:
 gliner2_pipeline.uninstall()
 save()
 
-lines = ["| config | depth | workers | batch | chunks/s | vs baseline | identical full output | identical kept values |",
-         "|---|---:|---:|---:|---:|---:|---|---:|"]
+lines = ["| config | count0 | fmtcache | streams | depth | workers | batch | chunks/s | vs baseline | identical full output "
+         "| identical kept values |", "|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|"]
 for name, row in results.items():
+    shape = (f"| {name} | {row['count_step0']} | {row['format_cache']} | {row['streams']} | {row['prefetch_depth']} | "
+             f"{row['num_workers']} | {row['batch_size']} | ")
     if "chunks_per_s" not in row:
-        lines.append(f"| {name} | {row['prefetch_depth']} | {row['num_workers']} | {row['batch_size']} | failed: "
-                     f"{row['errors'][:1]} | | | |")
+        lines.append(shape + f"failed: {row['errors'][:1]} | | | |")
         continue
-    lines.append(f"| {name} | {row['prefetch_depth']} | {row['num_workers']} | {row['batch_size']} | "
-                 f"{row['chunks_per_s']:.2f} | {row['speedup_vs_baseline']:.3f}x | {row['identical_full_output']} | "
+    lines.append(shape + f"{row['chunks_per_s']:.2f} | {row['speedup_vs_baseline']:.3f}x | {row['identical_full_output']} | "
                  f"{row['identical_kept_values_chunks']}/{len(chunks)} |")
 (out / "summary.md").write_text("\n".join(lines) + "\n")
 print("\n".join(lines), flush=True)

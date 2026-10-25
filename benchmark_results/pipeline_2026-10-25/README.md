@@ -134,3 +134,28 @@ The encoder figure includes the host wait from the `unpack` sync described above
   elementwise fusion (about 0.78 s, 19% of kernel time), a faster attention or GEMM path, and removing the host syncs
   (`unpack`) before trying CUDA Graphs. These are semantics-changing or kernel work, not Phase 1 items.
 - Caveat: the Colab VM has 2 vCPUs. A host with more cores may show a gain from `workers`, which this run cannot show.
+
+## Round 2: exact host-side cuts (code done, T4 run pending)
+
+The run above showed no gain from moving host work onto other threads or processes: Colab's 2 vCPUs share one core.
+So round 2 cuts host work outright, and every change must leave outputs byte-identical (`serving/gliner2_exact.py`,
+`gliner2_exact.install()`):
+
+- **count_step0:** targets the span head, at 4.9 ms/chunk the largest non-encoder stage. For each entity pair, gliner2
+  runs the CountLSTM GRU for `pred_count` steps (about 12 small kernels per step), then keeps only instance 0. Only
+  GRU step 0 now runs. The x-side GEMM and the projector GEMMs keep their full `[pred_count x M]` shapes, so the same
+  cuBLAS kernels see the same row values, and instance 0 is bit-identical by construction.
+  - Checked bit-equal against the stock module for counts 1..21 in fp32 and fp16.
+  - Unlike `DETECTION_FAST_COUNT`, nothing is batched across pairs. That flag changed 5 of 895 multilingual chunks.
+- **format_cache:** the text part of the input formatting (subwords, ids, offsets) is cached per chunk text and reused
+  by the 3 label passes. The schema part comes from the stock function. This removed about 10% of collation on CPU.
+- **streams2:** two serving copies with shared fp16 weights, each on its own CUDA stream, take turns on the same
+  batches. The serving queue already supports this (`DETECTION_STREAMS=2`); this round measures it on the same corpus.
+  It measured +8-13% on the VM earlier.
+- Rejected after measuring: a faster schema deep copy. The schemas are `OrderedDict`s, so at most about 0.1 ms/chunk
+  was available.
+
+CPU checks: `python tests/test_gliner2_exact.py` (PASS: every combination `==` stock). A bench smoke run with
+`--standin` ran every config with identical outputs. The bench now defaults to the round-2 set (`baseline`, `count0`,
+`fmtcache`, `exact`, `exact_prefetch1`, `streams2`, `exact_streams2`); `--configs all` adds the earlier ones. It
+records `lscpu` and a stage breakdown of `exact` next to the baseline's.

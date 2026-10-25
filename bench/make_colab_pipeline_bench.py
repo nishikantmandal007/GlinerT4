@@ -17,6 +17,7 @@ args = parser.parse_args()
 names = ["csrc/torch_binding.cpp", "csrc/disentangled_attention.cu", "csrc/disentangled_attention_v2.cu",
          "csrc/disentangled_attention_v3.cu", "csrc/disentangled_attention_v4.cu", "csrc/add_layernorm.cu",
          "torch-ext/gliner_t4/__init__.py", "torch-ext/gliner_t4/_build.py", "serving/gliner2_pipeline.py",
+         "serving/gliner2_exact.py",
          "bench/pipeline_bench.py", "benchmark_results/colab_2026-10-24/exact_optimization/exact_prep.py"]
 files = {name: (root / name).read_text() for name in names}
 # the corpus of the 54.81 chunks/s baseline, as shipped in the 2026-10-24 Colab payload
